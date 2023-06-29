@@ -9,7 +9,7 @@ library(kit)
 parseFactor <- function(factor_string)
   factor_string %>% 
   sub('[','fromEurostatDataset( ',.,fixed=TRUE) %>% 
-  sub('[',' with_filters=list(',.,fixed=TRUE) %>% 
+  sub('[',' with_filters = list(',.,fixed=TRUE) %>% 
   gsub(']',')',.,fixed=TRUE) %>% 
   gsub("'\\s*([^,]*)\\s*=\\s*([^,]*)\\s*'",
        ' \\1="\\2"',.) %>% 
@@ -62,14 +62,15 @@ processCatalog <- function(catalog_dt, comment="")
   .[, func :=
       SOURCE %>% 
       {kit::nif(grepl("^Eurostat,",.) | .=='DG CONNECT', 'fromEurostatDataset',
-               grepl("^OECD,",.), 'fromOECDdataset',
-               grepl("Labour Market Policy",.), 'fromLMPdataset',
-               grepl("Benefits and wages",.), 'fromBenefitsAndWages',
-               default='fromFile')}] %>% 
+                grepl("^OECD,",.), 'fromOECDdataset',
+                grepl("^OECD, Pisa$",.), 'fromEurostatDataset',
+                grepl("Labour Market Policy",.), 'fromLMPdataset',
+                grepl("Benefits and wages",.), 'fromBenefitsAndWages',
+                default='fromFile')}] %>% 
   .[, definitions :=
       ifelse(!is.na(formula),
              paste0('fromFormula( ',formula,
-                    ',\nwhere=variables(\n',
+                    ',\nwhere = variables(\n',
                     definitions,
                     '\n))'),
              paste0(func,'(',
@@ -152,17 +153,17 @@ CatalogNoFormulaOrCond <-
   Catalog %>%
   .[is.na(table) & is.na(cond1) & is.na(formula)] %>%
   processCatalog(comment="#")
-  # [1] "National Sources/LFS"
-  # [2] "National sources"
-  # [3] NA
-  # [4] "European Commission, Labour Market Policy"     ***
-  # [5] "OECD and European Commission, Benefits and wages"                <<<
-  # [6] "Eurostat, EU Statistics on Income and Living Conditions"         ooo
-  # [7] "SPC-OV 9b               (OECD - EC ?)"
-  # [8] "OECD and AWG?"
-  # [9] "Eurostat, EU Labour Force Survey"                         >>>
-  # [10] "Eurostat, Structural Business Statistics "
-  # [11] "National sources "
+# [1] "National Sources/LFS"
+# [2] "National sources"
+# [3] NA
+# [4] "European Commission, Labour Market Policy"     ***
+# [5] "OECD and European Commission, Benefits and wages"                <<<
+# [6] "Eurostat, EU Statistics on Income and Living Conditions"         ooo
+# [7] "SPC-OV 9b               (OECD - EC ?)"
+# [8] "OECD and AWG?"
+# [9] "Eurostat, EU Labour Force Survey"                         >>>
+# [10] "Eurostat, Structural Business Statistics "
+# [11] "National sources "
 # [12] "Eurostat, EU Job Vacancy Statistics"
 # [13] "Eurostat, EU Labour Force Survey and Job Vacancy Statistics"
 # [14] "CEDEFOP"
