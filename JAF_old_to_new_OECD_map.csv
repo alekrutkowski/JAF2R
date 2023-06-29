@@ -1,5 +1,5 @@
-﻿old_table,old_filter_name,old_filter_value,new_table,new_filter_name,new_filter_value,new_comment
-OECD_STR_EP,indicator,epl_reg,EPL_OV,SERIES,EPRC_V4,https://fgeerolf.com/data/oecd/EPL_OV.html
-OECD_STR_EP,indicator,epl_temp,EPL_T,SERIES,EPT_V4,https://fgeerolf.com/data/oecd/EPL_T.html
-educ_outc_pisa,,,go to Eurostat,,,
-consultations_per_capita,indicator,CONSCOVI,HEALTH_PROC,VAR,CONSCOVI,"OECD::get_dataset('HEALTH_PROC',filter=list('CONSCOVI'))   https://stats.oecd.org/BrandedView.aspx?oecd_bv_id=health-data-en&doi=data-00542-en"
+﻿old_table,old_filter_name,old_filter_value,new_table,filter_url,new_filter_name,new_filter_value,new_comment
+OECD_STR_EP,indicator,epl_reg,EPL_OV,FALSE,SERIES,EPRC_V4,https://fgeerolf.com/data/oecd/EPL_OV.html
+OECD_STR_EP,indicator,epl_temp,EPL_T,FALSE,SERIES,EPT_V4,https://fgeerolf.com/data/oecd/EPL_T.html
+educ_outc_pisa,,,go to Eurostat,,,,
+consultations_per_capita,indicator,CONSCOVI,HEALTH_PROC,TRUE,VAR,CONSCOVI,"OECD::get_dataset('HEALTH_PROC',filter=list('CONSCOVI'))   https://stats.oecd.org/BrandedView.aspx?oecd_bv_id=health-data-en&doi=data-00542-en"
