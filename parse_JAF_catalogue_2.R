@@ -91,7 +91,7 @@ processCatalog <- function(catalog_dt, comment="")
 # Actions -----------------------------------------------------------------
 
 Catalog <-
-  openxlsx2::read_xlsx('//NET1.cec.eu.int/offline/03/rutkoal/Desktop/JAF Indicators Table.xlsx',
+  openxlsx2::read_xlsx('//NET1.cec.eu.int/offline/03/rutkoal/Desktop/Indicators Table - JAF 2017 29062023.xlsx',
                        sheet='IndicatorsTable') %>% 
   as.data.table %>%  
   .[, row_num := .I]

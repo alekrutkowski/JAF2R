@@ -1,6 +1,6 @@
 ### Compiled automatically by rutkoal
 ### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`
-### on 2023-06-26 16:05:21
+### on 2023-06-29 09:38:37
 
 
 JAF_INDICATORS = list(
@@ -694,12 +694,48 @@ JAF_INDICATORS = list(
         ),
         
         
+        "PA1.O2." = specification(
+                name = "Disability employment gap by level of activity limitation and sex - total",
+                unit = "% (of popn)",
+                source = "Eurostat, EU Statistics on Income and Living Conditions",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("hlth_dlm200", with_filters=list(sex="T", unit="PC_PNT", lev_limit="SM_SEV"))
+        ),
+        
+        
+        "PA1.C3.M" = specification(
+                name = "Disability employment gap by level of activity limitation and sex - men",
+                unit = "% (of popn)",
+                source = "Eurostat, EU Statistics on Income and Living Conditions",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("hlth_dlm200", with_filters=list(sex="M", unit="PC_PNT", lev_limit="SM_SEV"))
+        ),
+        
+        
+        "PA1.C3.F" = specification(
+                name = "Disability employment gap by level of activity limitation and sex - women",
+                unit = "% (of popn)",
+                source = "Eurostat, EU Statistics on Income and Living Conditions",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("hlth_dlm200", with_filters=list(sex="F", unit="PC_PNT", lev_limit="SM_SEV"))
+        ),
+        
+        
         "PA1b.O1." = specification(
                 name = "NEET rate for population aged 15-24 - total",
                 unit = "% (of popn 15-24)",
                 source = "Eurostat, EU Labour Force Survey",
                 high_is_good = FALSE,
                 value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="T", unit="PC", wstatus="NEMP", age="Y15-24", training="NO_FE_NO_NFE"))
+        ),
+        
+        
+        "PA1b.O1.n." = specification(
+                name = "NEET rate for population aged 15-29 - total",
+                unit = "% (of popn 15-29)",
+                source = "Eurostat, EU Labour Force Survey",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="T", unit="PC", wstatus="NEMP", age="Y15-29", training="NO_FE_NO_NFE"))
         ),
         
         
@@ -737,8 +773,8 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(100*a/b,
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="T", unit="THS", wstatus="UNE")),
-                                            b = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="T", unit="THS", wstatus="POP"))
+                                            a = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="UNE")),
+                                            b = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="POP"))
                                     ))
         ),
         
@@ -750,10 +786,10 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula((a/b)/((c-a)/(d-b)),
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="T", unit="THS", wstatus="UNE")),
-                                            b = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="T", unit="THS", wstatus="POP")),
-                                            c = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-74", citizen="TOTAL", sex="T", unit="THS", wstatus="UNE")),
-                                            d = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-74", citizen="TOTAL", sex="T", unit="THS", wstatus="POP"))
+                                            a = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="UNE")),
+                                            b = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="POP")),
+                                            c = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-74", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="UNE")),
+                                            d = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-74", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="POP"))
                                     ))
         ),
         
@@ -773,6 +809,42 @@ JAF_INDICATORS = list(
                 source = "Eurostat, EU Labour Force Survey",
                 high_is_good = FALSE,
                 value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="T", unit="PC", wstatus="INAC", age="Y15-24", training="NO_FE_NO_NFE"))
+        ),
+        
+        
+        "PA1b.S1.n.M" = specification(
+                name = "NEET rate for population aged 15-29 - men",
+                unit = "% (of men 15-29)",
+                source = "Eurostat, EU Labour Force Survey",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="M", unit="PC", wstatus="NEMP", age="Y15-29", training="NO_FE_NO_NFE"))
+        ),
+        
+        
+        "PA1b.S1.n.F" = specification(
+                name = "NEET rate for population aged 15-29 - women",
+                unit = "% (of women 15-29)",
+                source = "Eurostat, EU Labour Force Survey",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="F", unit="PC", wstatus="NEMP", age="Y15-29", training="NO_FE_NO_NFE"))
+        ),
+        
+        
+        "PA1b.S5.n." = specification(
+                name = "NEET rates for age group 15-29 unemployed - total",
+                unit = "% (of popn 15-29)",
+                source = "Eurostat, EU Labour Force Survey",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="T", unit="PC", wstatus="UNE", age="Y15-29", training="NO_FE_NO_NFE"))
+        ),
+        
+        
+        "PA1b.S6.n." = specification(
+                name = "NEET rates for age group 15-29 inactive - total",
+                unit = "% (of popn 15-29)",
+                source = "Eurostat, EU Labour Force Survey",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="T", unit="PC", wstatus="INAC", age="Y15-29", training="NO_FE_NO_NFE"))
         ),
         
         
@@ -929,6 +1001,42 @@ JAF_INDICATORS = list(
         ),
         
         
+        "PA1b.C3.n.une.M" = specification(
+                name = "NEET rates for age group 15-29 unemployed - men",
+                unit = "% (of men 15-29)",
+                source = "Eurostat, EU Labour Force Survey",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="M", unit="PC", wstatus="UNE", age="Y15-29", training="NO_FE_NO_NFE"))
+        ),
+        
+        
+        "PA1b.C3.n.une.F" = specification(
+                name = "NEET rates for age group 15-29 unemployed - women",
+                unit = "% (of women 15-29)",
+                source = "Eurostat, EU Labour Force Survey",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="F", unit="PC", wstatus="UNE", age="Y15-29", training="NO_FE_NO_NFE"))
+        ),
+        
+        
+        "PA1b.C3.n.inac.M" = specification(
+                name = "NEET rates for age group 15-29 inactive - men",
+                unit = "% (of men 15-29)",
+                source = "Eurostat, EU Labour Force Survey",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="M", unit="PC", wstatus="INAC", age="Y15-29", training="NO_FE_NO_NFE"))
+        ),
+        
+        
+        "PA1b.C3.n.inac.F" = specification(
+                name = "NEET rates for age group 15-29 inactive - women",
+                unit = "% (of women 15-29)",
+                source = "Eurostat, EU Labour Force Survey",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="F", unit="PC", wstatus="INAC", age="Y15-29", training="NO_FE_NO_NFE"))
+        ),
+        
+        
         "PA1b.C3.inac.M" = specification(
                 name = "NEET rates for age group 15-24 inactive - men",
                 unit = "% (of men 15-24)",
@@ -972,8 +1080,8 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(100*a/b,
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="M", unit="THS", wstatus="UNE")),
-                                            b = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="M", unit="THS", wstatus="POP"))
+                                            a = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="M", unit="THS_PER", wstatus="UNE")),
+                                            b = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="M", unit="THS_PER", wstatus="POP"))
                                     ))
         ),
         
@@ -985,8 +1093,8 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(100*a/b,
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="F", unit="THS", wstatus="UNE")),
-                                            b = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="F", unit="THS", wstatus="POP"))
+                                            a = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="F", unit="THS_PER", wstatus="UNE")),
+                                            b = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="F", unit="THS_PER", wstatus="POP"))
                                     ))
         ),
         
@@ -1102,10 +1210,10 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(((a-b)/(c-d)-b/d)*100,
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y20-64", citizen="TOTAL", sex="T", unit="THS", wstatus="EMP")),
-                                            b = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y55-64", citizen="TOTAL", sex="T", unit="THS", wstatus="EMP")),
-                                            c = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y20-64", citizen="TOTAL", sex="T", unit="THS", wstatus="POP")),
-                                            d = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y55-64", citizen="TOTAL", sex="T", unit="THS", wstatus="POP"))
+                                            a = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y20-64", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="EMP")),
+                                            b = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y55-64", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="EMP")),
+                                            c = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y20-64", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="POP")),
+                                            d = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y55-64", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="POP"))
                                     ))
         ),
         
@@ -1651,12 +1759,12 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(((a*b)-(c*d))/(e-f),
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y25-64", isced11="TOTAL", sex="T", unit="THS")),
+                                            a = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y25-64", isced11="TOTAL", sex="T", unit="THS_PER")),
                                             b = fromEurostatDataset('lfsa_etgar', with_filters=list(age="Y25-64", reason="NF_PJOB", sex="T", unit="PC_SAL_TEMP")),
-                                            c = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y55-64", isced11="TOTAL", sex="T", unit="THS")),
+                                            c = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y55-64", isced11="TOTAL", sex="T", unit="THS_PER")),
                                             d = fromEurostatDataset('lfsa_etgar', with_filters=list(age="Y55-64", reason="NF_PJOB", sex="T", unit="PC_SAL_TEMP")),
-                                            e = fromEurostatDataset('lfsa_eegaed', with_filters=list(age="Y25-64", isced11="TOTAL", sex="T", unit="THS")),
-                                            f = fromEurostatDataset('lfsa_eegaed', with_filters=list(age="Y55-64", isced11="TOTAL", sex="T", unit="THS"))
+                                            e = fromEurostatDataset('lfsa_eegaed', with_filters=list(age="Y25-64", isced11="TOTAL", sex="T", unit="THS_PER")),
+                                            f = fromEurostatDataset('lfsa_eegaed', with_filters=list(age="Y55-64", isced11="TOTAL", sex="T", unit="THS_PER"))
                                     ))
         ),
         
@@ -1828,10 +1936,10 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(100*(a/(b+c+d)),
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED0-2", sex="T", unit="THS")),
-                                            b = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED3_4", sex="T", unit="THS")),
-                                            c = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED0-2", sex="T", unit="THS")),
-                                            d = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED5-8", sex="T", unit="THS"))
+                                            a = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED0-2", sex="T", unit="THS_PER")),
+                                            b = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED3_4", sex="T", unit="THS_PER")),
+                                            c = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED0-2", sex="T", unit="THS_PER")),
+                                            d = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED5-8", sex="T", unit="THS_PER"))
                                     ))
         ),
         
@@ -1843,10 +1951,10 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(100*(a/(b+c+d)),
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED0-2", sex="M", unit="THS")),
-                                            b = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED3_4", sex="M", unit="THS")),
-                                            c = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED0-2", sex="M", unit="THS")),
-                                            d = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED5-8", sex="M", unit="THS"))
+                                            a = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED0-2", sex="M", unit="THS_PER")),
+                                            b = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED3_4", sex="M", unit="THS_PER")),
+                                            c = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED0-2", sex="M", unit="THS_PER")),
+                                            d = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED5-8", sex="M", unit="THS_PER"))
                                     ))
         ),
         
@@ -1858,10 +1966,10 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(100*(a/(b+c+d)),
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED0-2", sex="F", unit="THS")),
-                                            b = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED3_4", sex="F", unit="THS")),
-                                            c = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED0-2", sex="F", unit="THS")),
-                                            d = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED5-8", sex="F", unit="THS"))
+                                            a = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED0-2", sex="F", unit="THS_PER")),
+                                            b = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED3_4", sex="F", unit="THS_PER")),
+                                            c = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED0-2", sex="F", unit="THS_PER")),
+                                            d = fromEurostatDataset('lfsa_etgaed', with_filters=list(age="Y15-64", isced11="ED5-8", sex="F", unit="THS_PER"))
                                     ))
         ),
         
@@ -2634,8 +2742,8 @@ JAF_INDICATORS = list(
                 high_is_good = TRUE,
                 value = fromFormula(100*a/b,
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_egaps', with_filters=list(age="Y15-64", sex="T", unit="THS", wstatus="SELF")),
-                                            b = fromEurostatDataset('lfsa_egaps', with_filters=list(age="Y15-64", sex="T", unit="THS", wstatus="EMP"))
+                                            a = fromEurostatDataset('lfsa_egaps', with_filters=list(age="Y15-64", sex="T", unit="THS_PER", wstatus="SELF")),
+                                            b = fromEurostatDataset('lfsa_egaps', with_filters=list(age="Y15-64", sex="T", unit="THS_PER", wstatus="EMP"))
                                     ))
         ),
         
@@ -2725,9 +2833,9 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(100*a/(b+c),
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y15-64", sex="T", unit="THS", wantwork="YES")),
-                                            b = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y15-64", sex="T", unit="THS", wantwork="TOTAL")),
-                                            c = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-64", citizen="TOTAL", sex="T", unit="THS", wstatus="ACT"))
+                                            a = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y15-64", sex="T", unit="THS_PER", wantwork="YES")),
+                                            b = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y15-64", sex="T", unit="THS_PER", wantwork="TOTAL")),
+                                            c = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-64", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="ACT"))
                                     ))
         ),
         
@@ -2739,9 +2847,9 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(100*a/(b+c),
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y15-24", sex="T", unit="THS", wantwork="YES")),
-                                            b = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y15-24", sex="T", unit="THS", wantwork="TOTAL")),
-                                            c = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="T", unit="THS", wstatus="ACT"))
+                                            a = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y15-24", sex="T", unit="THS_PER", wantwork="YES")),
+                                            b = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y15-24", sex="T", unit="THS_PER", wantwork="TOTAL")),
+                                            c = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y15-24", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="ACT"))
                                     ))
         ),
         
@@ -2753,11 +2861,11 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(100*(a-b)/(c-d+e),
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y25-64", sex="T", unit="THS", wantwork="YES")),
-                                            b = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y55-64", sex="T", unit="THS", wantwork="YES")),
-                                            c = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y25-64", sex="T", unit="THS", wantwork="TOTAL")),
-                                            d = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y55-64", sex="T", unit="THS", wantwork="TOTAL")),
-                                            e = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y25-54", citizen="TOTAL", sex="T", unit="THS", wstatus="ACT"))
+                                            a = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y25-64", sex="T", unit="THS_PER", wantwork="YES")),
+                                            b = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y55-64", sex="T", unit="THS_PER", wantwork="YES")),
+                                            c = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y25-64", sex="T", unit="THS_PER", wantwork="TOTAL")),
+                                            d = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y55-64", sex="T", unit="THS_PER", wantwork="TOTAL")),
+                                            e = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y25-54", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="ACT"))
                                     ))
         ),
         
@@ -2769,9 +2877,9 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(100*a/(b+c),
                                     where=variables(
-                                            a = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y55-64", sex="T", unit="THS", wantwork="YES")),
-                                            b = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y55-64", sex="T", unit="THS", wantwork="TOTAL")),
-                                            c = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y55-64", citizen="TOTAL", sex="T", unit="THS", wstatus="ACT"))
+                                            a = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y55-64", sex="T", unit="THS_PER", wantwork="YES")),
+                                            b = fromEurostatDataset('lfsa_igaww', with_filters=list(age="Y55-64", sex="T", unit="THS_PER", wantwork="TOTAL")),
+                                            c = fromEurostatDataset('lfsa_pganws', with_filters=list(age="Y55-64", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="ACT"))
                                     ))
         ),
         
@@ -3424,6 +3532,15 @@ JAF_INDICATORS = list(
         ),
         
         
+        "PA9.1.S2.n." = specification(
+                name = "NEET rates for age group 15-29 - total",
+                unit = "% (of popn 15-29)",
+                source = "Eurostat, EU Labour Force Survey",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="T", unit="PC", wstatus="NEMP", age="Y15-29", training="NO_FE_NO_NFE"))
+        ),
+        
+        
         "PA9.1.S2." = specification(
                 name = "NEET rates for age group 15-24 - total",
                 unit = "% (of popn 15-24)",
@@ -3469,7 +3586,7 @@ JAF_INDICATORS = list(
                 unit = "% (of men 18-24)",
                 source = "Eurostat, EU Labour Force Survey",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("t2020_40", with_filters=list(sex="M"))
+                value = fromEurostatDataset("edat_lfse_14", with_filters=list(age="Y18-24", sex="M", unit="PC", wstatus="POP"))
         ),
         
         
@@ -3478,7 +3595,7 @@ JAF_INDICATORS = list(
                 unit = "% (of women 18-24)",
                 source = "Eurostat, EU Labour Force Survey",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("t2020_40", with_filters=list(sex="F"))
+                value = fromEurostatDataset("edat_lfse_14", with_filters=list(age="Y18-24", sex="F", unit="PC", wstatus="POP"))
         ),
         
         
@@ -3533,6 +3650,24 @@ JAF_INDICATORS = list(
                 source = "Eurostat, EU Labour Force Survey",
                 high_is_good = FALSE,
                 value = fromEurostatDataset("edat_lfse_02", with_filters=list(c_birth="NEU27_2020_FOR", sex="T", unit="PC", wstatus="POP", age="Y18-24"))
+        ),
+        
+        
+        "PA9.1.C2.n.NEET.M" = specification(
+                name = "NEET rates for age group 15-29 - men",
+                unit = "% (of men 15-29)",
+                source = "Eurostat, EU Labour Force Survey",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="M", unit="PC", wstatus="NEMP", age="Y15-29", training="NO_FE_NO_NFE"))
+        ),
+        
+        
+        "PA9.1.C2.n.NEET.F" = specification(
+                name = "NEET rates for age group 15-29 - women",
+                unit = "% (of women 15-29)",
+                source = "Eurostat, EU Labour Force Survey",
+                high_is_good = FALSE,
+                value = fromEurostatDataset("edat_lfse_20", with_filters=list(sex="F", unit="PC", wstatus="NEMP", age="Y15-29", training="NO_FE_NO_NFE"))
         ),
         
         
@@ -3603,7 +3738,7 @@ JAF_INDICATORS = list(
                 unit = "% (of popn 30-36)",
                 source = "Eurostat, EU labour Force Survey",
                 high_is_good = TRUE,
-                value = fromEurostatDataset("t2020_41", with_filters=list(sex="T", age="Y30-34", unit="PC", isced11="ED5-8"))
+                value = fromEurostatDataset("edat_lfse_04", with_filters=list(sex="T", age="Y30-34", unit="PC", isced11="ED5-8"))
         ),
         
         
@@ -3679,7 +3814,7 @@ JAF_INDICATORS = list(
                 unit = "% (of men 30-36)",
                 source = "Eurostat, EU Labour Force Survey",
                 high_is_good = TRUE,
-                value = fromEurostatDataset("t2020_41", with_filters=list(sex="M", age="Y30-34", unit="PC", isced11="ED5-8"))
+                value = fromEurostatDataset("edat_lfse_04", with_filters=list(sex="M", age="Y30-34", unit="PC", isced11="ED5-8"))
         ),
         
         
@@ -3688,7 +3823,7 @@ JAF_INDICATORS = list(
                 unit = "% (of women 30-36)",
                 source = "Eurostat, EU Labour Force Survey",
                 high_is_good = TRUE,
-                value = fromEurostatDataset("t2020_41", with_filters=list(sex="F", age="Y30-34", unit="PC", isced11="ED5-8"))
+                value = fromEurostatDataset("edat_lfse_04", with_filters=list(sex="F", age="Y30-34", unit="PC", isced11="ED5-8"))
         ),
         
         
@@ -3862,8 +3997,8 @@ JAF_INDICATORS = list(
                 high_is_good = FALSE,
                 value = fromFormula(100*((a/b)-1),
                                     where=variables(
-                                            a = fromEurostatDataset('ert_eff_ic_a', with_filters=list(exch_rt="REER_IC37_ULCT", unit="I10")),
-                                            b = fromEurostatDataset('ert_eff_ic_a', with_filters=list(exch_rt="REER_IC37_ULCT", unit="I10"), time_period=-3)
+                                            a = fromEurostatDataset('ert_eff_ic_a', with_filters=list(exch_rt="REER_IC37_ULCT", unit="I15")),
+                                            b = fromEurostatDataset('ert_eff_ic_a', with_filters=list(exch_rt="REER_IC37_ULCT", unit="I15"), time_period=-3)
                                     ))
         ),
         
@@ -3887,38 +4022,38 @@ JAF_INDICATORS = list(
         
         
         "PA11.S2." = specification(
-                name = "Severe material deprivation rate (4+ items) - total",
+                name = "Severe material and social deprivation rate (7+ items) - total",
                 unit = "% (of total popn)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_mddd11", with_filters=list(sex="T", unit="PC", age="TOTAL"))
+                value = fromEurostatDataset("ilc_mdsd11", with_filters=list(sex="T", unit="PC", age="TOTAL"))
         ),
         
         
         "PA11.S3.T" = specification(
-                name = "People (aged 0-59) living in (quasi-)jobless households - total",
+                name = "People (aged 0-64) living in (quasi-)jobless households - total",
                 unit = "% (of total popn)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_lvhl11", with_filters=list(sex="T", unit="PC_Y_LT60", age="Y_LT60"))
+                value = fromEurostatDataset("ilc_lvhl11n", with_filters=list(sex="T", unit="PC_Y_LT65", age="Y_LT65"))
         ),
         
         
         "PA11.S3.M" = specification(
-                name = "People (aged 0-59) living in (quasi-)jobless households - men",
+                name = "People (aged 0-64) living in (quasi-)jobless households - men",
                 unit = "% (of male popn)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_lvhl11", with_filters=list(sex="M", unit="PC_Y_LT60", age="Y_LT60"))
+                value = fromEurostatDataset("ilc_lvhl11n", with_filters=list(sex="M", unit="PC_Y_LT65", age="Y_LT65"))
         ),
         
         
         "PA11.S3.F" = specification(
-                name = "People (aged 0-59) living in (quasi-)jobless households - women",
+                name = "People (aged 0-64) living in (quasi-)jobless households - women",
                 unit = "% (of female popn)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_lvhl11", with_filters=list(sex="F", unit="PC_Y_LT60", age="Y_LT60"))
+                value = fromEurostatDataset("ilc_lvhl11n", with_filters=list(sex="F", unit="PC_Y_LT65", age="Y_LT65"))
         ),
         
         
@@ -3953,34 +4088,7 @@ JAF_INDICATORS = list(
                 unit = "% (of total popn)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_li06", with_filters=list(sex="T", workint="WI0-02", indic_il="LI_R_MD60", age="Y_LT60", hhtyp="TOTAL"))
-        ),
-        
-        
-        "PA11.S7.T" = specification(
-                name = "In-work poverty - total",
-                unit = "% (of popn in work)",
-                source = "Eurostat, EU Statistics on Income and Living Conditions",
-                high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_iw01", with_filters=list(sex="T", wstatus="EMP", age="Y18-64"))
-        ),
-        
-        
-        "PA11.S7.M" = specification(
-                name = "In-work poverty - men",
-                unit = "% (of popn in work)",
-                source = "Eurostat, EU Statistics on Income and Living Conditions",
-                high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_iw01", with_filters=list(sex="M", wstatus="EMP", age="Y18-64"))
-        ),
-        
-        
-        "PA11.S7.F" = specification(
-                name = "In-work poverty - women",
-                unit = "% (of popn in work)",
-                source = "Eurostat, EU Statistics on Income and Living Conditions",
-                high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_iw01", with_filters=list(sex="F", wstatus="EMP", age="Y18-64"))
+                value = fromEurostatDataset("ilc_li06", with_filters=list(sex="T", workint="WI0-02", indic_il="LI_R_MD60", age="Y_LT65", hhtyp="TOTAL"))
         ),
         
         
@@ -4366,11 +4474,11 @@ JAF_INDICATORS = list(
         
         
         "PA11a.S2." = specification(
-                name = "Children living in a household suffering from severe material deprivation(4+)",
+                name = "Children living in a household suffering from severe material and social deprivation (7+)",
                 unit = "% (of popn 0-17)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_mddd11", with_filters=list(sex="T", unit="PC", age="Y_LT18"))
+                value = fromEurostatDataset("ilc_mdsd11", with_filters=list(sex="T", unit="PC", age="Y_LT18"))
         ),
         
         
@@ -4379,7 +4487,7 @@ JAF_INDICATORS = list(
                 unit = "% (of popn 0-17)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_lvhl11", with_filters=list(sex="T", unit="PC_Y_LT60", age="Y_LT18"))
+                value = fromEurostatDataset("ilc_lvhl11n", with_filters=list(sex="T", unit="PC_Y_LT65", age="Y_LT18"))
         ),
         
         
@@ -4546,7 +4654,7 @@ JAF_INDICATORS = list(
                 unit = "% (of popn 18-24)",
                 source = "Eurostat, EU Labour Force Survey",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("t2020_40", with_filters=list(sex="T"))
+                value = fromEurostatDataset("edat_lfse_14", with_filters=list(age="Y18-24", sex="T", unit="PC", wstatus="POP"))
         ),
         
         
@@ -4596,20 +4704,20 @@ JAF_INDICATORS = list(
         
         
         "PA11b.S2." = specification(
-                name = "Adults (aged 18-64) living in a household suffering from severe material deprivation (4+)",
+                name = "Adults (aged 18-64) living in a household suffering from severe material and social deprivation (7+)",
                 unit = "% (of popn 18-64)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_mddd11", with_filters=list(sex="T", unit="PC", age="Y18-64"))
+                value = fromEurostatDataset("ilc_mdsd11", with_filters=list(sex="T", unit="PC", age="Y18-64"))
         ),
         
         
         "PA11b.S3." = specification(
-                name = "Adults (aged 18-59) not students living in (quasi-)jobless households",
-                unit = "% (of popn 18-59)",
+                name = "Adults (aged 18-64) not students living in (quasi-)jobless households",
+                unit = "% (of popn 18-64)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_lvhl11", with_filters=list(sex="T", unit="PC_Y_LT60", age="Y18-59"))
+                value = fromEurostatDataset("ilc_lvhl11n", with_filters=list(sex="T", unit="PC_Y_LT65", age="Y18-64"))
         ),
         
         
@@ -4676,11 +4784,11 @@ JAF_INDICATORS = list(
         
         
         "PA11b.S8." = specification(
-                name = "At-risk of poverty rate for population living in (quasi-)jobless households (18-59)",
+                name = "At-risk of poverty rate for population living in (quasi-)jobless households (18-64)",
                 unit = "% (of total popn)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_li06", with_filters=list(sex="T", workint="WI0-02", indic_il="LI_R_MD60", age="Y18-59", hhtyp="TOTAL"))
+                value = fromEurostatDataset("ilc_li06", with_filters=list(sex="T", workint="WI0-02", indic_il="LI_R_MD60", age="Y18-64", hhtyp="TOTAL"))
         ),
         
         
@@ -4728,7 +4836,7 @@ JAF_INDICATORS = list(
                 unit = "NA",
                 source = "OECD and European Commission, Benefits and wages",
                 high_is_good = NA,
-                value = fromBenefitsAndWages("adequacy_minimum_income", with_filters=list(indicator="WITH_HOUSING"))
+                value = fromBenefitsAndWages("NA", with_filters=list(indicator="WITH_HOUSING"))
         ),
         
         
@@ -4737,7 +4845,7 @@ JAF_INDICATORS = list(
                 unit = "NA",
                 source = "OECD and European Commission, Benefits and wages",
                 high_is_good = NA,
-                value = fromBenefitsAndWages("adequacy_minimum_income", with_filters=list(indicator="NO_HOUSING"))
+                value = fromBenefitsAndWages("NA", with_filters=list(indicator="NO_HOUSING"))
         ),
         
         
@@ -4877,29 +4985,29 @@ JAF_INDICATORS = list(
         
         
         "PA11c.S2.T" = specification(
-                name = "Severe material deprivation of older people (aged 65+) - total",
+                name = "Severe material and social deprivation of older people (aged 65+) - total",
                 unit = "% (of popn 65+)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_mddd11", with_filters=list(sex="T", unit="PC", age="Y_GE65"))
+                value = fromEurostatDataset("ilc_mdsd11", with_filters=list(sex="T", unit="PC", age="Y_GE65"))
         ),
         
         
         "PA11c.S2.M" = specification(
-                name = "Severe material deprivation of older people (aged 65+) - men",
+                name = "Severe material and social deprivation of older people (aged 65+) - men",
                 unit = "% (of men 65+)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_mddd11", with_filters=list(sex="M", unit="PC", age="Y_GE65"))
+                value = fromEurostatDataset("ilc_mdsd11", with_filters=list(sex="M", unit="PC", age="Y_GE65"))
         ),
         
         
         "PA11c.S2.F" = specification(
-                name = "Severe material deprivation of older people (aged 65+) - women",
+                name = "Severe material and social deprivation of older people (aged 65+) - women",
                 unit = "% (of women 65+)",
                 source = "Eurostat, EU Statistics on Income and Living Conditions",
                 high_is_good = FALSE,
-                value = fromEurostatDataset("ilc_mddd11", with_filters=list(sex="F", unit="PC", age="Y_GE65"))
+                value = fromEurostatDataset("ilc_mdsd11", with_filters=list(sex="F", unit="PC", age="Y_GE65"))
         ),
         
         
