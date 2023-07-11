@@ -33,16 +33,26 @@ GENSENSE_to_Bool <- function(str)
 processCatalog <- function(catalog_dt, comment="")
   catalog_dt %>% 
   .[, c(id_cols,NumberedCatalogColumnNames), with=FALSE] %>%  
+  {`if`(comment=="",
+        .[!is.na(table) | !is.na(cond1) | !is.na(formula)] %T>% 
+          {message(nrow(.),' defined indicators.')},
+        .[is.na(table) & is.na(cond1) & is.na(formula)] %T>% 
+          {message(nrow(.),' mis-defined indicators.')})} %>% 
   melt(id.vars=,
        measure.vars=NumberedCatalogColumnNames,
        variable.name="factor_or_cond",
        value.name="definitions",
        variable.factor=FALSE,
-       na.rm=TRUE) %>%     
+       na.rm=FALSE) %>%     
+  `if`(comment=="",
+       .[!is.na(definitions)],
+       .) %>% 
   .[, sep :=
-      ifelse(factor_or_cond==max(factor_or_cond),"",
-             ifelse(grepl('cond',factor_or_cond),
-                    ", ",",\n")),
+      factor_or_cond %>% 
+      sub("(\\D+)(\\d{1}$)", "\\10\\2", .) %>% # add leading zeros e.g. factor5 => factor05 for correct sort/max
+      {ifelse(.==max(.),"",
+             ifelse(grepl('cond',.),
+                    ", ",",\n"))},
     by=id_cols] %>% 
   .[, definitions :=
       ifelse(grepl('cond',factor_or_cond),
@@ -66,6 +76,7 @@ processCatalog <- function(catalog_dt, comment="")
                 grepl("^OECD, Pisa$",.), 'fromEurostatDataset',
                 grepl("Labour Market Policy",.), 'fromLMPdataset',
                 grepl("Benefits and wages",.), 'fromBenefitsAndWages',
+                ### TODO - fromLFSfile ???
                 default='fromFile')}] %>% 
   .[, definitions :=
       ifelse(!is.na(formula),
@@ -75,7 +86,7 @@ processCatalog <- function(catalog_dt, comment="")
                     '\n))'),
              paste0(func,'(',
                     '"',table,'"',
-                    ', with_filters=list(',
+                    ', with_filters = list(',
                     definitions,
                     '))'))] %>%
   .[, definitions :=
@@ -85,8 +96,9 @@ processCatalog <- function(catalog_dt, comment="")
              comment,'unit = ',quoteAndEscapeQuotes(UNITLONG),',\n',
              comment,'source = ',quoteAndEscapeQuotes(SOURCE),',\n',
              comment,'high_is_good = ',GENSENSE_to_Bool(GENSENSE),',\n',
-             comment,'value = ',definitions,'\n)')] %>%  # ,
-             # ifelse(row_num!=max(row_num),',\n',""))] %>% 
+             comment,'value = ',definitions,'\n',
+             comment,')')] %>%  # ,
+  # ifelse(row_num!=max(row_num),',\n',""))] %>% 
   .[order(row_num)] 
 
 # Actions -----------------------------------------------------------------
@@ -127,7 +139,7 @@ id_cols <-
 
 CatalogFormulaOrCond <-
   Catalog %>% 
-  .[!is.na(table) | !is.na(cond1) | !is.na(formula)] %>% 
+  # .[!is.na(table) | !is.na(cond1) | !is.na(formula)] %>% 
   processCatalog()
 # [1] "Eurostat, EU Labour Force Survey"                                                  
 # [2] "Eurostat, Demographic Statistics and EU Statistics on Income and Living Conditions"
@@ -151,8 +163,8 @@ CatalogFormulaOrCond <-
 
 CatalogNoFormulaOrCond <-
   Catalog %>%
-  .[is.na(table) & is.na(cond1) & is.na(formula)] %>%
-  processCatalog(comment="#")
+  # .[is.na(table) & is.na(cond1) & is.na(formula)] %>%
+  processCatalog(comment="# ")
 # [1] "National Sources/LFS"
 # [2] "National sources"
 # [3] NA

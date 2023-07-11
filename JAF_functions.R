@@ -1,4 +1,5 @@
 library(magrittr)
+library(tibble)
 library(data.table)
 library(memoise)
 library(eurodata)
@@ -105,28 +106,46 @@ fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0
 
 fromOECDdataset <- function(OECDdatasetCode, with_filters) {
   JAF_old_to_new_OECD_map <-
-    fread('JAF_old_to_new_OECD_map.csv') %>% 
+    tibble::tribble(
+      ~old_table                , ~old_filter_name, ~old_filter_value, ~new_table      , ~filter_url, ~new_filter_name, ~new_filter_value ,
+      "OECD_STR_EP"             , "indicator"     , "epl_reg"        , "EPL_OV"        , FALSE      , "SERIES"        , "EPRC_V4"         ,
+      "OECD_STR_EP"             , "indicator"     , "epl_temp"       , "EPL_T"         , FALSE      , "SERIES"        , "EPT_V4"          ,
+      "educ_outc_pisa"          , NA              , NA               , "go to Eurostat", NA         , NA              , NA                ,
+      "consultations_per_capita", "indicator"     , "CONSCOVI"       , "HEALTH_PROC"   , TRUE       , "VAR"           , "CONSCOVI"        ) %>% 
+    as.data.table() %>% 
     .[old_table==OECDdatasetCode]
   `if`(nrow(JAF_old_to_new_OECD_map)!=1,
        stop('\nMultiple or no match in `JAF_old_to_new_OECD_map.csv` for\n',
             'fromOECDdataset("',OECDdatasetCode,'", with_filters(',
-            deparse(with_filters),')'))
-  OECD::get_dataset(JAF_old_to_new_OECD_map$new_table,
-                    `if`(JAF_old_to_new_OECD_map$filter_url,
-                         JAF_old_to_new_OECD_map$new_filter_value)) %>% 
-    .[get(JAF_old_to_new_OECD_map$new_filter_name)==
-        JAF_old_to_new_OECD_map$new_filter_value] %>% 
-    Filter(\(col) length(unique(col))!=1, .) %>% 
-    setnames(c('Time','ObsValue','COU','COUNTRY','OBS_STATUS'),
-             c('time','value_','country','country','flags_'),
-             skip_absent=TRUE) %>% 
-    .[, geo := countrycode(country,
-                           origin='iso3c',
-                           destination='eurostat')] %>% 
-    .[, country := NULL]
+            deparse(with_filters),'))'))
+  `if`(JAF_old_to_new_OECD_map$new_table=='go to Eurostat',
+       fromEurostatDataset(OECDdatasetCode,with_filters),
+       OECD::get_dataset(JAF_old_to_new_OECD_map$new_table,
+                         `if`(JAF_old_to_new_OECD_map$filter_url,
+                              JAF_old_to_new_OECD_map$new_filter_value)) %>% 
+         as.data.table() %>% 
+         `if`(!is.na(JAF_old_to_new_OECD_map$new_filter_name),
+              .[get(JAF_old_to_new_OECD_map$new_filter_name)==
+                  JAF_old_to_new_OECD_map$new_filter_value],
+              .) %>% 
+         finaliseOECDdataset()
+       )
 }
 
-fromLMPdataset(LMPdatasetCode, with_filters) {
+
+finaliseOECDdataset <- function(dt)
+  dt %>% 
+  Filter(\(col) length(unique(col))!=1, .) %>% 
+  setnames(c('Time','ObsValue','COU','COUNTRY','LOCATION','OBS_STATUS'),
+           c('time','value_','country','country','country','flags_'),
+           skip_absent=TRUE) %>% 
+  .[, geo := countrycode(country,
+                         origin='iso3c',
+                         destination='eurostat')] %>% 
+  .[, country := NULL]
+
+
+fromLMPdataset <- function(LMPdatasetCode, with_filters) {
   stopifnot(is.character(LMPdatasetCode),
             length(LMPdatasetCode)==1,
             is.list(with_filters),
@@ -202,7 +221,25 @@ LMPurlFilters <- function(ds_code, filters_list) {
 }
 
 
-
+fromBenefitsAndWages <- function(OECDdatasetCode, with_filters) {
+  dataset_code <-
+    OECDdatasetCode %>% 
+    switch(.,
+      "nrr_ub" = 'NRR',
+      .)
+  filters <-
+    with_filters$indicator %>% 
+    sub('E','EARNER',.,fixed=TRUE) %>% 
+    sub('S','SINGLE',.,fixed=TRUE) %>% 
+    sub('.67','.67AW',.,fixed=TRUE)
+  OECD::get_dataset(dataset_code,
+                    paste0('.', # all countries
+                           filters,
+                           '.0.0') # Not "Include social assistance benefits" and Not "Include housing benefits"
+  ) %>% 
+    as.data.table() %>% 
+    finaliseOECDdataset()
+}
 
 
 
