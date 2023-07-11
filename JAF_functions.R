@@ -51,6 +51,30 @@ memoised_importData <-
 memoised_importDataList <-
   memoise::memoise(eurodata::importDataList)
 
+specification <- memoise::memoise(
+  function(name,
+           unit,
+           source,
+           high_is_good,
+           value) {
+    stopifnot(
+      is.character(name),
+      length(name)==1,
+      is.character(source),
+      length(source)==1,
+      is.logical(high_is_good),
+      length(high_is_good)==1,
+      is.data.frame(value),
+      'value_' %in% colnames(value),
+      nrow(value)>0
+    )
+    list(name=name,
+         unit=unit,
+         source=source,
+         value=value)
+  })
+
+
 fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0L) {
   cmd_line <-
     paste0('\nfromEurostatDataset("',fromEurostatDataset,'", ',
@@ -101,3 +125,91 @@ fromOECDdataset <- function(OECDdatasetCode, with_filters) {
                            destination='eurostat')] %>% 
     .[, country := NULL]
 }
+
+fromLMPdataset(LMPdatasetCode, with_filters) {
+  stopifnot(is.character(LMPdatasetCode),
+            length(LMPdatasetCode)==1,
+            is.list(with_filters),
+            length(with_filters)>0)
+  if (any(names(with_filters)=="")) 
+    stop("All elements of `filters` must be named.")
+  web_dataset_code <-
+    LMPdatasetCode %>% 
+    ifelse(.=='lmp_expenditure','LMP_IND_EXP',.) %>% 
+    toupper()
+  url <-
+    paste0('https://webgate.ec.europa.eu/empl/redisstat/api/dissemination/sdmx/2.1/data/',
+           web_dataset_code,'/',
+           LMPurlFilters(web_dataset_code, with_filters),
+           '/?format=TSV&i')
+  RawData <-
+    url %>% 
+    data.table::fread(sep="\t", colClasses="character", 
+                      header=TRUE)
+  FirstColName <-
+    colnames(RawData)[1]
+  IdNames <-
+    FirstColName %>% 
+    strsplit(",|\\\\") %>% 
+    .[[1]]
+  ColIdName <-
+    IdNames %>%
+    tail(1)
+  RowIdNames <-
+    IdNames %>%
+    head(-1)
+  RawData %>% 
+    as.data.table() %>% 
+    .[, (RowIdNames) := tstrsplit(get(FirstColName), split=",")] %>% 
+    .[, (FirstColName) := NULL] %>% 
+    melt(id.vars=RowIdNames, 
+         variable.name=ColIdName, value.name="value_") %>% 
+    .[, flags_ := gsub("[0-9\\.-]", "", value_)] %>% 
+    .[, value_ := gsub("[^0-9\\.-]", "", value_) %>% as.numeric()] %>% 
+    Filter(\(col) length(unique(col))!=1, .) %>% 
+    setnames('TIME_PERIOD','time') 
+}
+
+
+LMPurlStructure <- function(ds_code) 
+  ds_code %>%
+  toupper() %>%
+  paste0("https://webgate.ec.europa.eu/empl/redisstat/api/dissemination/sdmx/2.1/dataflow/EMPL/",
+         .,
+         "/1.0?references=descendants&detail=referencepartial&format=sdmx_2.1_generic&compressed=false") %>%
+  xml2::read_xml() %>%
+  xml2::as_list() %>% {
+    .$Structure$Structures$DataStructures$DataStructure$
+      DataStructureComponents$DimensionList
+  } %>% sapply(\(x) attr(x$ConceptIdentity$Ref, "id"))
+
+
+LMPurlFilters <- function(ds_code, filters_list) {
+  filters <-
+    filters_list %>% 
+    `names<-`(toupper(names(.)))
+  ds_code %>% 
+    LMPurlStructure() %>% 
+    toupper() %>% 
+    .[.!='TIME_PERIOD'] %T>% {
+      not_present_dims <- setdiff(names(filters),.)
+      `if`(length(not_present_dims) > 0,
+           warning("`filters` contains dimension(s) not present in the dataset, ignored:\n", 
+                   paste(not_present_dims, collapse=", "), 
+                   call.=FALSE, immediate.=TRUE))
+    } %>% filters[.] %>% lapply(paste, collapse = "+") %>% 
+    {do.call(paste, c(., sep="."))}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -80,13 +80,13 @@ processCatalog <- function(catalog_dt, comment="")
                     '))'))] %>%
   .[, definitions :=
       paste0('\n',
-             comment,'"',JAF_KEY,'" = ','specification(\n',
+             comment,'JAF_INDICATORS$"',JAF_KEY,'" = ','specification(\n',
              comment,'name = ',quoteAndEscapeQuotes(INDICATOR_FULL),',\n',
              comment,'unit = ',quoteAndEscapeQuotes(UNITLONG),',\n',
              comment,'source = ',quoteAndEscapeQuotes(SOURCE),',\n',
              comment,'high_is_good = ',GENSENSE_to_Bool(GENSENSE),',\n',
-             comment,'value = ',definitions,'\n)',
-             ifelse(row_num!=max(row_num),',\n',""))] %>% 
+             comment,'value = ',definitions,'\n)')] %>%  # ,
+             # ifelse(row_num!=max(row_num),',\n',""))] %>% 
   .[order(row_num)] 
 
 # Actions -----------------------------------------------------------------
@@ -178,13 +178,13 @@ CodeLines <-
   c(paste('### Compiled automatically by',Sys.getenv("USERNAME")),
     '### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`',
     paste('### on',Sys.time()),'\n',
-    'JAF_INDICATORS = list(\n',
+    'JAF_INDICATORS = list()\n',
     CatalogFormulaOrCond$definitions,
     '\n\n### Mis-specified indicators:\n',
     CatalogNoFormulaOrCond$definitions,
-    '\n)')  %>% 
+    '\n')  %>% 
   gsub('fromEurostatDataset( ','fromEurostatDataset(',.,fixed=TRUE)  %>% 
-  gsub('with_filters=list( ','with_filters=list(',.,fixed=TRUE)  %>% 
+  gsub('with_filters = list( ','with_filters = list(',.,fixed=TRUE)  %>% 
   gsub('fromFormula( ','fromFormula(',.,fixed=TRUE) %T>% 
   cat(file='JAF_indicators__definitions.R',sep='\n')
 
