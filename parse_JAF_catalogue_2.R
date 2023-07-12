@@ -6,10 +6,10 @@ library(kit)
 
 # Functions ---------------------------------------------------------------
 
-parseFactor <- function(factor_string)
+parseFactor <- function(factor_string, comment)
   factor_string %>% 
   sub('[','fromEurostatDataset( ',.,fixed=TRUE) %>% 
-  sub('[',' with_filters = list(',.,fixed=TRUE) %>% 
+  sub('[',paste0('\n',comment,'with_filters = list('),.,fixed=TRUE) %>% 
   gsub(']',')',.,fixed=TRUE) %>% 
   gsub("'\\s*([^,]*)\\s*=\\s*([^,]*)\\s*'",
        ' \\1="\\2"',.) %>% 
@@ -63,7 +63,7 @@ processCatalog <- function(catalog_dt, comment="")
                as.integer() %>% 
                numToLetter() %>% 
                paste(comment,.,'=',
-                     parseFactor(definitions)))] %>% 
+                     parseFactor(definitions, comment)))] %>% 
   .[, definitions := paste0(definitions,sep)]  %>%     
   .[, .(definitions =
           definitions %>% 
@@ -86,12 +86,14 @@ processCatalog <- function(catalog_dt, comment="")
                     '\n))'),
              paste0(func,'(',
                     '"',table,'"',
-                    ', with_filters = list(',
+                    ',\n',
+                    comment,' with_filters = list(',
                     definitions,
                     '))'))] %>%
   .[, definitions :=
       paste0('\n',
-             comment,'JAF_INDICATORS$"',JAF_KEY,'" = ','specification(\n',
+             comment,'inside(JAF_INDICATORS, create_indicator = "',JAF_KEY,'") = \n',
+             comment,'specification(\n',
              comment,'name = ',quoteAndEscapeQuotes(INDICATOR_FULL),',\n',
              comment,'unit = ',quoteAndEscapeQuotes(UNITLONG),',\n',
              comment,'source = ',quoteAndEscapeQuotes(SOURCE),',\n',
@@ -186,11 +188,20 @@ CatalogNoFormulaOrCond <-
 # [19] "Eurostat, ESSPROS and EPC/AWG (under preparation)"
 # [20] "EPC/AWG (under preparation)"
 
+helpers <-
+  c('`inside<-` <- function(.list, create_indicator, value) {',
+    'message("Modifying JAF_INDICATORS element `",create_indicator,"`...")',
+  '.list[[create_indicator]] <- value',
+  '.list',
+  '}') %>% 
+  paste(collapse='\n')
+
 CodeLines <-
   c(paste('### Compiled automatically by',Sys.getenv("USERNAME")),
     '### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`',
     paste('### on',Sys.time()),'\n',
-    'JAF_INDICATORS = list()\n',
+    'JAF_INDICATORS = list()\n\n',
+    helpers,
     CatalogFormulaOrCond$definitions,
     '\n\n### Mis-specified indicators:\n',
     CatalogNoFormulaOrCond$definitions,
