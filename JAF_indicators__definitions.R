@@ -6,12 +6,6 @@
 JAF_INDICATORS = list()
 
 
-`inside<-` <- function(.list, create_indicator, value) {
-  message("Modifying JAF_INDICATORS element `",create_indicator,"`...")
-  .list[[create_indicator]] <- value
-  .list
-}
-
 inside(JAF_INDICATORS, create_indicator = "PA1.O1.") = 
   specification(
     name = "Employment rate of population aged 20-64 - total",

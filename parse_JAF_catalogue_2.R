@@ -188,20 +188,22 @@ CatalogNoFormulaOrCond <-
 # [19] "Eurostat, ESSPROS and EPC/AWG (under preparation)"
 # [20] "EPC/AWG (under preparation)"
 
-helpers <-
-  c('`inside<-` <- function(.list, create_indicator, value) {',
-    'message("Modifying JAF_INDICATORS element `",create_indicator,"`...")',
-  '.list[[create_indicator]] <- value',
-  '.list',
-  '}') %>% 
-  paste(collapse='\n')
+# helpers <-
+#   c('source("JAF_functions.R")\n',
+#     '`inside<-` <- function(.list, create_indicator, value) {',
+#     'message("Modifying JAF_INDICATORS element `",create_indicator,"`...")',
+#   '.list[[create_indicator]] <- value',
+#   '.list',
+#   '}') %>% 
+#   paste(collapse='\n')
 
 CodeLines <-
   c(paste('### Compiled automatically by',Sys.getenv("USERNAME")),
     '### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`',
     paste('### on',Sys.time()),'\n',
+    'source("JAF_functions.R")\n',
     'JAF_INDICATORS = list()\n\n',
-    helpers,
+    # helpers,
     CatalogFormulaOrCond$definitions,
     '\n\n### Mis-specified indicators:\n',
     CatalogNoFormulaOrCond$definitions,

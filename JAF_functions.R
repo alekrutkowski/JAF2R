@@ -6,6 +6,15 @@ library(eurodata)
 library(collapse)
 library(OECD)
 library(countrycode)
+library(rvest)
+
+
+`inside<-` <- function(.list, create_indicator, value) {
+  message("Modifying JAF_INDICATORS element `",create_indicator,"`...")
+  .list[[create_indicator]] <- value
+  .list
+}
+
 
 fromFormula <- function(formula_expression, where) {
   list_of_data_tables <- 
@@ -221,28 +230,61 @@ LMPurlFilters <- function(ds_code, filters_list) {
 }
 
 
-fromBenefitsAndWages <- function(OECDdatasetCode, with_filters) {
-  dataset_code <-
-    OECDdatasetCode %>% 
+fromBenefitsAndWages <- function(table_code, with_filters) {
+  url_dataset <-
+    table_code %>% 
     switch(.,
-      "nrr_ub" = 'NRR',
+      "nrr_ub" = 'NRR/NRRUB',
+      "earn_nt_lowwtrp" = 'TR/',
+      "tax_ben_traps" = 'TR/',
       .)
-  filters <-
+  url_filters <-
     with_filters$indicator %>% 
-    sub('E','EARNER',.,fixed=TRUE) %>% 
-    sub('S','SINGLE',.,fixed=TRUE) %>% 
-    sub('.67','.67AW',.,fixed=TRUE)
-  OECD::get_dataset(dataset_code,
-                    paste0('.', # all countries
-                           filters,
-                           '.0.0') # Not "Include social assistance benefits" and Not "Include housing benefits"
-  ) %>% 
-    as.data.table() %>% 
-    finaliseOECDdataset()
+    gsub('.','/',.,fixed=TRUE) %>% 
+    `if`(table_code %in% c('earn_nt_lowwtrp','tax_ben_traps'),
+         sub('LW/(.+)/.+/(.+/.+)','LW/\\2/\\1',.) %>% 
+           sub('IT/(.+)/(.+)/.+/.+','IT/\\2/\\1',.),
+         .)
+  url_pfix <-
+    'https://europa.eu/economy_finance/db_indicators/tab/wq/details_all_webquery.php?url='
+  url_geos <-
+    'BE,BG,CZ,DK,DE,EE,IE,GR,ES,FR,HR,IT,CY,LV,LT,LU,HU,MT,NL,AT,PL,PT,RO,SI,SK,FI,SE'
+  url_years <-
+    2000:as.integer(format(Sys.Date(),"%Y")) %>% 
+    paste(collapse=',')
+  url <-
+    paste0(url_pfix,url_dataset,'/',url_filters,'/filter/',url_geos,'/',url_years)
+  url %>% 
+    getTaxBenTable() %>% 
+    `if`(table_code=='nrr_ub',
+         melt(., id.vars='Country',
+              measure.vars = colnames(.) %>% .[!is.na(as.integer(.))],
+              variable.name='time', value.name='value_'),
+         .) %>% 
+    `if`(table_code %in% c('earn_nt_lowwtrp','tax_ben_traps'),
+         .[,.(Country,Year,METR)] %>% 
+           setnames(c('Year','METR'),
+                    c('time','value_')),
+         .) %>% 
+    .[, time := as.integer(time)] %>% 
+    .[, value_ := as.numeric(value_)] %>% 
+    .[!is.na(value_)] %>% 
+    .[, geo := countrycode(Country,
+                           origin='country.name',
+                           destination='eurostat')] %>% 
+    .[, Country := NULL]
 }
 
 
-
+getTaxBenTable <- function(url)
+  url %>% 
+  read_html() %>% 
+  html_node(xpath='/html/body/table') %>% 
+  html_table(convert=FALSE) %>% # wrong colnames = title "European Commission	Economic and Financial Affairs	Tax and Benefits"
+  as.data.table() %>%
+  setnames(seq_along(.),
+           as.character(.[1])) %>% 
+  .[-c(1,nrow(.))] # last row includes date e.g. "Last update :	20-03-2023"
 
 
 
