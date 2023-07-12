@@ -138,7 +138,7 @@ fromOECDdataset <- function(OECDdatasetCode, with_filters) {
                   JAF_old_to_new_OECD_map$new_filter_value],
               .) %>% 
          finaliseOECDdataset()
-       )
+  )
 }
 
 
@@ -234,10 +234,10 @@ fromBenefitsAndWages <- function(table_code, with_filters) {
   url_dataset <-
     table_code %>% 
     switch(.,
-      "nrr_ub" = 'NRR/NRRUB',
-      "earn_nt_lowwtrp" = 'TR/',
-      "tax_ben_traps" = 'TR/',
-      .)
+           "nrr_ub" = 'NRR/NRRUB',
+           "earn_nt_lowwtrp" = 'TR/',
+           "tax_ben_traps" = 'TR/',
+           .)
   url_filters <-
     with_filters$indicator %>% 
     gsub('.','/',.,fixed=TRUE) %>% 
@@ -287,8 +287,42 @@ getTaxBenTable <- function(url)
   .[-c(1,nrow(.))] # last row includes date e.g. "Last update :	20-03-2023"
 
 
+memoised_fread <- memoise(fread)
 
 
+fromLFSspecialFile <- function(jaf_lfs_code, with_filters) {
+  name_of_raw_file_from_estat <-
+    jaf_lfs_code %>% 
+    switch(
+      'lfse_jobtenure'="IESS_PA2_S5_v2_Y.csv",
+      'lfse_nacegap'="IESS_17_PA7_1_C6_N1_N2_AA.csv",
+      'lfse_iscogap'="IESS_16_PA7_1_C5_AA.csv",
+      'lfse_erfgap2064'="IESS_15_PA7_1_C4_2064_FTE_AA.csv",
+      'lfse_er_child'="IESS_11_PA7_2_S1_Y.csv",
+      'lfse_inactpt_lackcare'="IESS_10_PA5_C3_mod_Y.csv",
+      'lfse_overtime'="IESS_PA2_C3_AA.csv",
+      .
+    )
+  memoised_fread(name_of_raw_file_from_estat) %>% 
+    setnames(colnames(.),
+             colnames(.) %>% tolower()) %>% 
+    .[, c('quarter','flag','flag_break') := NULL] %>% 
+    setnames(c('country','year','value'),
+             c('geo','time','value_')) %>% 
+    .[, time := as.integer(time)] %>% 
+    .[, value_ := as.numeric(value_)] %>% 
+    Reduce(\(dt,x) dt[dt[[tolower(x)]] %in% with_filters[[x]]],
+           x=names(with_filters),
+           init=.)
+}
+
+
+fromDESI <- function(desi_indic, with_filters) {
+  # TODO: steal code from eurodata::importData
+  # reuse https://gist.github.com/alekrutkowski/5871288524cc9af6d5909f8a715edfe1
+  readr::read_csv(zip::unzip("https://digital-agenda-data.eu/download/DESI.csv.zip",
+                             "DESI.csv"))
+}
 
 
 

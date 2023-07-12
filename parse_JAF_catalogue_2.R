@@ -34,18 +34,18 @@ processCatalog <- function(catalog_dt, comment="")
   catalog_dt %>% 
   .[, c(id_cols,NumberedCatalogColumnNames), with=FALSE] %>%  
   {`if`(comment=="",
-        .[!is.na(table) | !is.na(cond1) | !is.na(formula)] %T>% 
+        .[!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl('DESI_Connectivity',table)] %T>% 
           {message(nrow(.),' defined indicators.')},
-        .[is.na(table) & is.na(cond1) & is.na(formula)] %T>% 
+        .[!(!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl('DESI_Connectivity',table))] %T>% 
           {message(nrow(.),' mis-defined indicators.')})} %>% 
-  melt(id.vars=,
-       measure.vars=NumberedCatalogColumnNames,
+  melt(measure.vars=NumberedCatalogColumnNames,
        variable.name="factor_or_cond",
        value.name="definitions",
        variable.factor=FALSE,
        na.rm=FALSE) %>%     
   `if`(comment=="",
-       .[!is.na(definitions)],
+       .[!is.na(definitions) | grepl('DESI_Connectivity',table)] %>% 
+         .[grepl('DESI_Connectivity',table) & factor_or_cond=='cond1' | !grepl('DESI_Connectivity',table)],
        .) %>% 
   .[, sep :=
       factor_or_cond %>% 
@@ -71,9 +71,11 @@ processCatalog <- function(catalog_dt, comment="")
     by=id_cols] %>% 
   .[, func :=
       SOURCE %>% 
-      {kit::nif(grepl("^Eurostat,",.) | .=='DG CONNECT', 'fromEurostatDataset',
+      {kit::nif(grepl('lfse_',table), 'fromLFSspecialFile',
+                grepl('DESI_Connectivity',table),'fromDESI',
+                grepl("^Eurostat,",.) | .=='DG CONNECT', 'fromEurostatDataset',
+                grepl("^OECD, Pisa",.), 'fromEurostatDataset',
                 grepl("^OECD,",.), 'fromOECDdataset',
-                grepl("^OECD, Pisa$",.), 'fromEurostatDataset',
                 grepl("Labour Market Policy",.), 'fromLMPdataset',
                 grepl("Benefits and wages",.), 'fromBenefitsAndWages',
                 ### TODO - fromLFSfile ???
@@ -202,7 +204,7 @@ CodeLines <-
     '### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`',
     paste('### on',Sys.time()),'\n',
     'source("JAF_functions.R")\n',
-    'JAF_INDICATORS = list()\n\n',
+    'JAF_INDICATORS = list()\n',
     # helpers,
     CatalogFormulaOrCond$definitions,
     '\n\n### Mis-specified indicators:\n',
