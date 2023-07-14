@@ -4,12 +4,24 @@ library(data.table)
 library(kit)
 
 
+# Constants ---------------------------------------------------------------
+
+table_names_without_cond_or_factor <-
+  c('DESI_Connectivity')
+
+Number_of_defined_indics_message <- ""
+Number_of_undefined_indics_message <- ""
+Undefined_indics <- character(0)
+
+
 # Functions ---------------------------------------------------------------
+
+`%+%` <- function(x,y) paste0(x,y)
 
 parseFactor <- function(factor_string, comment)
   factor_string %>% 
   sub('[','fromEurostatDataset( ',.,fixed=TRUE) %>% 
-  sub('[',paste0('\n',comment,'with_filters = list('),.,fixed=TRUE) %>% 
+  sub('[',paste0('\n',comment,'with_filters('),.,fixed=TRUE) %>% 
   gsub(']',')',.,fixed=TRUE) %>% 
   gsub("'\\s*([^,]*)\\s*=\\s*([^,]*)\\s*'",
        ' \\1="\\2"',.) %>% 
@@ -34,25 +46,29 @@ processCatalog <- function(catalog_dt, comment="")
   catalog_dt %>% 
   .[, c(id_cols,NumberedCatalogColumnNames), with=FALSE] %>%  
   {`if`(comment=="",
-        .[!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl('DESI_Connectivity',table)] %T>% 
-          {message(nrow(.),' defined indicators.')},
-        .[!(!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl('DESI_Connectivity',table))] %T>% 
-          {message(nrow(.),' mis-defined indicators.')})} %>% 
+        .[!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl(table_names_without_cond_or_factor,table)] %T>% 
+          {message(Number_of_defined_indics_message <<- paste(nrow(.),'defined indicators.'))},
+        .[!(!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl(table_names_without_cond_or_factor,table))] %T>% 
+          {message(Number_of_undefined_indics_message <<- paste(nrow(.),'mis-defined indicators.'))
+            Undefined_indics <<- unique(.$JAF_KEY)})} %>% 
   melt(measure.vars=NumberedCatalogColumnNames,
        variable.name="factor_or_cond",
        value.name="definitions",
        variable.factor=FALSE,
        na.rm=FALSE) %>%     
   `if`(comment=="",
-       .[!is.na(definitions) | grepl('DESI_Connectivity',table)] %>% 
-         .[grepl('DESI_Connectivity',table) & factor_or_cond=='cond1' | !grepl('DESI_Connectivity',table)],
+       .[!is.na(definitions) | grepl(table_names_without_cond_or_factor,table)] %>% 
+         .[grepl(table_names_without_cond_or_factor,table) & factor_or_cond=='cond1' | !grepl(table_names_without_cond_or_factor,table)],
+       .) %>% 
+  `if`(comment!="",
+       .[!is.na(definitions) | factor_or_cond=='cond1'],
        .) %>% 
   .[, sep :=
       factor_or_cond %>% 
       sub("(\\D+)(\\d{1}$)", "\\10\\2", .) %>% # add leading zeros e.g. factor5 => factor05 for correct sort/max
       {ifelse(.==max(.),"",
-             ifelse(grepl('cond',.),
-                    ", ",",\n"))},
+              ifelse(grepl('cond',.),
+                     ", ",",\n"))},
     by=id_cols] %>% 
   .[, definitions :=
       ifelse(grepl('cond',factor_or_cond),
@@ -89,12 +105,12 @@ processCatalog <- function(catalog_dt, comment="")
              paste0(func,'(',
                     '"',table,'"',
                     ',\n',
-                    comment,' with_filters = list(',
+                    comment,' with_filters(',
                     definitions,
                     '))'))] %>%
   .[, definitions :=
       paste0('\n',
-             comment,'inside(JAF_INDICATORS, create_indicator = "',JAF_KEY,'") = \n',
+             comment,'inside(JAF_INDICATORS, indicator_named = "',JAF_KEY,'") = \n',
              comment,'specification(\n',
              comment,'name = ',quoteAndEscapeQuotes(INDICATOR_FULL),',\n',
              comment,'unit = ',quoteAndEscapeQuotes(UNITLONG),',\n',
@@ -202,16 +218,19 @@ CatalogNoFormulaOrCond <-
 CodeLines <-
   c(paste('### Compiled automatically by',Sys.getenv("USERNAME")),
     '### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`',
-    paste('### on',Sys.time()),'\n',
-    'source("JAF_functions.R")\n',
-    'JAF_INDICATORS = list()\n',
+    paste('### ',
+          c('on ' %+% Sys.time(),
+            Number_of_defined_indics_message,
+            Number_of_undefined_indics_message)),
+    'source("JAF_functions.R")',
+    'JAF_INDICATORS = list()',
     # helpers,
     CatalogFormulaOrCond$definitions,
     '\n\n### Mis-specified indicators:\n',
     CatalogNoFormulaOrCond$definitions,
     '\n')  %>% 
   gsub('fromEurostatDataset( ','fromEurostatDataset(',.,fixed=TRUE)  %>% 
-  gsub('with_filters = list( ','with_filters = list(',.,fixed=TRUE)  %>% 
+  gsub('with_filters( ','with_filters(',.,fixed=TRUE)  %>% 
   gsub('fromFormula( ','fromFormula(',.,fixed=TRUE) %T>% 
   cat(file='JAF_indicators__definitions.R',sep='\n')
 

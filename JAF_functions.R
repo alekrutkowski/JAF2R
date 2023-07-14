@@ -7,11 +7,15 @@ library(collapse)
 library(OECD)
 library(countrycode)
 library(rvest)
+library(kit)
 
 
-`inside<-` <- function(.list, create_indicator, value) {
-  message("Modifying JAF_INDICATORS element `",create_indicator,"`...")
-  .list[[create_indicator]] <- value
+`inside<-` <- function(.list,  indicator_named, value) {
+  pfix <-
+    ifelse(indicator_named %in% names(.list),
+           'Modifying', 'Creating')
+  message(pfix," JAF_INDICATORS\U2019 element `",indicator_named,"`...")
+  .list[[indicator_named]] <- value
   .list
 }
 
@@ -83,6 +87,18 @@ specification <- memoise::memoise(
          source=source,
          value=value)
   })
+
+with_filters <- function(...) {
+  filters <-
+    list(...)
+  if (!identical(filters,list(NA))) {
+    if (any(names(filters)!=""))
+      stop('There is an unnamed element inside with_filters()!')
+    if (length(names(filters))!=length(unique(names(filters))))
+      stop('There are repeated names of elements inside with_filters()!')
+  }
+  filters
+}
 
 
 fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0L) {
@@ -318,10 +334,16 @@ fromLFSspecialFile <- function(jaf_lfs_code, with_filters) {
 
 
 fromDESI <- function(desi_indic, with_filters) {
-  # TODO: steal code from eurodata::importData
-  # reuse https://gist.github.com/alekrutkowski/5871288524cc9af6d5909f8a715edfe1
-  readr::read_csv(zip::unzip("https://digital-agenda-data.eu/download/DESI.csv.zip",
-                             "DESI.csv"))
+  tmpfile <- tempfile()
+  download.file("https://digital-agenda-data.eu/download/DESI.csv.zip",
+                tmpfile)
+  unzip(tmpfile) %>% 
+    fread() %>% 
+    Reduce(\(dt,x) dt[dt[[x]] %in% with_filters[[x]]],
+           x=names(with_filters),
+           init=.) # %>% 
+    # TODO:
+    # setnames(c("observation","time_period","ref_area","indicator","breakdown","unit_measure","value","flag","note"))
 }
 
 
