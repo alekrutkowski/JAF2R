@@ -7,7 +7,9 @@ library(kit)
 # Constants ---------------------------------------------------------------
 
 table_names_without_cond_or_factor <-
-  c('DESI_Connectivity')
+  c('DESI_Connectivity',
+    'earn_nt_unemtrp') %>% 
+  paste(collapse="|")
 
 Number_of_defined_indics_message <- ""
 Number_of_undefined_indics_message <- ""
@@ -89,7 +91,7 @@ processCatalog <- function(catalog_dt, comment="")
       SOURCE %>% 
       {kit::nif(grepl('lfse_',table), 'fromLFSspecialFile',
                 grepl('DESI_Connectivity',table),'fromDESI',
-                grepl("^Eurostat,",.) | .=='DG CONNECT', 'fromEurostatDataset',
+                grepl("^Eurostat,",.) | .=='DG CONNECT' | table=='earn_nt_unemtrp', 'fromEurostatDataset',
                 grepl("^OECD, Pisa",.), 'fromEurostatDataset',
                 grepl("^OECD,",.), 'fromOECDdataset',
                 grepl("Labour Market Policy",.), 'fromLMPdataset',
@@ -233,7 +235,3 @@ CodeLines <-
   gsub('with_filters( ','with_filters(',.,fixed=TRUE)  %>% 
   gsub('fromFormula( ','fromFormula(',.,fixed=TRUE) %T>% 
   cat(file='JAF_indicators__definitions.R',sep='\n')
-
-
-
-
