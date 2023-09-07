@@ -341,10 +341,11 @@ fromDESI <- function(desi_indic, with_filters) {
     fread() %>% 
     Reduce(\(dt,x) dt[dt[[x]] %in% with_filters[[x]]],
            x=names(with_filters),
-           init=.) # %>% 
-    # TODO:
-    # setnames(c("observation","time_period","ref_area","indicator","breakdown","unit_measure","value","flag","note"))
+           init=.) %>% 
+  `if`(desi_indic=='DESI_Connectivity',
+       .[indicator=="desi" & breakdown=="desi_conn" & unit_measure=="pc_desi"],
+       .) %>% 
+    .[,.(time_period,ref_area,value,flag)] %>% 
+    setnames(c('time_period','ref_area','value','flag'),
+             c('time','geo','value_','flags_'))
 }
-
-
-
