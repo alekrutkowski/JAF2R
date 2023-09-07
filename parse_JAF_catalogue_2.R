@@ -228,10 +228,45 @@ CodeLines <-
     'JAF_INDICATORS = list()',
     # helpers,
     CatalogFormulaOrCond$definitions,
-    '\n\n### Mis-specified indicators:\n',
+    '\n\n### Mis-specified indicators are commented-out below -- but some valid indicators below too,\n',
+    '\n\n### the valid ones are those with significantly modified definitions compared to the catalogue\n',
     CatalogNoFormulaOrCond$definitions,
     '\n')  %>% 
   gsub('fromEurostatDataset( ','fromEurostatDataset(',.,fixed=TRUE)  %>% 
   gsub('with_filters( ','with_filters(',.,fixed=TRUE)  %>% 
-  gsub('fromFormula( ','fromFormula(',.,fixed=TRUE) %T>% 
+  gsub('fromFormula( ','fromFormula(',.,fixed=TRUE) %>% 
+  # Special treatment:
+  sub(
+    '
+# inside(JAF_INDICATORS, indicator_named = "PA6a.S5.") = 
+# specification(
+# name = "Employment in newly established enterprises ",
+# unit = "% (of current employment in all active enterprises)",
+# source = "Eurostat, Structural Business Statistics ",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("empl_new_enterprises",
+#  with_filters(NA))
+# )',
+'
+inside(JAF_INDICATORS, indicator_named = "PA6a.S5.") = 
+specification(
+name = "Employment in newly established enterprises",
+unit = "% (of current employment in all active enterprises)",
+source = "Eurostat, Structural Business Statistics",
+high_is_good = TRUE,
+value = fromFormula((a + b + c + d)/e,
+where = variables(
+ a = fromEurostatDataset("bd_9bd_sz_cl_r2",
+with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16920")),
+ b = fromEurostatDataset("bd_9bd_sz_cl_r2",
+with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16941")),
+ c = fromEurostatDataset("bd_9bd_sz_cl_r2",
+with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16942")),
+ d = fromEurostatDataset("bd_9bd_sz_cl_r2",
+with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16943")),
+ e = fromEurostatDataset("bd_9bd_sz_cl_r2",
+with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
+)))',
+.,
+fixed=TRUE) %T>%
   cat(file='JAF_indicators__definitions.R',sep='\n')
