@@ -8,7 +8,8 @@ library(kit)
 
 table_names_without_cond_or_factor <-
   c('DESI_Connectivity',
-    'earn_nt_unemtrp') %>% 
+    'earn_nt_unemtrp',
+    'vacancy_rate') %>% 
   paste(collapse="|")
 
 Number_of_defined_indics_message <- ""
@@ -91,13 +92,14 @@ processCatalog <- function(catalog_dt, comment="")
       SOURCE %>% 
       {kit::nif(grepl('lfse_',table), 'fromLFSspecialFile',
                 grepl('DESI_Connectivity',table),'fromDESI',
-                grepl("^Eurostat,",.) | .=='DG CONNECT' | table=='earn_nt_unemtrp', 'fromEurostatDataset',
+                (grepl("^Eurostat,",.) & table!='vacancy_rate') |
+                  .=='DG CONNECT' | table=='earn_nt_unemtrp', 'fromEurostatDataset',
                 grepl("^OECD, Pisa",.), 'fromEurostatDataset',
                 grepl("^OECD,",.), 'fromOECDdataset',
                 grepl("Labour Market Policy",.), 'fromLMPdataset',
                 grepl("Benefits and wages",.), 'fromBenefitsAndWages',
                 ### TODO - fromLFSfile ???
-                default='fromFile')}] %>% 
+                default='fromSpecialCalculation')}] %>% 
   .[, definitions :=
       ifelse(!is.na(formula),
              paste0('fromFormula( ',formula,
@@ -270,3 +272,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 .,
 fixed=TRUE) %T>%
   cat(file='JAF_indicators__definitions.R',sep='\n')
+
+
+
+

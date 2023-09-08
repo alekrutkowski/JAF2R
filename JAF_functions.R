@@ -342,10 +342,54 @@ fromDESI <- function(desi_indic, with_filters) {
     Reduce(\(dt,x) dt[dt[[x]] %in% with_filters[[x]]],
            x=names(with_filters),
            init=.) %>% 
-  `if`(desi_indic=='DESI_Connectivity',
-       .[indicator=="desi" & breakdown=="desi_conn" & unit_measure=="pc_desi"],
-       .) %>% 
+    `if`(desi_indic=='DESI_Connectivity',
+         .[indicator=="desi" & breakdown=="desi_conn" & unit_measure=="pc_desi"],
+         .) %>% 
     .[,.(time_period,ref_area,value,flag)] %>% 
     setnames(c('time_period','ref_area','value','flag'),
              c('time','geo','value_','flags_'))
+}
+
+fromSpecialCalculation <- function(indicator, with_filters=NULL)
+  get(indicator)(with_filters)
+
+EU_Members_geo_codes <-
+  c("BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR",
+    "HR","IT","CY","LV","LT","LU","HU","MT","NL","AT",
+    "PL","PT","RO","SI","SK","FI","SE")
+
+`%without%` <- setdiff
+
+vacancy_rate <- function(with_filters=NULL) {
+  f <- eurodata::importData
+  dt1 <-
+    f('jvs_q_nace2',
+      list(indic_em='JOBRATE', s_adj='NSA',
+           nace_r2='B-S', sizeclas='TOTAL',
+           geo = EU_Members_geo_codes %without% c('IT','DK','FR','MT') ))
+  dt2 <-
+    f('jvs_q_nace2', 
+      list(indic_em='JOBRATE', s_adj='NSA',
+           nace_r2='B-N', sizeclas='GE10', geo='IT'))
+  dt3 <-
+    f('jvs_q_nace2', 
+      list(indic_em='JOBRATE', s_adj='NSA',
+           nace_r2='B-N', sizeclas='TOTAL', geo='DK'))
+  dt4 <-
+    f('jvs_q_nace2', 
+      list(indic_em='JOBRATE', s_adj='NSA',
+           nace_r2='B-S', sizeclas='GE10', geo=c('FR','MT')))
+  list(dt1, dt2, dt3, dt4) %>% 
+    lapply(as.data.table) %>% 
+    rbindlist() %>% 
+    setnames('TIME_PERIOD','time') %>% 
+    .[, time := as.integer(substr(time, 1, 4))] %>%  # quarters to years
+    .[, .(value_ = mean(value_, na.rm=TRUE)),
+      by=.(geo,time)] %>% # across quarters
+    merge(data.table(time = seq.int(min(.$time),max(.$time)) ),
+          by='time', all.y=TRUE) %>% # fill in potentially missing years for the correct setting of the rolling mean window
+    setorder(geo,time) %>% 
+    .[, value_ := frollmean(value_, 3, algo='exact'),
+      by=geo] %>% 
+    .[!is.na(value_)]
 }

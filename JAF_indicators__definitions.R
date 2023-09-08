@@ -1,8 +1,8 @@
 ### Compiled automatically by rutkoal
 ### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`
-###  on 2023-09-07 16:31:21
-###  520 defined indicators.
-###  46 mis-defined indicators.
+###  on 2023-09-08 16:26:10
+###  521 defined indicators.
+###  45 mis-defined indicators.
 source("JAF_functions.R")
 JAF_INDICATORS = list()
 
@@ -2439,7 +2439,7 @@ value = fromLMPdataset("lmp_expenditure",
 
 inside(JAF_INDICATORS, indicator_named = "PA3.S5.") = 
 specification(
-name = "Activation Â– number of participants in regular activation measures (cat. 2-7) in relation to persons wanting to work ",
+name = "Activation – number of participants in regular activation measures (cat. 2-7) in relation to persons wanting to work ",
 unit = "% (of persons wanting to work)",
 source = "European Commission, Labour Market Policy",
 high_is_good = TRUE,
@@ -2659,7 +2659,7 @@ value = fromEurostatDataset("une_rt_a",
 
 inside(JAF_INDICATORS, indicator_named = "PA4.2.O1.") = 
 specification(
-name = "Unemployment trap Â– tax rate on low wage earners ",
+name = "Unemployment trap – tax rate on low wage earners ",
 unit = "% (of change in gross income)",
 source = "OECD and European Commission, Benefits and wages",
 high_is_good = FALSE,
@@ -2679,7 +2679,7 @@ value = fromEurostatDataset("ilc_iw01",
 
 inside(JAF_INDICATORS, indicator_named = "PA4.2.S2.") = 
 specification(
-name = "Low wage trap Â– tax rate on low wage earners ",
+name = "Low wage trap – tax rate on low wage earners ",
 unit = "% (of increase in gross earnings)",
 source = "OECD and European Commission, Benefits and wages",
 high_is_good = FALSE,
@@ -2786,7 +2786,7 @@ value = fromLFSspecialFile("lfse_inactpt_lackcare",
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S3.T") = 
 specification(
-name = "Child care Â– Children cared for (by formal arrangements other than by the family) (age 3 to mandatory school age) ",
+name = "Child care – Children cared for (by formal arrangements other than by the family) (age 3 to mandatory school age) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -2801,7 +2801,7 @@ with_filters(age="Y3-CSA", duration="H_GE30"))
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S3.<30") = 
 specification(
-name = "Child care Â– Children cared for (by formal arrangements other than by the family) less than 30h a usual week as a proportion of all children in the same age group (age 3 to mandatory school age) ",
+name = "Child care – Children cared for (by formal arrangements other than by the family) less than 30h a usual week as a proportion of all children in the same age group (age 3 to mandatory school age) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -2811,7 +2811,7 @@ value = fromEurostatDataset("ilc_caindformal",
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S3.>30") = 
 specification(
-name = "Child care Â– Children cared for (by formal arrangements other than by the family) 30h or more a usual week as a proportion of all children in the same age group (age 3 to mandatory school age) ",
+name = "Child care – Children cared for (by formal arrangements other than by the family) 30h or more a usual week as a proportion of all children in the same age group (age 3 to mandatory school age) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -2821,7 +2821,7 @@ value = fromEurostatDataset("ilc_caindformal",
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S4.T") = 
 specification(
-name = "Child care Â– Children cared for (by formal arrangements other than by the family) (age 0 to 3) ",
+name = "Child care – Children cared for (by formal arrangements other than by the family) (age 0 to 3) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -2836,7 +2836,7 @@ with_filters(age="Y_LT3", duration="H_GE30"))
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S4.<30") = 
 specification(
-name = "Child care Â– Children cared for (by formal arrangements other than by the family) less than 30h a usual week as a proportion of all children in the same age group (age 0 to 3) ",
+name = "Child care – Children cared for (by formal arrangements other than by the family) less than 30h a usual week as a proportion of all children in the same age group (age 0 to 3) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -2846,7 +2846,7 @@ value = fromEurostatDataset("ilc_caindformal",
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S4.>30") = 
 specification(
-name = "Child care Â– Children cared for (by formal arrangements other than by the family) 30h or more a usual week as a proportion of all children in the same age group (age 0 to 3) ",
+name = "Child care – Children cared for (by formal arrangements other than by the family) 30h or more a usual week as a proportion of all children in the same age group (age 0 to 3) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -3100,7 +3100,7 @@ with_filters(age="Y15-64", sex="T", unit="PC_EMP", wstatus="EMP_TEMP"), time_per
 
 inside(JAF_INDICATORS, indicator_named = "PA6a.S6.") = 
 specification(
-name = "Self-employment Â– Share of self-employed workers among overall employment ",
+name = "Self-employment – Share of self-employed workers among overall employment ",
 unit = "% (of total employment)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
@@ -3276,7 +3276,7 @@ with_filters(age="Y55-64", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="AC
 
 inside(JAF_INDICATORS, indicator_named = "PA6a.C4.") = 
 specification(
-name = "White coat jobs Â– Share of employment in care and health care activities ",
+name = "White coat jobs – Share of employment in care and health care activities ",
 unit = "% (of employment)",
 source = "Eurostat, National Accounts ",
 high_is_good = TRUE,
@@ -3293,12 +3293,22 @@ with_filters(nace_r2="TOTAL", na_item="EMP_DC", unit="THS_PER"))
 
 inside(JAF_INDICATORS, indicator_named = "PA6a.C5.") = 
 specification(
-name = "Green jobs Â– employment in the environmental goods and services sector ",
+name = "Green jobs – employment in the environmental goods and services sector ",
 unit = "FTE (Full time equivalent)",
 source = "Eurostat, EGSS data collection",
 high_is_good = TRUE,
 value = fromEurostatDataset("env_ac_egss1",
  with_filters(unit="FTE", na_item="EMP_DC", ceparema="TOTAL", ty="TOT_EGSS", nace_r2="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA6b.O1.") = 
+specification(
+name = "Job vacancy rate (average over 3 years)",
+unit = "% (of total vacant and occupied posts)",
+source = "Eurostat, EU Job Vacancy Statistics",
+high_is_good = TRUE,
+value = fromSpecialCalculation("vacancy_rate",
+ with_filters(NA))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA6b.S2.") = 
@@ -3435,7 +3445,7 @@ value = fromEurostatDataset("lfsa_eetpgar",
 
 inside(JAF_INDICATORS, indicator_named = "PA7.1.S4.") = 
 specification(
-name = "Inactivity and part-time work due to personal and family responsibilities Â– women ",
+name = "Inactivity and part-time work due to personal and family responsibilities – women ",
 unit = "% (of women 15-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
@@ -3470,7 +3480,7 @@ with_filters(age="Y20-64", citizen="TOTAL", sex="M", unit="PC"))
 
 inside(JAF_INDICATORS, indicator_named = "PA7.1.C2.") = 
 specification(
-name = "Child care Â– Children cared for (by formal arrangements other than by the family) (age 3 to mandatory school age) ",
+name = "Child care – Children cared for (by formal arrangements other than by the family) (age 3 to mandatory school age) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -3614,7 +3624,7 @@ value = fromBenefitsAndWages("tax_ben_traps",
 
 inside(JAF_INDICATORS, indicator_named = "PA7.2.C1.") = 
 specification(
-name = "Child care Â– Children cared for (by formal arrangements other than by the family) (age 3 to mandatory school age) ",
+name = "Child care – Children cared for (by formal arrangements other than by the family) (age 3 to mandatory school age) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -3839,7 +3849,7 @@ value = fromLFSspecialFile("trng_lfse_02",
 
 inside(JAF_INDICATORS, indicator_named = "PA8.2.S4.") = 
 specification(
-name = "Public spending on human resources Â– total public expenditure in education as % of GDP ",
+name = "Public spending on human resources – total public expenditure in education as % of GDP ",
 unit = "% (of GDP)",
 source = "Eurostat, UOE",
 high_is_good = TRUE,
@@ -4319,7 +4329,7 @@ value = fromLFSspecialFile("edat_lfse_03",
 
 inside(JAF_INDICATORS, indicator_named = "PA9.2.C0.") = 
 specification(
-name = "TO REVIEW: Youth education attainment level Â– Percentage of the population aged 20-24 having attained at least upper secondary education",
+name = "TO REVIEW: Youth education attainment level – Percentage of the population aged 20-24 having attained at least upper secondary education",
 unit = "% (of popn 20-24)",
 source = "Eurostat, EU labour Force Survey",
 high_is_good = TRUE,
@@ -5794,7 +5804,7 @@ value = fromEurostatDataset("demo_mlexpec",
 # unit = "percentage points (gap between reference groups)",
 # source = "National Sources/LFS",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -5804,7 +5814,7 @@ value = fromEurostatDataset("demo_mlexpec",
 # unit = "NA",
 # source = "National sources",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -5814,7 +5824,7 @@ value = fromEurostatDataset("demo_mlexpec",
 # unit = "NA",
 # source = "National sources",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -5824,7 +5834,7 @@ value = fromEurostatDataset("demo_mlexpec",
 # unit = "NA",
 # source = "NA",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -5864,7 +5874,7 @@ value = fromEurostatDataset("demo_mlexpec",
 # unit = "NA",
 # source = "Eurostat, EU Statistics on Income and Living Conditions",
 # high_is_good = FALSE,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -5874,7 +5884,7 @@ value = fromEurostatDataset("demo_mlexpec",
 # unit = "NA",
 # source = "SPC-OV 9b               (OECD - EC ?)",
 # high_is_good = FALSE,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -5884,7 +5894,7 @@ value = fromEurostatDataset("demo_mlexpec",
 # unit = "NA",
 # source = "OECD and AWG?",
 # high_is_good = TRUE,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -5894,7 +5904,7 @@ value = fromEurostatDataset("demo_mlexpec",
 # unit = "NA",
 # source = "Eurostat, EU Labour Force Survey",
 # high_is_good = NA,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -5904,7 +5914,7 @@ value = fromEurostatDataset("demo_mlexpec",
 # unit = "NA",
 # source = "Eurostat, EU Labour Force Survey",
 # high_is_good = NA,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -5914,7 +5924,7 @@ value = fromEurostatDataset("demo_mlexpec",
 # unit = "NA",
 # source = "National sources",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -5944,7 +5954,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "% (of pop 55-59)",
 # source = "Eurostat, EU Labour Force Survey",
 # high_is_good = FALSE,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -5954,27 +5964,17 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "% (of pop 60-64)",
 # source = "Eurostat, EU Labour Force Survey",
 # high_is_good = FALSE,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
 # inside(JAF_INDICATORS, indicator_named = "PA6a.C3.") = 
 # specification(
-# name = "Undeclared work Â– Size of undeclared work as share of persons employed ",
+# name = "Undeclared work – Size of undeclared work as share of persons employed ",
 # unit = "% (of employment)",
 # source = "National sources ",
 # high_is_good = FALSE,
-# value = fromFile("NA",
-#  with_filters(NA))
-# )
-
-# inside(JAF_INDICATORS, indicator_named = "PA6b.O1.") = 
-# specification(
-# name = "Job vacancy rate (average over 3 years)",
-# unit = "% (of total vacant and occupied posts)",
-# source = "Eurostat, EU Job Vacancy Statistics",
-# high_is_good = TRUE,
-# value = fromEurostatDataset("vacancy_rate",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -5994,17 +5994,17 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "ratio (vacancies/unemployed)*1000",
 # source = "Eurostat, EU Labour Force Survey and Job Vacancy Statistics",
 # high_is_good = TRUE,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
 # inside(JAF_INDICATORS, indicator_named = "PA6b.C1.") = 
 # specification(
-# name = "Anticipation of skill needs - future skill needs (total and by activity Â– 6 main branches of NACE) ",
+# name = "Anticipation of skill needs - future skill needs (total and by activity – 6 main branches of NACE) ",
 # unit = "NA",
 # source = "CEDEFOP",
 # high_is_good = TRUE,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6024,7 +6024,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "National sources",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6034,17 +6034,17 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "National sources",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
 # inside(JAF_INDICATORS, indicator_named = "PA8.1.C2.") = 
 # specification(
-# name = "Anticipation of skill needs Â– future skill needs (by occupation and educational level)",
+# name = "Anticipation of skill needs – future skill needs (by occupation and educational level)",
 # unit = "NA",
 # source = "CEDEFOP",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6054,7 +6054,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "ratio (vacancies/unemployed)*1000",
 # source = "Eurostat, EU Labour Force Survey and Job Vacancy Statistics",
 # high_is_good = NA,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6064,7 +6064,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "CVTS",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6074,7 +6074,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "CVTS",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6084,7 +6084,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "ICT household survey ",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6094,7 +6094,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "ICT household survey ",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6124,7 +6124,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "% (of 15 yrs old)",
 # source = "NA",
 # high_is_good = FALSE,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6134,7 +6134,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "Eurostat, ESSPROS and EPC/AWG (under preparation)",
 # high_is_good = NA,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6144,7 +6144,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "NA",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6154,7 +6154,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "NA",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6164,7 +6164,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "Eurostat, EU Statistics on Income and Living Conditions",
 # high_is_good = NA,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6194,7 +6194,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "NA",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6204,7 +6204,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "Eurostat, EU Labour Force Survey",
 # high_is_good = NA,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6214,7 +6214,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "percentage points (difference in ERs)",
 # source = "Eurostat, EU Labour Force Survey",
 # high_is_good = NA,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6224,7 +6224,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "percentage points (difference in ERs)",
 # source = "Eurostat, EU Labour Force Survey",
 # high_is_good = NA,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6234,7 +6234,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "EPC/AWG (under preparation)",
 # high_is_good = NA,
-# value = fromFile("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6244,7 +6244,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "Eurostat, ESSPROS and EPC/AWG (under preparation)",
 # high_is_good = NA,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
 
@@ -6254,6 +6254,8 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 # unit = "NA",
 # source = "Eurostat, ESSPROS and EPC/AWG (under preparation)",
 # high_is_good = NA,
-# value = fromEurostatDataset("NA",
+# value = fromSpecialCalculation("NA",
 #  with_filters(NA))
 # )
+
+
