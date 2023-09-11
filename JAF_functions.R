@@ -386,10 +386,10 @@ vacancy_rate <- function(with_filters=NULL) {
     .[, time := as.integer(substr(time, 1, 4))] %>%  # quarters to years
     .[, .(value_ = mean(value_, na.rm=TRUE)),
       by=.(geo,time)] %>% # across quarters
-    merge(data.table(time = seq.int(min(.$time),max(.$time)) ),
+    merge(data.table(time = seq.int(min(.$time, na.rm=TRUE),max(.$time, na.rm=TRUE)) ),
           by='time', all.y=TRUE) %>% # fill in potentially missing years for the correct setting of the rolling mean window
     setorder(geo,time) %>% 
     .[, value_ := frollmean(value_, 3, algo='exact'),
-      by=geo] %>% 
+      by=geo] %>% View
     .[!is.na(value_)]
 }

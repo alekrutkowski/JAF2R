@@ -9,9 +9,12 @@ library(kit)
 table_names_without_cond_or_factor <-
   c('DESI_Connectivity',
     'earn_nt_unemtrp',
-    'vacancy_rate') %>% 
+    'vacancy_rate',
+    'earn_nt_taxwedge',
+    'tepsr_lm210') %>% 
   paste(collapse="|")
 
+Number_of_redefined_indics_in_Codelines <- 4 # PA6a.S5.; PA4.2.S2.; PA9.1.S5.; PA9.2.S4.
 Number_of_defined_indics_message <- ""
 Number_of_undefined_indics_message <- ""
 Undefined_indics <- character(0)
@@ -50,9 +53,9 @@ processCatalog <- function(catalog_dt, comment="")
   .[, c(id_cols,NumberedCatalogColumnNames), with=FALSE] %>%  
   {`if`(comment=="",
         .[!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl(table_names_without_cond_or_factor,table)] %T>% 
-          {message(Number_of_defined_indics_message <<- paste(nrow(.),'defined indicators.'))},
+          {message(Number_of_defined_indics_message <<- paste(nrow(.)+Number_of_redefined_indics_in_Codelines,'defined indicators.'))},
         .[!(!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl(table_names_without_cond_or_factor,table))] %T>% 
-          {message(Number_of_undefined_indics_message <<- paste(nrow(.),'mis-defined indicators.'))
+          {message(Number_of_undefined_indics_message <<- paste(nrow(.)-Number_of_redefined_indics_in_Codelines,'mis-defined indicators.'))
             Undefined_indics <<- unique(.$JAF_KEY)})} %>% 
   melt(measure.vars=NumberedCatalogColumnNames,
        variable.name="factor_or_cond",
@@ -93,7 +96,8 @@ processCatalog <- function(catalog_dt, comment="")
       {kit::nif(grepl('lfse_',table), 'fromLFSspecialFile',
                 grepl('DESI_Connectivity',table),'fromDESI',
                 (grepl("^Eurostat,",.) & table!='vacancy_rate') |
-                  .=='DG CONNECT' | table=='earn_nt_unemtrp', 'fromEurostatDataset',
+                  .=='DG CONNECT' |
+                  table %in% c('earn_nt_unemtrp','earn_nt_taxwedge'), 'fromEurostatDataset',
                 grepl("^OECD, Pisa",.), 'fromEurostatDataset',
                 grepl("^OECD,",.), 'fromOECDdataset',
                 grepl("Labour Market Policy",.), 'fromLMPdataset',
@@ -219,6 +223,9 @@ CatalogNoFormulaOrCond <-
 #   '}') %>% 
 #   paste(collapse='\n')
 
+file_conn <-
+  file("JAF_indicators__definitions.R", open = "wt", encoding = "UTF-8")
+
 CodeLines <-
   c(paste('### Compiled automatically by',Sys.getenv("USERNAME")),
     '### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`',
@@ -237,6 +244,7 @@ CodeLines <-
   gsub('fromEurostatDataset( ','fromEurostatDataset(',.,fixed=TRUE)  %>% 
   gsub('with_filters( ','with_filters(',.,fixed=TRUE)  %>% 
   gsub('fromFormula( ','fromFormula(',.,fixed=TRUE) %>% 
+  # enc2utf8() %>% 
   # Special treatment:
   sub(
     '
@@ -270,9 +278,99 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16943")),
 with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 )))',
 .,
-fixed=TRUE) %T>%
-  cat(file='JAF_indicators__definitions.R',sep='\n')
-
+fixed=TRUE)  %>% 
+  # Special treatment:
+  sub(
+    '
+inside(JAF_INDICATORS, indicator_named = "PA4.2.S2.") = 
+specification(
+name = "Low wage trap – tax rate on low wage earners ",
+unit = "% (of increase in gross earnings)",
+source = "OECD and European Commission, Benefits and wages",
+high_is_good = FALSE,
+value = fromEurostatDataset("earn_nt_lowwtrp",
+ with_filters(NA))
+)',
+'
+inside(JAF_INDICATORS, indicator_named = "PA4.2.S2.") = 
+specification(
+name = "Low wage trap – tax rate on low wage earners ",
+unit = "% (of increase in gross earnings)",
+source = "OECD and European Commission, Benefits and wages",
+high_is_good = FALSE,
+value = fromEurostatDataset("earn_nt_lowwtrp",
+ with_filters(NA))
+)',
+.,
+fixed=TRUE) %>% 
+  sub('
+# inside(JAF_INDICATORS, indicator_named = "PA9.1.S5.") = 
+# specification(
+# name = "Annual expenditure in primary (ISCED 1) and secondary (ISCED 2-4) education per capita age group 6-18",
+# unit = "ratio (expenditure/GDP)",
+# source = "Eurostat, EU Labour Force Survey, National Accounts and Education statistics",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("educ_exp0_4",
+#  with_filters(NA))
+# )',
+'
+inside(JAF_INDICATORS, indicator_named = "PA9.1.S5.") = 
+specification(
+name = "Annual expenditure in primary and secondary education per capita of age group 5-19 relative to GDP per capita",
+unit = "ratio of ratios (expenditure/young population)/(GDP/total population)",
+source = "Eurostat",
+high_is_good = TRUE,
+value = fromFormula( ((a + b + c)/(d + e + f))/(g/h),
+where = variables(
+ a = fromEurostatDataset("educ_uoe_fine01",
+with_filters(unit="MIO_EUR", sector="S1", isced11="ED1")),
+ b = fromEurostatDataset("educ_uoe_fine01",
+with_filters(unit="MIO_EUR", sector="S1", isced11="ED2")),
+ c = fromEurostatDataset("educ_uoe_fine01",
+with_filters(unit="MIO_EUR", sector="S1", isced11="ED3")),
+ d = fromEurostatDataset("demo_pjangroup",
+with_filters(unit="NR", sex="T", age="Y5-9")),
+ e = fromEurostatDataset("demo_pjangroup",
+with_filters(unit="NR", sex="T", age="Y10-14")),
+ f = fromEurostatDataset("demo_pjangroup",
+with_filters(unit="NR", sex="T", age="Y15-19")),
+ g = fromEurostatDataset("nama_10_gdp",
+with_filters(unit="CP_MEUR", na_item="B1GQ")),
+ h = fromEurostatDataset("demo_pjangroup",
+with_filters(unit="NR", sex="T", age="TOTAL"))
+)))',
+., fixed=TRUE) %>% 
+  sub('
+# inside(JAF_INDICATORS, indicator_named = "PA9.2.S4.") = 
+# specification(
+# name = "Annual expenditure in tertiary education (ISCED 5+6) per capita age group 20-24",
+# unit = "ratio (expenditure/GDP)",
+# source = "Eurostat, EU Labour Force Survey, National Accounts and Education statistics",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("educ_exp5_6",
+#  with_filters(NA))
+# )',
+'
+inside(JAF_INDICATORS, indicator_named = "PA9.2.S4.") = 
+specification(
+name = "Annual expenditure in tertiary education per capita of age group 20-24 relative to GDP per capita",
+unit = "ratio of ratios (expenditure/young population)/(GDP/total population)",
+source = "Eurostat",
+high_is_good = TRUE,
+value = fromFormula( (a/b)/(c/d),
+where = variables(
+ a = fromEurostatDataset("educ_uoe_fine01",
+with_filters(unit="MIO_EUR", sector="S1", isced11="ED5-8")),
+ b = fromEurostatDataset("demo_pjangroup",
+with_filters(unit="NR", sex="T", age="Y20-24")),
+ c = fromEurostatDataset("nama_10_gdp",
+with_filters(unit="CP_MEUR", na_item="B1GQ")),
+ d = fromEurostatDataset("demo_pjangroup",
+with_filters(unit="NR", sex="T", age="TOTAL"))
+)))',
+., fixed=TRUE) %T>%
+  cat(file=file_conn,sep='\n')
+close(file_conn)
 
 
 

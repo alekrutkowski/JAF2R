@@ -1,8 +1,8 @@
 ### Compiled automatically by rutkoal
 ### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`
-###  on 2023-09-08 16:26:10
-###  521 defined indicators.
-###  45 mis-defined indicators.
+###  on 2023-09-11 17:41:55
+###  527 defined indicators.
+###  39 mis-defined indicators.
 source("JAF_functions.R")
 JAF_INDICATORS = list()
 
@@ -2439,7 +2439,7 @@ value = fromLMPdataset("lmp_expenditure",
 
 inside(JAF_INDICATORS, indicator_named = "PA3.S5.") = 
 specification(
-name = "Activation – number of participants in regular activation measures (cat. 2-7) in relation to persons wanting to work ",
+name = "Activation â€“ number of participants in regular activation measures (cat. 2-7) in relation to persons wanting to work ",
 unit = "% (of persons wanting to work)",
 source = "European Commission, Labour Market Policy",
 high_is_good = TRUE,
@@ -2659,7 +2659,7 @@ value = fromEurostatDataset("une_rt_a",
 
 inside(JAF_INDICATORS, indicator_named = "PA4.2.O1.") = 
 specification(
-name = "Unemployment trap – tax rate on low wage earners ",
+name = "Unemployment trap â€“ tax rate on low wage earners ",
 unit = "% (of change in gross income)",
 source = "OECD and European Commission, Benefits and wages",
 high_is_good = FALSE,
@@ -2679,7 +2679,7 @@ value = fromEurostatDataset("ilc_iw01",
 
 inside(JAF_INDICATORS, indicator_named = "PA4.2.S2.") = 
 specification(
-name = "Low wage trap – tax rate on low wage earners ",
+name = "Low wage trap â€“ tax rate on low wage earners ",
 unit = "% (of increase in gross earnings)",
 source = "OECD and European Commission, Benefits and wages",
 high_is_good = FALSE,
@@ -2786,7 +2786,7 @@ value = fromLFSspecialFile("lfse_inactpt_lackcare",
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S3.T") = 
 specification(
-name = "Child care – Children cared for (by formal arrangements other than by the family) (age 3 to mandatory school age) ",
+name = "Child care â€“ Children cared for (by formal arrangements other than by the family) (age 3 to mandatory school age) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -2801,7 +2801,7 @@ with_filters(age="Y3-CSA", duration="H_GE30"))
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S3.<30") = 
 specification(
-name = "Child care – Children cared for (by formal arrangements other than by the family) less than 30h a usual week as a proportion of all children in the same age group (age 3 to mandatory school age) ",
+name = "Child care â€“ Children cared for (by formal arrangements other than by the family) less than 30h a usual week as a proportion of all children in the same age group (age 3 to mandatory school age) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -2811,7 +2811,7 @@ value = fromEurostatDataset("ilc_caindformal",
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S3.>30") = 
 specification(
-name = "Child care – Children cared for (by formal arrangements other than by the family) 30h or more a usual week as a proportion of all children in the same age group (age 3 to mandatory school age) ",
+name = "Child care â€“ Children cared for (by formal arrangements other than by the family) 30h or more a usual week as a proportion of all children in the same age group (age 3 to mandatory school age) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -2821,7 +2821,7 @@ value = fromEurostatDataset("ilc_caindformal",
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S4.T") = 
 specification(
-name = "Child care – Children cared for (by formal arrangements other than by the family) (age 0 to 3) ",
+name = "Child care â€“ Children cared for (by formal arrangements other than by the family) (age 0 to 3) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -2836,7 +2836,7 @@ with_filters(age="Y_LT3", duration="H_GE30"))
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S4.<30") = 
 specification(
-name = "Child care – Children cared for (by formal arrangements other than by the family) less than 30h a usual week as a proportion of all children in the same age group (age 0 to 3) ",
+name = "Child care â€“ Children cared for (by formal arrangements other than by the family) less than 30h a usual week as a proportion of all children in the same age group (age 0 to 3) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -2846,7 +2846,7 @@ value = fromEurostatDataset("ilc_caindformal",
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S4.>30") = 
 specification(
-name = "Child care – Children cared for (by formal arrangements other than by the family) 30h or more a usual week as a proportion of all children in the same age group (age 0 to 3) ",
+name = "Child care â€“ Children cared for (by formal arrangements other than by the family) 30h or more a usual week as a proportion of all children in the same age group (age 0 to 3) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -3100,7 +3100,7 @@ with_filters(age="Y15-64", sex="T", unit="PC_EMP", wstatus="EMP_TEMP"), time_per
 
 inside(JAF_INDICATORS, indicator_named = "PA6a.S6.") = 
 specification(
-name = "Self-employment – Share of self-employed workers among overall employment ",
+name = "Self-employment â€“ Share of self-employed workers among overall employment ",
 unit = "% (of total employment)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
@@ -3276,7 +3276,7 @@ with_filters(age="Y55-64", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="AC
 
 inside(JAF_INDICATORS, indicator_named = "PA6a.C4.") = 
 specification(
-name = "White coat jobs – Share of employment in care and health care activities ",
+name = "White coat jobs â€“ Share of employment in care and health care activities ",
 unit = "% (of employment)",
 source = "Eurostat, National Accounts ",
 high_is_good = TRUE,
@@ -3293,7 +3293,7 @@ with_filters(nace_r2="TOTAL", na_item="EMP_DC", unit="THS_PER"))
 
 inside(JAF_INDICATORS, indicator_named = "PA6a.C5.") = 
 specification(
-name = "Green jobs – employment in the environmental goods and services sector ",
+name = "Green jobs â€“ employment in the environmental goods and services sector ",
 unit = "FTE (Full time equivalent)",
 source = "Eurostat, EGSS data collection",
 high_is_good = TRUE,
@@ -3308,6 +3308,16 @@ unit = "% (of total vacant and occupied posts)",
 source = "Eurostat, EU Job Vacancy Statistics",
 high_is_good = TRUE,
 value = fromSpecialCalculation("vacancy_rate",
+ with_filters(NA))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA6b.S1.") = 
+specification(
+name = "Tax wedge on labour cost (tax rate on low wage earners)",
+unit = "% (of total labour costs of the earner)",
+source = "OECD and European Commission, Benefits and wages",
+high_is_good = FALSE,
+value = fromEurostatDataset("earn_nt_taxwedge",
  with_filters(NA))
 )
 
@@ -3445,7 +3455,7 @@ value = fromEurostatDataset("lfsa_eetpgar",
 
 inside(JAF_INDICATORS, indicator_named = "PA7.1.S4.") = 
 specification(
-name = "Inactivity and part-time work due to personal and family responsibilities – women ",
+name = "Inactivity and part-time work due to personal and family responsibilities â€“ women ",
 unit = "% (of women 15-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
@@ -3461,6 +3471,16 @@ source = "OECD and European Commission, Benefits and wages",
 high_is_good = FALSE,
 value = fromBenefitsAndWages("tax_ben_traps",
  with_filters(indicator="IT.2EC67.67.0.0"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA7.1.S6.") = 
+specification(
+name = "Gender gap in part-time employment ",
+unit = "Percentage points differtence (difference in share of part-time employment 20-64)",
+source = "Eurostat, EU Labour Force Survey",
+high_is_good = FALSE,
+value = fromEurostatDataset("tepsr_lm210",
+ with_filters(NA))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA7.1.C1.") = 
@@ -3480,7 +3500,7 @@ with_filters(age="Y20-64", citizen="TOTAL", sex="M", unit="PC"))
 
 inside(JAF_INDICATORS, indicator_named = "PA7.1.C2.") = 
 specification(
-name = "Child care – Children cared for (by formal arrangements other than by the family) (age 3 to mandatory school age) ",
+name = "Child care â€“ Children cared for (by formal arrangements other than by the family) (age 3 to mandatory school age) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -3624,7 +3644,7 @@ value = fromBenefitsAndWages("tax_ben_traps",
 
 inside(JAF_INDICATORS, indicator_named = "PA7.2.C1.") = 
 specification(
-name = "Child care – Children cared for (by formal arrangements other than by the family) (age 3 to mandatory school age) ",
+name = "Child care â€“ Children cared for (by formal arrangements other than by the family) (age 3 to mandatory school age) ",
 unit = "% (of children of 3 years to mandatory school age)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
@@ -3849,7 +3869,7 @@ value = fromLFSspecialFile("trng_lfse_02",
 
 inside(JAF_INDICATORS, indicator_named = "PA8.2.S4.") = 
 specification(
-name = "Public spending on human resources – total public expenditure in education as % of GDP ",
+name = "Public spending on human resources â€“ total public expenditure in education as % of GDP ",
 unit = "% (of GDP)",
 source = "Eurostat, UOE",
 high_is_good = TRUE,
@@ -4329,7 +4349,7 @@ value = fromLFSspecialFile("edat_lfse_03",
 
 inside(JAF_INDICATORS, indicator_named = "PA9.2.C0.") = 
 specification(
-name = "TO REVIEW: Youth education attainment level – Percentage of the population aged 20-24 having attained at least upper secondary education",
+name = "TO REVIEW: Youth education attainment level â€“ Percentage of the population aged 20-24 having attained at least upper secondary education",
 unit = "% (of popn 20-24)",
 source = "Eurostat, EU labour Force Survey",
 high_is_good = TRUE,
@@ -5970,21 +5990,11 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 
 # inside(JAF_INDICATORS, indicator_named = "PA6a.C3.") = 
 # specification(
-# name = "Undeclared work – Size of undeclared work as share of persons employed ",
+# name = "Undeclared work â€“ Size of undeclared work as share of persons employed ",
 # unit = "% (of employment)",
 # source = "National sources ",
 # high_is_good = FALSE,
 # value = fromSpecialCalculation("NA",
-#  with_filters(NA))
-# )
-
-# inside(JAF_INDICATORS, indicator_named = "PA6b.S1.") = 
-# specification(
-# name = "Tax wedge on labour cost (tax rate on low wage earners)",
-# unit = "% (of total labour costs of the earner)",
-# source = "OECD and European Commission, Benefits and wages",
-# high_is_good = FALSE,
-# value = fromBenefitsAndWages("earn_nt_taxwedge",
 #  with_filters(NA))
 # )
 
@@ -6000,21 +6010,11 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 
 # inside(JAF_INDICATORS, indicator_named = "PA6b.C1.") = 
 # specification(
-# name = "Anticipation of skill needs - future skill needs (total and by activity – 6 main branches of NACE) ",
+# name = "Anticipation of skill needs - future skill needs (total and by activity â€“ 6 main branches of NACE) ",
 # unit = "NA",
 # source = "CEDEFOP",
 # high_is_good = TRUE,
 # value = fromSpecialCalculation("NA",
-#  with_filters(NA))
-# )
-
-# inside(JAF_INDICATORS, indicator_named = "PA7.1.S6.") = 
-# specification(
-# name = "Gender gap in part-time employment ",
-# unit = "Percentage points differtence (difference in share of part-time employment 20-64)",
-# source = "Eurostat, EU Labour Force Survey",
-# high_is_good = FALSE,
-# value = fromEurostatDataset("tepsr_lm210",
 #  with_filters(NA))
 # )
 
@@ -6040,7 +6040,7 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 
 # inside(JAF_INDICATORS, indicator_named = "PA8.1.C2.") = 
 # specification(
-# name = "Anticipation of skill needs – future skill needs (by occupation and educational level)",
+# name = "Anticipation of skill needs â€“ future skill needs (by occupation and educational level)",
 # unit = "NA",
 # source = "CEDEFOP",
 # high_is_good = NA,
@@ -6098,25 +6098,49 @@ with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 #  with_filters(NA))
 # )
 
-# inside(JAF_INDICATORS, indicator_named = "PA9.1.S5.") = 
-# specification(
-# name = "Annual expenditure in primary (ISCED 1) and secondary (ISCED 2-4) education per capita age group 6-18",
-# unit = "ratio (expenditure/GDP)",
-# source = "Eurostat, EU Labour Force Survey, National Accounts and Education statistics",
-# high_is_good = TRUE,
-# value = fromEurostatDataset("educ_exp0_4",
-#  with_filters(NA))
-# )
+inside(JAF_INDICATORS, indicator_named = "PA9.1.S5.") = 
+specification(
+name = "Annual expenditure in primary and secondary education per capita of age group 5-19 relative to GDP per capita",
+unit = "ratio of ratios (expenditure/young population)/(GDP/total population)",
+source = "Eurostat",
+high_is_good = TRUE,
+value = fromFormula( ((a + b + c)/(d + e + f))/(g/h),
+where = variables(
+ a = fromEurostatDataset("educ_uoe_fine01",
+with_filters(unit="MIO_EUR", sector="S1", isced11="ED1")),
+ b = fromEurostatDataset("educ_uoe_fine01",
+with_filters(unit="MIO_EUR", sector="S1", isced11="ED2")),
+ c = fromEurostatDataset("educ_uoe_fine01",
+with_filters(unit="MIO_EUR", sector="S1", isced11="ED3")),
+ d = fromEurostatDataset("demo_pjangroup",
+with_filters(unit="NR", sex="T", age="Y5-9")),
+ e = fromEurostatDataset("demo_pjangroup",
+with_filters(unit="NR", sex="T", age="Y10-14")),
+ f = fromEurostatDataset("demo_pjangroup",
+with_filters(unit="NR", sex="T", age="Y15-19")),
+ g = fromEurostatDataset("nama_10_gdp",
+with_filters(unit="CP_MEUR", na_item="B1GQ")),
+ h = fromEurostatDataset("demo_pjangroup",
+with_filters(unit="NR", sex="T", age="TOTAL"))
+)))
 
-# inside(JAF_INDICATORS, indicator_named = "PA9.2.S4.") = 
-# specification(
-# name = "Annual expenditure in tertiary education (ISCED 5+6) per capita age group 20-24",
-# unit = "ratio (expenditure/GDP)",
-# source = "Eurostat, EU Labour Force Survey, National Accounts and Education statistics",
-# high_is_good = TRUE,
-# value = fromEurostatDataset("educ_exp5_6",
-#  with_filters(NA))
-# )
+inside(JAF_INDICATORS, indicator_named = "PA9.2.S4.") = 
+specification(
+name = "Annual expenditure in tertiary education per capita of age group 20-24 relative to GDP per capita",
+unit = "ratio of ratios (expenditure/young population)/(GDP/total population)",
+source = "Eurostat",
+high_is_good = TRUE,
+value = fromFormula( (a/b)/(c/d),
+where = variables(
+ a = fromEurostatDataset("educ_uoe_fine01",
+with_filters(unit="MIO_EUR", sector="S1", isced11="ED5-8")),
+ b = fromEurostatDataset("demo_pjangroup",
+with_filters(unit="NR", sex="T", age="Y20-24")),
+ c = fromEurostatDataset("nama_10_gdp",
+with_filters(unit="CP_MEUR", na_item="B1GQ")),
+ d = fromEurostatDataset("demo_pjangroup",
+with_filters(unit="NR", sex="T", age="TOTAL"))
+)))
 
 # inside(JAF_INDICATORS, indicator_named = "PA9.2.S6.") = 
 # specification(
