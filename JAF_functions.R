@@ -390,6 +390,6 @@ vacancy_rate <- function(with_filters=NULL) {
           by='time', all.y=TRUE) %>% # fill in potentially missing years for the correct setting of the rolling mean window
     setorder(geo,time) %>% 
     .[, value_ := frollmean(value_, 3, algo='exact'),
-      by=geo] %>% View
+      by=geo] %>% 
     .[!is.na(value_)]
 }
