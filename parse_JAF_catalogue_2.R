@@ -223,8 +223,13 @@ CatalogNoFormulaOrCond <-
 #   '}') %>% 
 #   paste(collapse='\n')
 
-file_conn <-
-  file("JAF_indicators__definitions.R", open = "wt", encoding = "UTF-8")
+saveAsUtf8 <- function(contents, file_name) {
+  file_conn <-
+    file("JAF_indicators__definitions.R", open="wt", encoding="UTF-8")
+  on.exit(close(file_conn))
+  cat(contents, file=file_conn, sep='\n')
+}
+
 
 CodeLines <-
   c(paste('### Compiled automatically by',Sys.getenv("USERNAME")),
@@ -369,8 +374,7 @@ with_filters(unit="CP_MEUR", na_item="B1GQ")),
 with_filters(unit="NR", sex="T", age="TOTAL"))
 )))',
 ., fixed=TRUE) %T>%
-  cat(file=file_conn,sep='\n')
-close(file_conn)
+  saveAsUtf8()
 
 
 
