@@ -93,11 +93,12 @@ processCatalog <- function(catalog_dt, comment="")
     by=id_cols] %>% 
   .[, func :=
       SOURCE %>% 
-      {kit::nif(grepl('lfse_',table), 'fromLFSspecialFile',
+      {kit::nif(grepl('lfse_',table) & !grepl('edat_lfse_',table), 'fromLFSspecialFile',
                 grepl('DESI_Connectivity',table),'fromDESI',
                 (grepl("^Eurostat,",.) & table!='vacancy_rate') |
                   .=='DG CONNECT' |
-                  table %in% c('earn_nt_unemtrp','earn_nt_taxwedge'), 'fromEurostatDataset',
+                  table %in% c('earn_nt_unemtrp','earn_nt_taxwedge'),
+                'fromEurostatDataset',
                 grepl("^OECD, Pisa",.), 'fromEurostatDataset',
                 grepl("^OECD,",.), 'fromOECDdataset',
                 grepl("Labour Market Policy",.), 'fromLMPdataset',
@@ -135,7 +136,15 @@ Catalog <-
   openxlsx2::read_xlsx('//NET1.cec.eu.int/offline/03/rutkoal/Desktop/Indicators Table - JAF 2017 29062023.xlsx',
                        sheet='IndicatorsTable') %>% 
   as.data.table %>%  
-  .[, row_num := .I]
+  .[, row_num := .I] %>% 
+  .[, formula := ifelse(grepl('delete the formula',comments) | 
+                          (!is.na(table) & standard=='Y'),
+                        NA_character_,
+                        formula)] %>% 
+  Reduce(\(dt,colname)
+         .[, (colname) := ifelse(is.na(formula),NA_character_,get(colname))],
+         grep('factor.+',colnames(.),value=TRUE),
+         .)
 
 StandardCatalogColumnNames <-
   quote(c(
@@ -229,7 +238,6 @@ saveAsUtf8 <- function(contents, file_name) {
   on.exit(close(file_conn))
   cat(contents, file=file_conn, sep='\n')
 }
-
 
 CodeLines <-
   c(paste('### Compiled automatically by',Sys.getenv("USERNAME")),

@@ -1,6 +1,6 @@
 ### Compiled automatically by rutkoal
 ### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`
-###  on 2023-09-11 17:41:55
+###  on 2023-09-14 17:26:28
 ###  527 defined indicators.
 ###  39 mis-defined indicators.
 source("JAF_functions.R")
@@ -807,7 +807,7 @@ name = "NEET rate for population aged 15-24 - total",
 unit = "% (of popn 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="T", unit="PC", wstatus="NEMP", age="Y15-24", training="NO_FE_NO_NFE"))
 )
 
@@ -817,7 +817,7 @@ name = "NEET rate for population aged 15-29 - total",
 unit = "% (of popn 15-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="T", unit="PC", wstatus="NEMP", age="Y15-29", training="NO_FE_NO_NFE"))
 )
 
@@ -827,7 +827,7 @@ name = "NEET rate for population aged 15-24 - men",
 unit = "% (of men 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="M", unit="PC", wstatus="NEMP", age="Y15-24", training="NO_FE_NO_NFE"))
 )
 
@@ -837,7 +837,7 @@ name = "NEET rate for population aged 15-24 - women",
 unit = "% (of women 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="F", unit="PC", wstatus="NEMP", age="Y15-24", training="NO_FE_NO_NFE"))
 )
 
@@ -891,7 +891,7 @@ name = "NEET rates for age group 15-24 unemployed - total",
 unit = "% (of popn 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="T", unit="PC", wstatus="UNE", age="Y15-24", training="NO_FE_NO_NFE"))
 )
 
@@ -901,7 +901,7 @@ name = "NEET rates for age group 15-24 inactive - total",
 unit = "% (of popn 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="T", unit="PC", wstatus="INAC", age="Y15-24", training="NO_FE_NO_NFE"))
 )
 
@@ -911,7 +911,7 @@ name = "NEET rate for population aged 15-29 - men",
 unit = "% (of men 15-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="M", unit="PC", wstatus="NEMP", age="Y15-29", training="NO_FE_NO_NFE"))
 )
 
@@ -921,7 +921,7 @@ name = "NEET rate for population aged 15-29 - women",
 unit = "% (of women 15-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="F", unit="PC", wstatus="NEMP", age="Y15-29", training="NO_FE_NO_NFE"))
 )
 
@@ -931,7 +931,7 @@ name = "NEET rates for age group 15-29 unemployed - total",
 unit = "% (of popn 15-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="T", unit="PC", wstatus="UNE", age="Y15-29", training="NO_FE_NO_NFE"))
 )
 
@@ -941,7 +941,7 @@ name = "NEET rates for age group 15-29 inactive - total",
 unit = "% (of popn 15-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="T", unit="PC", wstatus="INAC", age="Y15-29", training="NO_FE_NO_NFE"))
 )
 
@@ -951,7 +951,7 @@ name = "NEET rate for population aged 15-19 - total",
 unit = "% (of popn 15-19)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="T", unit="PC", wstatus="NEMP", age="Y15-19", training="NO_FE_NO_NFE"))
 )
 
@@ -961,7 +961,7 @@ name = "NEET rate for population aged 15-19 - men",
 unit = "% (of men 15-19)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="M", unit="PC", wstatus="NEMP", age="Y15-19", training="NO_FE_NO_NFE"))
 )
 
@@ -971,7 +971,7 @@ name = "NEET rate for population aged 15-19 - women",
 unit = "% (of women 15-19)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="F", unit="PC", wstatus="NEMP", age="Y15-19", training="NO_FE_NO_NFE"))
 )
 
@@ -981,7 +981,7 @@ name = "NEET rate for population aged 20-24 - total",
 unit = "% (of popn 20-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="T", unit="PC", wstatus="NEMP", age="Y20-24", training="NO_FE_NO_NFE"))
 )
 
@@ -991,7 +991,7 @@ name = "NEET rate for population aged 20-24 - men",
 unit = "% (of men 20-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="M", unit="PC", wstatus="NEMP", age="Y20-24", training="NO_FE_NO_NFE"))
 )
 
@@ -1001,7 +1001,7 @@ name = "NEET rate for population aged 20-24 - women",
 unit = "% (of women 20-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="F", unit="PC", wstatus="NEMP", age="Y20-24", training="NO_FE_NO_NFE"))
 )
 
@@ -1011,7 +1011,7 @@ name = "NEET rate for population aged 25-29 - total",
 unit = "% (of popn 25-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="T", unit="PC", wstatus="NEMP", age="Y25-29", training="NO_FE_NO_NFE"))
 )
 
@@ -1021,7 +1021,7 @@ name = "NEET rate for population aged 25-29 - men",
 unit = "% (of men 25-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="M", unit="PC", wstatus="NEMP", age="Y25-29", training="NO_FE_NO_NFE"))
 )
 
@@ -1031,7 +1031,7 @@ name = "NEET rate for population aged 25-29 - women",
 unit = "% (of women 25-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="F", unit="PC", wstatus="NEMP", age="Y25-29", training="NO_FE_NO_NFE"))
 )
 
@@ -1041,7 +1041,7 @@ name = "NEET rates for age group 18-24 with low education attainment - total",
 unit = "% (of low-skilled popn 18-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_21",
+value = fromEurostatDataset("edat_lfse_21",
  with_filters(isced11="ED0-2", sex="T", unit="PC", wstatus="NEMP", age="Y18-24"))
 )
 
@@ -1051,7 +1051,7 @@ name = "NEET rates for age group 18-24 with low education attainment - men",
 unit = "% (of low-skilled men 18-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_21",
+value = fromEurostatDataset("edat_lfse_21",
  with_filters(isced11="ED0-2", sex="M", unit="PC", wstatus="NEMP", age="Y18-24"))
 )
 
@@ -1061,7 +1061,7 @@ name = "NEET rates for age group 18-24 with low education attainment - women",
 unit = "% (of low-skilled women 18-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_21",
+value = fromEurostatDataset("edat_lfse_21",
  with_filters(isced11="ED0-2", sex="F", unit="PC", wstatus="NEMP", age="Y18-24"))
 )
 
@@ -1071,7 +1071,7 @@ name = "NEET rates for age group 18-24 with upper secondary or tertiary educatio
 unit = "% (of med&high-skilled popn 18-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_21",
+value = fromEurostatDataset("edat_lfse_21",
  with_filters(isced11="ED3-8", sex="T", unit="PC", wstatus="NEMP", age="Y18-24"))
 )
 
@@ -1081,7 +1081,7 @@ name = "NEET rates for age group 18-24 with upper secondary or tertiary educatio
 unit = "% (of med&high-skilled men 18-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_21",
+value = fromEurostatDataset("edat_lfse_21",
  with_filters(isced11="ED3-8", sex="M", unit="PC", wstatus="NEMP", age="Y18-24"))
 )
 
@@ -1091,7 +1091,7 @@ name = "NEET rates for age group 18-24 with upper secondary or tertiary educatio
 unit = "% (of med&high-skilled women 18-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_21",
+value = fromEurostatDataset("edat_lfse_21",
  with_filters(isced11="ED3-8", sex="F", unit="PC", wstatus="NEMP", age="Y18-24"))
 )
 
@@ -1101,7 +1101,7 @@ name = "NEET rates for age group 15-24 unemployed - men",
 unit = "% (of men 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="M", unit="PC", wstatus="UNE", age="Y15-24", training="NO_FE_NO_NFE"))
 )
 
@@ -1111,7 +1111,7 @@ name = "NEET rates for age group 15-24 unemployed - women",
 unit = "% (of women 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="F", unit="PC", wstatus="UNE", age="Y15-24", training="NO_FE_NO_NFE"))
 )
 
@@ -1121,7 +1121,7 @@ name = "NEET rates for age group 15-29 unemployed - men",
 unit = "% (of men 15-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="M", unit="PC", wstatus="UNE", age="Y15-29", training="NO_FE_NO_NFE"))
 )
 
@@ -1131,7 +1131,7 @@ name = "NEET rates for age group 15-29 unemployed - women",
 unit = "% (of women 15-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="F", unit="PC", wstatus="UNE", age="Y15-29", training="NO_FE_NO_NFE"))
 )
 
@@ -1141,7 +1141,7 @@ name = "NEET rates for age group 15-29 inactive - men",
 unit = "% (of men 15-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="M", unit="PC", wstatus="INAC", age="Y15-29", training="NO_FE_NO_NFE"))
 )
 
@@ -1151,7 +1151,7 @@ name = "NEET rates for age group 15-29 inactive - women",
 unit = "% (of women 15-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="F", unit="PC", wstatus="INAC", age="Y15-29", training="NO_FE_NO_NFE"))
 )
 
@@ -1161,7 +1161,7 @@ name = "NEET rates for age group 15-24 inactive - men",
 unit = "% (of men 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="M", unit="PC", wstatus="INAC", age="Y15-24", training="NO_FE_NO_NFE"))
 )
 
@@ -1171,7 +1171,7 @@ name = "NEET rates for age group 15-24 inactive - women",
 unit = "% (of women 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="F", unit="PC", wstatus="INAC", age="Y15-24", training="NO_FE_NO_NFE"))
 )
 
@@ -1411,15 +1411,8 @@ name = "Share of Inactivity due to personal and family responsibilities (55-64) 
 unit = "% (of popn 55-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromFormula((100-a)*(b+c)/100,
-where = variables(
-sex="T", unit="PC_POP", age="Y55-64", reason="FAM_CARE_PER_OTH",  a = fromEurostatDataset('lfsi_emp_a',
-with_filters(age="Y55-64", indic_em="ACT", sex="T", unit="PC_POP")),
- b = fromEurostatDataset('lfsa_igar',
-with_filters(age="Y55-64", reason="FAM_CARE_PER_OTH", sex="T", unit="PC")),
- c = fromEurostatDataset('lfsa_igar',
-with_filters(age="Y55-64", reason="FAM_CARE_PER_OTH", sex="T", unit="PC"))
-))
+value = fromEurostatDataset("lfsa_igar",
+ with_filters(sex="T", unit="PC_POP", age="Y55-64", reason="FAM_CARE_PER_OTH"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA1c.C4.M") = 
@@ -1668,7 +1661,7 @@ name = "Tertiary education attaintment (55-64) - total",
 unit = "% (of popn 55-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED5-8", sex="T", unit="PC", age="Y55-64"))
 )
 
@@ -1678,7 +1671,7 @@ name = "Tertiary education attainment (55-64) - men",
 unit = "% (of men 55-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED5-8", sex="M", unit="PC", age="Y55-64"))
 )
 
@@ -1688,7 +1681,7 @@ name = "Tertiary education attainment (55-64) - women",
 unit = "% (of women 55-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED5-8", sex="F", unit="PC", age="Y55-64"))
 )
 
@@ -1938,13 +1931,8 @@ name = "Involuntary temporary employment as % of total employees 15-64",
 unit = "% (of employees 15-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromFormula(a*b/100,
-where = variables(
-age="Y15-64", sex="T", reason="NF_PJOB", unit="PC_SAL",  a = fromEurostatDataset('lfsa_etpgan',
-with_filters(age="Y15-64", sex="T", unit="PC", citizen="TOTAL")),
- b = fromEurostatDataset('lfsa_etgar',
-with_filters(age="Y15-64", reason="NF_PJOB", sex="T", unit="PC"))
-))
+value = fromEurostatDataset("lfsa_etgar",
+ with_filters(age="Y15-64", sex="T", reason="NF_PJOB", unit="PC_SAL"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA2a.S1.Y15-24") = 
@@ -1953,13 +1941,8 @@ name = "Involuntary temporary employment as % of total employees in age group 15
 unit = "% (of employees 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromFormula(a*b/100,
-where = variables(
-age="Y15-24", sex="T", reason="NF_PJOB", unit="PC_SAL",  a = fromEurostatDataset('lfsa_etpgan',
-with_filters(age="Y15-24", sex="T", unit="PC", citizen="TOTAL")),
- b = fromEurostatDataset('lfsa_etgar',
-with_filters(age="Y15-24", reason="NF_PJOB", sex="T", unit="PC"))
-))
+value = fromEurostatDataset("lfsa_etgar",
+ with_filters(age="Y15-24", sex="T", reason="NF_PJOB", unit="PC_SAL"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA2a.S1.Y25-54") = 
@@ -1991,13 +1974,8 @@ name = "Involuntary temporary employment as % of total employees in age group 55
 unit = "% (of employees 55-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromFormula(a*b/100,
-where = variables(
-age="Y55-64", sex="T", reason="NF_PJOB", unit="PC_SAL",  a = fromEurostatDataset('lfsa_etpgan',
-with_filters(age="Y55-64", sex="T", unit="PC", citizen="TOTAL")),
- b = fromEurostatDataset('lfsa_etgar',
-with_filters(age="Y55-64", reason="NF_PJOB", sex="T", unit="PC"))
-))
+value = fromEurostatDataset("lfsa_etgar",
+ with_filters(age="Y55-64", sex="T", reason="NF_PJOB", unit="PC_SAL"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA2a.S2.M") = 
@@ -2006,13 +1984,8 @@ name = "Involuntary temporary employment as % of total employees in age group 15
 unit = "% (of male employees 15-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromFormula(a*b/100,
-where = variables(
-age="Y15-64", sex="M", reason="NF_PJOB", unit="PC_SAL",  a = fromEurostatDataset('lfsa_etpgan',
-with_filters(age="Y15-64", sex="M", unit="PC", citizen="TOTAL")),
- b = fromEurostatDataset('lfsa_etgar',
-with_filters(age="Y15-64", reason="NF_PJOB", sex="M", unit="PC"))
-))
+value = fromEurostatDataset("lfsa_etgar",
+ with_filters(age="Y15-64", sex="M", reason="NF_PJOB", unit="PC_SAL"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA2a.S2.F") = 
@@ -2021,13 +1994,8 @@ name = "Involuntary temporary employment as % of total employees in age group 15
 unit = "% (of female employees 15-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromFormula(a*b/100,
-where = variables(
-age="Y15-64", sex="F", reason="NF_PJOB", unit="PC_SAL",  a = fromEurostatDataset('lfsa_etpgan',
-with_filters(age="Y15-64", sex="F", unit="PC", citizen="TOTAL")),
- b = fromEurostatDataset('lfsa_etgar',
-with_filters(age="Y15-64", reason="NF_PJOB", sex="F", unit="PC"))
-))
+value = fromEurostatDataset("lfsa_etgar",
+ with_filters(age="Y15-64", sex="F", reason="NF_PJOB", unit="PC_SAL"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA2a.S3.") = 
@@ -2141,7 +2109,7 @@ name = "Persons with low educational attainment in population 15-64",
 unit = "% (of popn 15-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED0-2", sex="T", unit="PC", age="Y15-64"))
 )
 
@@ -2151,7 +2119,7 @@ name = "Persons with low educational attainment in population 15-64 - men",
 unit = "% (of male popn 15-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED0-2", sex="M", unit="PC", age="Y15-64"))
 )
 
@@ -2161,7 +2129,7 @@ name = "Persons with low educational attainment in population 15-64 - women",
 unit = "% (of female popn 15-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED0-2", sex="F", unit="PC", age="Y15-64"))
 )
 
@@ -3683,7 +3651,7 @@ name = "Share of adult population (aged 25-64) with upper secondary or tertiary 
 unit = "% (of popn 25-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED3-8", sex="T", unit="PC", age="Y25-64"))
 )
 
@@ -3693,7 +3661,7 @@ name = "Share of adult population (aged 25-64) having attained medium (upper sec
 unit = "% (of popn 25-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED3_4", sex="T", unit="PC", age="Y25-64"))
 )
 
@@ -3703,7 +3671,7 @@ name = "Share of adult population (aged 25-64) having attained high (tertiary) e
 unit = "% (of popn 25-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED5-8", sex="T", unit="PC", age="Y25-64"))
 )
 
@@ -3713,7 +3681,7 @@ name = "Youth education attainment level (aged 20-24) - total",
 unit = "% (of popn 20-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED3-8", sex="T", unit="PC", age="Y20-24"))
 )
 
@@ -3768,7 +3736,7 @@ name = "Share of adult population (aged 25-64) with upper secondary or tertiary 
 unit = "% (of popn 25-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED3-8", sex="M", unit="PC", age="Y25-64"))
 )
 
@@ -3778,7 +3746,7 @@ name = "Share of adult population (aged 25-64) with upper secondary or tertiary 
 unit = "% (of women 25-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED3-8", sex="F", unit="PC", age="Y25-64"))
 )
 
@@ -3788,7 +3756,7 @@ name = "Share of adult population (aged 25-34) with upper secondary or tertiary 
 unit = "% (of people 25-34)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED3-8", sex="T", unit="PC", age="Y25-34"))
 )
 
@@ -3798,7 +3766,7 @@ name = "Share of adult population (aged 35-44) with upper secondary or tertiary 
 unit = "% (of people 35-44)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED3-8", sex="T", unit="PC", age="Y35-44"))
 )
 
@@ -3808,7 +3776,7 @@ name = "Share of adult population (aged 25-64) having attained low (at most lowe
 unit = "% (of popn 25-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED0-2", sex="T", unit="PC", age="Y25-64"))
 )
 
@@ -4033,7 +4001,7 @@ name = "Early leavers from education and training (aged 18-24) - total",
 unit = "% (of popn 18-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_14",
+value = fromEurostatDataset("edat_lfse_14",
  with_filters(sex="T", unit="PC", wstatus="POP", age="Y18-24"))
 )
 
@@ -4053,7 +4021,7 @@ name = "NEET rates for age group 15-29 - total",
 unit = "% (of popn 15-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="T", unit="PC", wstatus="NEMP", age="Y15-29", training="NO_FE_NO_NFE"))
 )
 
@@ -4063,7 +4031,7 @@ name = "NEET rates for age group 15-24 - total",
 unit = "% (of popn 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="T", unit="PC", wstatus="NEMP", age="Y15-24", training="NO_FE_NO_NFE"))
 )
 
@@ -4088,7 +4056,7 @@ name = "Share of women aged 45-54 with low educational attainment",
 unit = "% (of popn 45-54)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED0-2", sex="F", unit="PC", age="Y45-54"))
 )
 
@@ -4108,7 +4076,7 @@ name = "Early leavers from education and training - men",
 unit = "% (of men 18-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_14",
+value = fromEurostatDataset("edat_lfse_14",
  with_filters(age="Y18-24", sex="M", unit="PC", wstatus="POP"))
 )
 
@@ -4118,7 +4086,7 @@ name = "Early leavers from education and training - women",
 unit = "% (of women 18-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_14",
+value = fromEurostatDataset("edat_lfse_14",
  with_filters(age="Y18-24", sex="F", unit="PC", wstatus="POP"))
 )
 
@@ -4128,7 +4096,7 @@ name = "Early leavers from education and training - nationals",
 unit = "% (of nationals)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_01",
+value = fromEurostatDataset("edat_lfse_01",
  with_filters(sex="T", unit="PC", citizen="NAT", wstatus="POP", age="Y18-24"))
 )
 
@@ -4138,7 +4106,7 @@ name = "Early leavers from education and training - EU27_2020 nationals",
 unit = "% (of EU nationals)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_01",
+value = fromEurostatDataset("edat_lfse_01",
  with_filters(sex="T", unit="PC", citizen="EU27_2020_FOR", wstatus="POP", age="Y18-24"))
 )
 
@@ -4148,7 +4116,7 @@ name = "Early leavers from education and training - non-EU nationals",
 unit = "% (of non-EU nationals)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_01",
+value = fromEurostatDataset("edat_lfse_01",
  with_filters(sex="T", unit="PC", citizen="NEU27_2020_FOR", wstatus="POP", age="Y18-24"))
 )
 
@@ -4158,7 +4126,7 @@ name = "Early leavers from education and training - same born",
 unit = "% (of same born)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_02",
+value = fromEurostatDataset("edat_lfse_02",
  with_filters(c_birth="NAT", sex="T", unit="PC", wstatus="POP", age="Y18-24"))
 )
 
@@ -4168,7 +4136,7 @@ name = "Early leavers from education and training - other EU27_2020 born",
 unit = "% (of other EU born)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_02",
+value = fromEurostatDataset("edat_lfse_02",
  with_filters(c_birth="EU27_2020_FOR", sex="T", unit="PC", wstatus="POP", age="Y18-24"))
 )
 
@@ -4178,7 +4146,7 @@ name = "Early leavers from education and training - non-EU27_2020 born",
 unit = "% (of non-EU born)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_02",
+value = fromEurostatDataset("edat_lfse_02",
  with_filters(c_birth="NEU27_2020_FOR", sex="T", unit="PC", wstatus="POP", age="Y18-24"))
 )
 
@@ -4188,7 +4156,7 @@ name = "NEET rates for age group 15-29 - men",
 unit = "% (of men 15-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="M", unit="PC", wstatus="NEMP", age="Y15-29", training="NO_FE_NO_NFE"))
 )
 
@@ -4198,7 +4166,7 @@ name = "NEET rates for age group 15-29 - women",
 unit = "% (of women 15-29)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="F", unit="PC", wstatus="NEMP", age="Y15-29", training="NO_FE_NO_NFE"))
 )
 
@@ -4208,7 +4176,7 @@ name = "NEET rates for age group 15-24 - men",
 unit = "% (of men 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="M", unit="PC", wstatus="NEMP", age="Y15-24", training="NO_FE_NO_NFE"))
 )
 
@@ -4218,7 +4186,7 @@ name = "NEET rates for age group 15-24 - women",
 unit = "% (of women 15-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_20",
+value = fromEurostatDataset("edat_lfse_20",
  with_filters(sex="F", unit="PC", wstatus="NEMP", age="Y15-24", training="NO_FE_NO_NFE"))
 )
 
@@ -4278,7 +4246,7 @@ name = "Completion of tertiary or equivalent education (aged 30-34) - total",
 unit = "% (of popn 30-36)",
 source = "Eurostat, EU labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_04",
+value = fromEurostatDataset("edat_lfse_04",
  with_filters(sex="T", age="Y30-34", unit="PC", isced11="ED5-8"))
 )
 
@@ -4333,7 +4301,7 @@ name = "Share of females aged 55-64 with tertiary education",
 unit = "% (of women)",
 source = "Eurostat, EU labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED5-8", sex="F", unit="PC", age="Y55-64"))
 )
 
@@ -4343,7 +4311,7 @@ name = "Share of population aged 20-24 having completed at least upper secondary
 unit = "% (of population)",
 source = "Eurostat, EU labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED3-8", sex="T", unit="PC", age="Y20-24"))
 )
 
@@ -4353,7 +4321,7 @@ name = "TO REVIEW: Youth education attainment level – Percentage of the popula
 unit = "% (of popn 20-24)",
 source = "Eurostat, EU labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED5-8", sex="T", unit="PC", age="Y20-24"))
 )
 
@@ -4363,7 +4331,7 @@ name = "Completion of tertiary or equivalent education (aged 30-34) - men",
 unit = "% (of men 30-36)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_04",
+value = fromEurostatDataset("edat_lfse_04",
  with_filters(sex="M", age="Y30-34", unit="PC", isced11="ED5-8"))
 )
 
@@ -4373,7 +4341,7 @@ name = "Completion of tertiary or equivalent education (aged 30-34) - women",
 unit = "% (of women 30-36)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_04",
+value = fromEurostatDataset("edat_lfse_04",
  with_filters(sex="F", age="Y30-34", unit="PC", isced11="ED5-8"))
 )
 
@@ -4473,7 +4441,7 @@ name = "Share of population aged 20-24 having completed at least upper secondary
 unit = "% (of population)",
 source = "Eurostat, EU labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED3-8", sex="M", unit="PC", age="Y20-24"))
 )
 
@@ -4483,7 +4451,7 @@ name = "Share of population aged 20-24 having completed at least upper secondary
 unit = "graduates every 1000",
 source = "Eurostat, EU labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("edat_lfse_03",
+value = fromEurostatDataset("edat_lfse_03",
  with_filters(isced11="ED3-8", sex="F", unit="PC", age="Y20-24"))
 )
 
@@ -5311,7 +5279,7 @@ name = "Early leavers from education and training (aged 18-24) - total",
 unit = "% (of popn 18-24)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromLFSspecialFile("edat_lfse_14",
+value = fromEurostatDataset("edat_lfse_14",
  with_filters(age="Y18-24", sex="T", unit="PC", wstatus="POP"))
 )
 

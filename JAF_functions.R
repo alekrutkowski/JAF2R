@@ -25,20 +25,25 @@ fromFormula <- function(formula_expression, where) {
     where
   letters. <- 
     names(list_of_data_tables)
+  renameCols <- function(dt, letter..)
+    dt %>% 
+    copy() %>% 
+    setnames(c('value_','flags_'),
+             c(letter..,paste0('flags_',letter..)),
+             skip_absent=TRUE)
   mergeRenamed <- function(dt, num) {
     letter1 <- 
       letters.[num - 1]
     letter2 <- 
       letters.[num]
-    dt2 <- 
-      copy(list_of_data_tables[[letter2]])
-    setnames(dt2,
-             'values_',letter2)
+    dt2 <-
+      list_of_data_tables[[letter2]] %>% 
+      renameCols(letter2)
     merge(dt, dt2,
           by = 
             intersect(colnames(dt),
                       colnames(dt2)) %>%
-            setdiff(c(letter1,letter2)))
+            setdiff(c(letter1,letter2) %>% c(paste0('flags_',.))))
   }
   merged_data_tables <-
     Reduce(mergeRenamed,
@@ -46,10 +51,9 @@ fromFormula <- function(formula_expression, where) {
              2:length(list_of_data_tables),
            init =
              list_of_data_tables[[1]] %>% 
-             copy() %>% 
-             setnames('values_',letters.[1]))
+            renameCols(letters.[1]))
   eval(bquote(
-    merged_data_tables[, values_ :=
+    merged_data_tables[, value_ :=
                          .(substitute(formula_expression))]
   ))
 }
@@ -92,7 +96,7 @@ with_filters <- function(...) {
   filters <-
     list(...)
   if (!identical(filters,list(NA))) {
-    if (any(names(filters)!=""))
+    if (any(names(filters)==""))
       stop('There is an unnamed element inside with_filters()!')
     if (length(names(filters))!=length(unique(names(filters))))
       stop('There are repeated names of elements inside with_filters()!')
@@ -103,15 +107,20 @@ with_filters <- function(...) {
 
 fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0L) {
   cmd_line <-
-    paste0('\nfromEurostatDataset("',fromEurostatDataset,'", ',
+    paste0('\nfromEurostatDataset("',EurostatDatasetCode,'", ',
            deparse(with_filters),
            ifelse(time_period!=0L,
                   paste0(', time_period = ',time_period,')\n'),
                   ")\n"))
-  `if`(EurostatDatasetCode %not in% memoised_importDataList()$Code,
+  `if`(EurostatDatasetCode %not in% c(memoised_importDataList()$Code,
+                                      # The datasets below are for some reason absent in
+                                      # https://ec.europa.eu/eurostat/api/dissemination/catalogue/toc/txt?lang=EN
+                                      'lfsa_ergaed','lfsa_ergan','lfsa_urgaed',
+                                      'lfsa_argaed','edat_lfse_20'), 
        stop(cmd_line,
             '"',EurostatDatasetCode,
-            '" not found in the list of Eurostat datasets or tables!\n'))
+            '" not found in the list of Eurostat datasets or tables!\n',
+            'check https://ec.europa.eu/eurostat/api/dissemination/catalogue/toc/txt?lang=EN'))
   memoised_importData(EurostatDatasetCode, with_filters) %>% 
     `if`(nrow(.)==0,
          stop(cmd_line,
@@ -122,10 +131,11 @@ fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0
     setnames('TIME_PERIOD','time') %>% 
     .[, time := sub('-',"",time,fixed=TRUE)] %>% 
     .[, lapply(., \(col) `if`(is.factor(col),as.character(col),col))] %>% 
-    .[, value_lagged := collapse::L(value_, n=-time_period, t=time),
-      by = eval(setdiff(colnames(.),
-                        c('time','value_','flags_')))] %>% 
-    setnames('flags_',paste0('flags__',EurostatDatasetCode))
+    `if`(time_period!=0L,
+         .[, value_ := collapse::L(value_, n=-time_period, t=time),
+           by = eval(setdiff(colnames(.),
+                             c('time','value_','flags_')))],
+         .)
 }
 
 
@@ -309,7 +319,7 @@ memoised_fread <- memoise(fread)
 fromLFSspecialFile <- function(jaf_lfs_code, with_filters) {
   name_of_raw_file_from_estat <-
     jaf_lfs_code %>% 
-    switch(
+    switch(.,
       'lfse_jobtenure'="IESS_PA2_S5_v2_Y.csv",
       'lfse_nacegap'="IESS_17_PA7_1_C6_N1_N2_AA.csv",
       'lfse_iscogap'="IESS_16_PA7_1_C5_AA.csv",
