@@ -14,7 +14,7 @@ table_names_without_cond_or_factor <-
     'tepsr_lm210') %>% 
   paste(collapse="|")
 
-Number_of_redefined_indics_in_Codelines <- 4 # PA6a.S5.; PA4.2.S2.; PA9.1.S5.; PA9.2.S4.
+Number_of_redefined_commented_out_indics_in_Codelines <- 3 # PA6a.S5.; PA9.1.S5.; PA9.2.S4.
 Number_of_defined_indics_message <- ""
 Number_of_undefined_indics_message <- ""
 Undefined_indics <- character(0)
@@ -53,9 +53,9 @@ processCatalog <- function(catalog_dt, comment="")
   .[, c(id_cols,NumberedCatalogColumnNames), with=FALSE] %>%  
   {`if`(comment=="",
         .[!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl(table_names_without_cond_or_factor,table)] %T>% 
-          {message(Number_of_defined_indics_message <<- paste(nrow(.)+Number_of_redefined_indics_in_Codelines,'defined indicators.'))},
+          {message(Number_of_defined_indics_message <<- paste(nrow(.)+Number_of_redefined_commented_out_indics_in_Codelines,'defined indicators.'))},
         .[!(!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl(table_names_without_cond_or_factor,table))] %T>% 
-          {message(Number_of_undefined_indics_message <<- paste(nrow(.)-Number_of_redefined_indics_in_Codelines,'mis-defined indicators.'))
+          {message(Number_of_undefined_indics_message <<- paste(nrow(.)-Number_of_redefined_commented_out_indics_in_Codelines,'mis-defined indicators.'))
             Undefined_indics <<- unique(.$JAF_KEY)})} %>% 
   melt(measure.vars=NumberedCatalogColumnNames,
        variable.name="factor_or_cond",
@@ -114,7 +114,7 @@ processCatalog <- function(catalog_dt, comment="")
              paste0(func,'(',
                     '"',table,'"',
                     ',\n',
-                    comment,' with_filters(',
+                    comment,'   with_filters(',
                     definitions,
                     '))'))] %>%
   .[, definitions :=
@@ -255,7 +255,7 @@ CodeLines <-
     CatalogNoFormulaOrCond$definitions,
     '\n')  %>% 
   gsub('fromEurostatDataset( ','fromEurostatDataset(',.,fixed=TRUE)  %>% 
-  gsub('with_filters( ','with_filters(',.,fixed=TRUE)  %>% 
+  gsub('with_filters( ','  with_filters(',.,fixed=TRUE)  %>% 
   gsub('fromFormula( ','fromFormula(',.,fixed=TRUE) %>% 
   # enc2utf8() %>% 
   # Special treatment:
@@ -268,7 +268,7 @@ CodeLines <-
 # source = "Eurostat, Structural Business Statistics ",
 # high_is_good = TRUE,
 # value = fromEurostatDataset("empl_new_enterprises",
-#  with_filters(NA))
+#    with_filters(NA))
 # )',
 '
 inside(JAF_INDICATORS, indicator_named = "PA6a.S5.") = 
@@ -280,15 +280,15 @@ high_is_good = TRUE,
 value = fromFormula((a + b + c + d)/e,
 where = variables(
  a = fromEurostatDataset("bd_9bd_sz_cl_r2",
-with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16920")),
+  with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16920")),
  b = fromEurostatDataset("bd_9bd_sz_cl_r2",
-with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16941")),
+  with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16941")),
  c = fromEurostatDataset("bd_9bd_sz_cl_r2",
-with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16942")),
+  with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16942")),
  d = fromEurostatDataset("bd_9bd_sz_cl_r2",
-with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16943")),
+  with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16943")),
  e = fromEurostatDataset("bd_9bd_sz_cl_r2",
-with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
+  with_filters(nace_r2="B-S_X_K642", sizeclas="TOTAL", indic_sb="V16910"))
 )))',
 .,
 fixed=TRUE)  %>% 
@@ -301,18 +301,18 @@ name = "Low wage trap – tax rate on low wage earners ",
 unit = "% (of increase in gross earnings)",
 source = "OECD and European Commission, Benefits and wages",
 high_is_good = FALSE,
-value = fromEurostatDataset("earn_nt_lowwtrp",
- with_filters(NA))
+value = fromBenefitsAndWages("earn_nt_lowwtrp",
+   with_filters(indicator="LW.S.0.33.33"))
 )',
 '
 inside(JAF_INDICATORS, indicator_named = "PA4.2.S2.") = 
 specification(
 name = "Low wage trap – tax rate on low wage earners ",
 unit = "% (of increase in gross earnings)",
-source = "OECD and European Commission, Benefits and wages",
+source = "Eurostat",
 high_is_good = FALSE,
 value = fromEurostatDataset("earn_nt_lowwtrp",
- with_filters(NA))
+   with_filters(NA))
 )',
 .,
 fixed=TRUE) %>% 
@@ -324,7 +324,7 @@ fixed=TRUE) %>%
 # source = "Eurostat, EU Labour Force Survey, National Accounts and Education statistics",
 # high_is_good = TRUE,
 # value = fromEurostatDataset("educ_exp0_4",
-#  with_filters(NA))
+#    with_filters(NA))
 # )',
 '
 inside(JAF_INDICATORS, indicator_named = "PA9.1.S5.") = 
@@ -336,21 +336,21 @@ high_is_good = TRUE,
 value = fromFormula( ((a + b + c)/(d + e + f))/(g/h),
 where = variables(
  a = fromEurostatDataset("educ_uoe_fine01",
-with_filters(unit="MIO_EUR", sector="S1", isced11="ED1")),
+  with_filters(unit="MIO_EUR", sector="S1", isced11="ED1")),
  b = fromEurostatDataset("educ_uoe_fine01",
-with_filters(unit="MIO_EUR", sector="S1", isced11="ED2")),
+  with_filters(unit="MIO_EUR", sector="S1", isced11="ED2")),
  c = fromEurostatDataset("educ_uoe_fine01",
-with_filters(unit="MIO_EUR", sector="S1", isced11="ED3")),
+  with_filters(unit="MIO_EUR", sector="S1", isced11="ED3")),
  d = fromEurostatDataset("demo_pjangroup",
-with_filters(unit="NR", sex="T", age="Y5-9")),
+  with_filters(unit="NR", sex="T", age="Y5-9")),
  e = fromEurostatDataset("demo_pjangroup",
-with_filters(unit="NR", sex="T", age="Y10-14")),
+  with_filters(unit="NR", sex="T", age="Y10-14")),
  f = fromEurostatDataset("demo_pjangroup",
-with_filters(unit="NR", sex="T", age="Y15-19")),
+  with_filters(unit="NR", sex="T", age="Y15-19")),
  g = fromEurostatDataset("nama_10_gdp",
-with_filters(unit="CP_MEUR", na_item="B1GQ")),
+  with_filters(unit="CP_MEUR", na_item="B1GQ")),
  h = fromEurostatDataset("demo_pjangroup",
-with_filters(unit="NR", sex="T", age="TOTAL"))
+  with_filters(unit="NR", sex="T", age="TOTAL"))
 )))',
 ., fixed=TRUE) %>% 
   sub('
@@ -361,7 +361,7 @@ with_filters(unit="NR", sex="T", age="TOTAL"))
 # source = "Eurostat, EU Labour Force Survey, National Accounts and Education statistics",
 # high_is_good = TRUE,
 # value = fromEurostatDataset("educ_exp5_6",
-#  with_filters(NA))
+#    with_filters(NA))
 # )',
 '
 inside(JAF_INDICATORS, indicator_named = "PA9.2.S4.") = 
@@ -373,13 +373,13 @@ high_is_good = TRUE,
 value = fromFormula( (a/b)/(c/d),
 where = variables(
  a = fromEurostatDataset("educ_uoe_fine01",
-with_filters(unit="MIO_EUR", sector="S1", isced11="ED5-8")),
+  with_filters(unit="MIO_EUR", sector="S1", isced11="ED5-8")),
  b = fromEurostatDataset("demo_pjangroup",
-with_filters(unit="NR", sex="T", age="Y20-24")),
+  with_filters(unit="NR", sex="T", age="Y20-24")),
  c = fromEurostatDataset("nama_10_gdp",
-with_filters(unit="CP_MEUR", na_item="B1GQ")),
+  with_filters(unit="CP_MEUR", na_item="B1GQ")),
  d = fromEurostatDataset("demo_pjangroup",
-with_filters(unit="NR", sex="T", age="TOTAL"))
+  with_filters(unit="NR", sex="T", age="TOTAL"))
 )))',
 ., fixed=TRUE) %T>%
   saveAsUtf8()

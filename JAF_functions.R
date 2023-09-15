@@ -9,12 +9,14 @@ library(countrycode)
 library(rvest)
 library(kit)
 
+delimiter <-
+  rep.int('-',80) %>% paste(collapse="") %>% paste0('\n',.,'\n')
 
 `inside<-` <- function(.list,  indicator_named, value) {
   pfix <-
     ifelse(indicator_named %in% names(.list),
            'Modifying', 'Creating')
-  message(pfix," JAF_INDICATORS\U2019 element `",indicator_named,"`...")
+  message(delimiter,pfix," JAF_INDICATORS\U2019 element `",indicator_named,"`...")
   .list[[indicator_named]] <- value
   .list
 }
@@ -25,6 +27,8 @@ fromFormula <- function(formula_expression, where) {
     where
   letters. <- 
     names(list_of_data_tables)
+  if (length(all.vars(substitute(formula_expression)) %without% letters.)!=0)
+    stop('Some of the variables used in the formula are not defined in the `where` clause!')
   renameCols <- function(dt, letter..)
     dt %>% 
     copy() %>% 
@@ -51,7 +55,7 @@ fromFormula <- function(formula_expression, where) {
              2:length(list_of_data_tables),
            init =
              list_of_data_tables[[1]] %>% 
-            renameCols(letters.[1]))
+             renameCols(letters.[1]))
   eval(bquote(
     merged_data_tables[, value_ :=
                          .(substitute(formula_expression))]
@@ -74,7 +78,8 @@ specification <- memoise::memoise(
            unit,
            source,
            high_is_good,
-           value) {
+           value,
+           problems=list(NA)) {
     stopifnot(
       is.character(name),
       length(name)==1,
@@ -89,7 +94,8 @@ specification <- memoise::memoise(
     list(name=name,
          unit=unit,
          source=source,
-         value=value)
+         value=value,
+         problems=anyProblems(value))
   })
 
 with_filters <- function(...) {
@@ -102,6 +108,64 @@ with_filters <- function(...) {
       stop('There are repeated names of elements inside with_filters()!')
   }
   filters
+}
+
+anyProblems <- function(dt) {
+  current_year <-
+    Sys.Date() %>% 
+    substr(1,4) %>% 
+    as.integer()
+  dt_nonmiss <-
+    dt[!is.na(value_)]
+  max_time <-
+    max(dt_nonmiss$time)
+  not_available_geos <-
+    dt_nonmiss %>% 
+    .$geo %>% 
+    unique() %>% 
+    setdiff(EU_Members_geo_codes,.)
+  dt_nonmiss_last_t <-
+    dt_nonmiss[time==max_time]
+  not_available_geos_last_time_point <-
+    dt_nonmiss_last_t %>% 
+    .$geo %>% 
+    unique() %>% 
+    setdiff(EU_Members_geo_codes,.)
+  if_add <- function(list, cond, entry)
+    if (cond) c(list, entry) else list
+  no_problems <- function(list.)
+    (list. %>%
+       sapply(is.logical) %>% 
+       all()) &&
+    (list. %>% 
+       unlist() %>% 
+       !. %>% 
+       all())
+  to_report <- function(list.)
+    list. %>% 
+    Filter(\(x) is.logical(x) && x || !is.logical(x),.)
+  list(`Old data` = max_time < (current_year - 3),
+       `Very old data` = max_time < (current_year - 5),
+       `One time point only` = length(unique(dt_nonmiss$time))==1,
+       `Many countries missing` = length(not_available_geos)>=10,
+       `All large countries missing` = all(large_EU_Members_geo_codes %in% not_available_geos),
+       `One or more large countries missing` = any(large_EU_Members_geo_codes %in% not_available_geos),
+       `All large countries missing at the last time point` = all(large_EU_Members_geo_codes %in% not_available_geos_last_time_point),
+       `One or more large countries missing at the last time point` = any(large_EU_Members_geo_codes %in% not_available_geos_last_time_point),
+       `No EU aggregate` = 'EU27_2020' %not in% unique(dt_nonmiss$geo),
+       `No EU aggregate for the last time point` = 'EU27_2020' %not in% unique(dt_nonmiss_last_t$geo)
+       # More checks to be added e.g. if high jums in values or variance
+    ) %>%
+    if_add(.$`Old data`,
+           list(`Latest time point` = max_time)) %>% 
+    if_add(.$`Many countries missing`,
+           list(`Not available countries` = not_available_geos)) %>% 
+    if_add(.$`One or more large countries missing`,
+           list(`Large countries missing` = intersect(large_EU_Members_geo_codes, not_available_geos))) %>% 
+    if_add(.$`One or more large countries missing at the last time point`,
+           list(`Large countries missing at the last time point` = intersect(large_EU_Members_geo_codes, not_available_geos_last_time_point))) %>% 
+    `if`(no_problems(.),.,
+         {message('Some problems detected:'); str(to_report(.)); .})
 }
 
 
@@ -127,7 +191,10 @@ fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0
               "returned empty data.frame!\n",call.=FALSE),
          .) %>%
     as.data.table() %>% 
-    Filter(\(col) length(unique(col))!=1, .) %>% 
+    .[, sapply(colnames(.),
+               \(colname) colname %in% c('geo','TIME_PERIOD') ||
+                 length(unique(.[[colname]]))!=1),
+      with=FALSE] %>%
     setnames('TIME_PERIOD','time') %>% 
     .[, time := sub('-',"",time,fixed=TRUE)] %>% 
     .[, lapply(., \(col) `if`(is.factor(col),as.character(col),col))] %>% 
@@ -148,9 +215,12 @@ fromOECDdataset <- function(OECDdatasetCode, with_filters) {
       "educ_outc_pisa"          , NA              , NA               , "go to Eurostat", NA         , NA              , NA                ,
       "consultations_per_capita", "indicator"     , "CONSCOVI"       , "HEALTH_PROC"   , TRUE       , "VAR"           , "CONSCOVI"        ) %>% 
     as.data.table() %>% 
-    .[old_table==OECDdatasetCode]
+    .[old_table==OECDdatasetCode] %>% 
+    `if`(nrow(.)!=1,
+         .[old_filter_name==names(with_filters) & old_filter_value==with_filters[[1]]],
+         .)
   `if`(nrow(JAF_old_to_new_OECD_map)!=1,
-       stop('\nMultiple or no match in `JAF_old_to_new_OECD_map.csv` for\n',
+       stop('\nMultiple or no match in `tribble` for\n',
             'fromOECDdataset("',OECDdatasetCode,'", with_filters(',
             deparse(with_filters),'))'))
   `if`(JAF_old_to_new_OECD_map$new_table=='go to Eurostat',
@@ -320,16 +390,17 @@ fromLFSspecialFile <- function(jaf_lfs_code, with_filters) {
   name_of_raw_file_from_estat <-
     jaf_lfs_code %>% 
     switch(.,
-      'lfse_jobtenure'="IESS_PA2_S5_v2_Y.csv",
-      'lfse_nacegap'="IESS_17_PA7_1_C6_N1_N2_AA.csv",
-      'lfse_iscogap'="IESS_16_PA7_1_C5_AA.csv",
-      'lfse_erfgap2064'="IESS_15_PA7_1_C4_2064_FTE_AA.csv",
-      'lfse_er_child'="IESS_11_PA7_2_S1_Y.csv",
-      'lfse_inactpt_lackcare'="IESS_10_PA5_C3_mod_Y.csv",
-      'lfse_overtime'="IESS_PA2_C3_AA.csv",
-      .
+           'lfse_jobtenure'="IESS_PA2_S5_v2_Y.csv",
+           'lfse_nacegap'="IESS_17_PA7_1_C6_N1_N2_AA.csv",
+           'lfse_iscogap'="IESS_16_PA7_1_C5_AA.csv",
+           'lfse_erfgap2064'="IESS_15_PA7_1_C4_2064_FTE_AA.csv",
+           'lfse_er_child'="IESS_11_PA7_2_S1_Y.csv",
+           'lfse_inactpt_lackcare'="IESS_10_PA5_C3_mod_Y.csv",
+           'lfse_overtime'="IESS_PA2_C3_AA.csv",
+           .
     )
-  memoised_fread(name_of_raw_file_from_estat) %>% 
+  memoised_fread(name_of_raw_file_from_estat) %>%
+    copy() %>% 
     setnames(colnames(.),
              colnames(.) %>% tolower()) %>% 
     .[, c('quarter','flag','flag_break') := NULL] %>% 
@@ -367,6 +438,9 @@ EU_Members_geo_codes <-
   c("BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR",
     "HR","IT","CY","LV","LT","LU","HU","MT","NL","AT",
     "PL","PT","RO","SI","SK","FI","SE")
+
+large_EU_Members_geo_codes <-
+  c('DE','FR','IT','ES','PL','RO','NL')
 
 `%without%` <- setdiff
 
