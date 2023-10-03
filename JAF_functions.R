@@ -13,11 +13,8 @@ delimiter <-
   rep.int('-',80) %>% paste(collapse="") %>% paste0('\n',.,'\n')
 
 `inside<-` <- function(.list,  indicator_named, value) {
-  pfix <-
-    ifelse(indicator_named %in% names(.list),
-           'Modifying', 'Creating')
-  message(delimiter,pfix," JAF_INDICATORS\U2019 element `",indicator_named,"`...")
-  .list[[indicator_named]] <- value
+  .list[[indicator_named]] <-
+    calculate(indicator_named, value)
   .list
 }
 
@@ -73,30 +70,36 @@ memoised_importData <-
 memoised_importDataList <-
   memoise::memoise(eurodata::importDataList)
 
-specification <- memoise::memoise(
-  function(name,
-           unit,
-           source,
-           high_is_good,
-           value,
-           problems=list(NA)) {
-    stopifnot(
-      is.character(name),
-      length(name)==1,
-      is.character(source),
-      length(source)==1,
-      is.logical(high_is_good),
-      length(high_is_good)==1,
-      is.data.frame(value),
-      'value_' %in% colnames(value),
-      nrow(value)>0
-    )
-    list(name=name,
-         unit=unit,
-         source=source,
-         value=value,
-         problems=anyProblems(value))
-  })
+specification <- function(...)
+  substitute(list(...))
+
+calculate <- memoise::memoise(
+  function(indicator_named, unevaluated_specification_list) {
+    message('\nCalculating ',indicator_named)
+    do.call(function(name,
+                     unit,
+                     source,
+                     high_is_good,
+                     value) {
+      stopifnot(
+        is.character(name),
+        length(name)==1,
+        is.character(source),
+        length(source)==1,
+        is.logical(high_is_good),
+        length(high_is_good)==1,
+        is.data.frame(value),
+        'value_' %in% colnames(value),
+        nrow(value)>0
+      )
+      list(name=name,
+           unit=unit,
+           source=source,
+           value=value,
+           problems=anyProblems(value))
+    }, eval(unevaluated_specification_list))
+  }
+)
 
 with_filters <- function(...) {
   filters <-
@@ -139,7 +142,7 @@ anyProblems <- function(dt) {
        all()) &&
     (list. %>% 
        unlist() %>% 
-       !. %>% 
+       {!.} %>% 
        all())
   to_report <- function(list.)
     list. %>% 
@@ -154,8 +157,8 @@ anyProblems <- function(dt) {
        `One or more large countries missing at the last time point` = any(large_EU_Members_geo_codes %in% not_available_geos_last_time_point),
        `No EU aggregate` = 'EU27_2020' %not in% unique(dt_nonmiss$geo),
        `No EU aggregate for the last time point` = 'EU27_2020' %not in% unique(dt_nonmiss_last_t$geo)
-       # More checks to be added e.g. if high jums in values or variance
-    ) %>%
+       # More checks to be added e.g. if high jumps in values or variance
+  ) %>%
     if_add(.$`Old data`,
            list(`Latest time point` = max_time)) %>% 
     if_add(.$`Many countries missing`,
@@ -291,7 +294,9 @@ fromLMPdataset <- function(LMPdatasetCode, with_filters) {
     .[, flags_ := gsub("[0-9\\.-]", "", value_)] %>% 
     .[, value_ := gsub("[^0-9\\.-]", "", value_) %>% as.numeric()] %>% 
     Filter(\(col) length(unique(col))!=1, .) %>% 
-    setnames('TIME_PERIOD','time') 
+    setnames('TIME_PERIOD','time') %>% 
+    .[, time := as.integer(as.character(time))] %>% # converting from factor
+    setnames(colnames(.),tolower(colnames(.)))
 }
 
 
@@ -377,7 +382,7 @@ getTaxBenTable <- function(url)
   read_html() %>% 
   html_node(xpath='/html/body/table') %>% 
   html_table(convert=FALSE) %>% # wrong colnames = title "European Commission	Economic and Financial Affairs	Tax and Benefits"
-  as.data.table() %>%
+  as.data.table() %T>% str %>%
   setnames(seq_along(.),
            as.character(.[1])) %>% 
   .[-c(1,nrow(.))] # last row includes date e.g. "Last update :	20-03-2023"
