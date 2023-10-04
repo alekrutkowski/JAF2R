@@ -8,6 +8,7 @@ library(OECD)
 library(countrycode)
 library(rvest)
 library(kit)
+# library(retry)
 
 delimiter <-
   rep.int('-',80) %>% paste(collapse="") %>% paste0('\n',.,'\n')
@@ -73,10 +74,35 @@ memoised_importDataList <-
 specification <- function(...)
   substitute(list(...))
 
+isError <- function(x)
+  inherits(x,'simpleError')
+
+# For very temporary network problems
+retry <- function(expr, timeout=5, interval=1) {
+  t0 <- Sys.time()
+  repeat {
+    result <-
+      withCallingHandlers(
+        tryCatch(expr,
+                 error = function(e) e),
+        warning=function(w)
+          if (grepl("restarting interrupted promise evaluation", w$message))
+            invokeRestart("muffleWarning")
+      )
+    if (!isError(result) || Sys.time()-t0 > timeout) break
+    Sys.sleep(interval)
+    message('Re-trying...')
+  }
+  result
+  if (!isError(result)) result else
+    stop(sub('Error in doTryCatch(return(expr), name, parentenv, handler): ',
+             "",result,fixed=TRUE), call.=FALSE)
+}
+
 calculate <- memoise::memoise(
   function(indicator_named, unevaluated_specification_list) {
     message('\nCalculating ',indicator_named)
-    do.call(function(name,
+    retry(do.call(function(name,
                      unit,
                      source,
                      high_is_good,
@@ -97,7 +123,7 @@ calculate <- memoise::memoise(
            source=source,
            value=value,
            problems=anyProblems(value))
-    }, eval(unevaluated_specification_list))
+    }, eval(unevaluated_specification_list)))
   }
 )
 
@@ -342,6 +368,10 @@ fromBenefitsAndWages <- function(table_code, with_filters) {
   url_filters <-
     with_filters$indicator %>% 
     gsub('.','/',.,fixed=TRUE) %>% 
+    sub('^S/',"1EC/",.) %>% 
+    `if`(table_code=='nrr_ub',
+         sub('^(.+)/(.+)/(.+)$',"\\1/\\3/\\2",.),
+         .) %>% 
     `if`(table_code %in% c('earn_nt_lowwtrp','tax_ben_traps'),
          sub('LW/(.+)/.+/(.+/.+)','LW/\\2/\\1',.) %>% 
            sub('IT/(.+)/(.+)/.+/.+','IT/\\2/\\1',.),
@@ -355,7 +385,7 @@ fromBenefitsAndWages <- function(table_code, with_filters) {
     paste(collapse=',')
   url <-
     paste0(url_pfix,url_dataset,'/',url_filters,'/filter/',url_geos,'/',url_years)
-  url %>% 
+  url %T>% message('Opening:\n',.) %>%
     getTaxBenTable() %>% 
     `if`(table_code=='nrr_ub',
          melt(., id.vars='Country',
@@ -382,10 +412,10 @@ getTaxBenTable <- function(url)
   read_html() %>% 
   html_node(xpath='/html/body/table') %>% 
   html_table(convert=FALSE) %>% # wrong colnames = title "European Commission	Economic and Financial Affairs	Tax and Benefits"
-  as.data.table() %T>% str %>%
+  as.data.table()%>% ### TODO debug
   setnames(seq_along(.),
            as.character(.[1])) %>% 
-  .[-c(1,nrow(.))] # last row includes date e.g. "Last update :	20-03-2023"
+  .[-c(1,nrow(.))]  %T>% str # last row includes date e.g. "Last update :	20-03-2023"
 
 
 memoised_fread <- memoise(fread)
