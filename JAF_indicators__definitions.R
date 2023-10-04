@@ -1,6 +1,6 @@
 ### Compiled automatically by rutkoal
 ### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`
-###  on 2023-09-15 10:23:55
+###  on 2023-10-04 11:44:29
 ###  526 defined indicators.
 ###  40 mis-defined indicators.
 source("JAF_functions.R")
@@ -775,7 +775,7 @@ inside(JAF_INDICATORS, indicator_named = "PA1.O2.") =
 specification(
 name = "Disability employment gap by level of activity limitation and sex - total",
 unit = "% (of popn)",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
+source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
 value = fromEurostatDataset("hlth_dlm200",
    with_filters(sex="T", unit="PC_PNT", lev_limit="SM_SEV"))
@@ -785,7 +785,7 @@ inside(JAF_INDICATORS, indicator_named = "PA1.C3.M") =
 specification(
 name = "Disability employment gap by level of activity limitation and sex - men",
 unit = "% (of popn)",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
+source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
 value = fromEurostatDataset("hlth_dlm200",
    with_filters(sex="M", unit="PC_PNT", lev_limit="SM_SEV"))
@@ -795,7 +795,7 @@ inside(JAF_INDICATORS, indicator_named = "PA1.C3.F") =
 specification(
 name = "Disability employment gap by level of activity limitation and sex - women",
 unit = "% (of popn)",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
+source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
 value = fromEurostatDataset("hlth_dlm200",
    with_filters(sex="F", unit="PC_PNT", lev_limit="SM_SEV"))
