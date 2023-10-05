@@ -41,23 +41,22 @@ fromFormula <- function(formula_expression, where) {
     dt2 <-
       list_of_data_tables[[letter2]] %>% 
       renameCols(letter2)
-    merge(dt, dt2,
-          by = 
-            intersect(colnames(dt),
-                      colnames(dt2)) %>%
-            setdiff(c(letter1,letter2) %>% c(paste0('flags_',.))))
+    merge(dt, dt2, by=c('geo','time'))
   }
   merged_data_tables <-
-    Reduce(mergeRenamed,
-           x = 
-             2:length(list_of_data_tables),
-           init =
-             list_of_data_tables[[1]] %>% 
-             renameCols(letters.[1]))
+    list_of_data_tables[[1]] %>% 
+    renameCols(letters.[1]) %>% 
+    `if`(length(list_of_data_tables)>1,
+         Reduce(mergeRenamed,
+                x = 2:length(list_of_data_tables),
+                init = .),
+         .)
   eval(bquote(
     merged_data_tables[, value_ :=
                          .(substitute(formula_expression))]
-  ))
+  )) %>% 
+    .[, c(letters.,grep('geo|time|value_|flags_',colnames(.),value=TRUE)),
+      with=FALSE]
 }
 
 
@@ -78,7 +77,7 @@ isError <- function(x)
   inherits(x,'simpleError')
 
 # For very temporary network problems
-retry <- function(expr, timeout=5, interval=1) {
+retry <- function(expr, timeout=6, interval=2) {
   t0 <- Sys.time()
   repeat {
     result <-
@@ -94,19 +93,23 @@ retry <- function(expr, timeout=5, interval=1) {
     message('Re-trying...')
   }
   result
-  if (!isError(result)) result else
+  if (!isError(result)) result else {
+    if (grepl('HTTP error 400',result))
+      message('\nCheck if `with_filters()` contains the correct filters!')
     stop(sub('Error in doTryCatch(return(expr), name, parentenv, handler): ',
              "",result,fixed=TRUE), call.=FALSE)
+  }
+  
 }
 
 calculate <- memoise::memoise(
   function(indicator_named, unevaluated_specification_list) {
-    message('\nCalculating ',indicator_named)
+    message(delimiter,'Calculating ',indicator_named)
     retry(do.call(function(name,
-                     unit,
-                     source,
-                     high_is_good,
-                     value) {
+                           unit,
+                           source,
+                           high_is_good,
+                           value) {
       stopifnot(
         is.character(name),
         length(name)==1,
@@ -135,8 +138,8 @@ with_filters <- function(...) {
       stop('There is an unnamed element inside with_filters()!')
     if (length(names(filters))!=length(unique(names(filters))))
       stop('There are repeated names of elements inside with_filters()!')
+    filters
   }
-  filters
 }
 
 anyProblems <- function(dt) {
@@ -362,8 +365,8 @@ fromBenefitsAndWages <- function(table_code, with_filters) {
     table_code %>% 
     switch(.,
            "nrr_ub" = 'NRR/NRRUB',
-           "earn_nt_lowwtrp" = 'TR/',
-           "tax_ben_traps" = 'TR/',
+           "earn_nt_lowwtrp" = 'TR',
+           "tax_ben_traps" = 'TR',
            .)
   url_filters <-
     with_filters$indicator %>% 
@@ -388,12 +391,15 @@ fromBenefitsAndWages <- function(table_code, with_filters) {
   url %T>% message('Opening:\n',.) %>%
     getTaxBenTable() %>% 
     `if`(table_code=='nrr_ub',
-         melt(., id.vars='Country',
-              measure.vars = colnames(.) %>% .[!is.na(as.integer(.))],
-              variable.name='time', value.name='value_'),
-         .) %>% 
+         Filter(\(colvals) !all(colvals==""), .) %>% 
+           .[, c(1,2,length(.)), with=FALSE] %>% 
+           setnames(colnames(.),
+                    c('Country','time','value_')),
+         .) %>%
     `if`(table_code %in% c('earn_nt_lowwtrp','tax_ben_traps'),
-         .[,.(Country,Year,METR)] %>% 
+         setnames(., seq_along(.),
+                  as.character(.[1])) %>%
+           .[,.(Country,Year,METR)] %>% 
            setnames(c('Year','METR'),
                     c('time','value_')),
          .) %>% 
@@ -412,10 +418,10 @@ getTaxBenTable <- function(url)
   read_html() %>% 
   html_node(xpath='/html/body/table') %>% 
   html_table(convert=FALSE) %>% # wrong colnames = title "European Commission	Economic and Financial Affairs	Tax and Benefits"
-  as.data.table()%>% ### TODO debug
-  setnames(seq_along(.),
-           as.character(.[1])) %>% 
-  .[-c(1,nrow(.))]  %T>% str # last row includes date e.g. "Last update :	20-03-2023"
+  as.data.table() %>% 
+  # setnames(seq_along(.),
+  #          as.character(.[1])) %>% 
+  .[-c(nrow(.))] # last row includes date e.g. "Last update :	20-03-2023"
 
 
 memoised_fread <- memoise(fread)
@@ -450,19 +456,20 @@ fromLFSspecialFile <- function(jaf_lfs_code, with_filters) {
 
 
 fromDESI <- function(desi_indic, with_filters) {
-  tmpfile <- tempfile()
-  download.file("https://digital-agenda-data.eu/download/DESI.csv.zip",
-                tmpfile)
-  unzip(tmpfile) %>% 
+  # tmpfile <- tempfile()
+  # download.file("https://digital-agenda-data.eu/download/DESI.csv.zip",
+  #               tmpfile)
+  # unzip(tmpfile) %>% 
+  'https://digital-decade-desi.digital-strategy.ec.europa.eu/api/v1/chart-groups/desi-2022/facts/' %>% 
     fread() %>% 
     Reduce(\(dt,x) dt[dt[[x]] %in% with_filters[[x]]],
            x=names(with_filters),
            init=.) %>% 
     `if`(desi_indic=='DESI_Connectivity',
-         .[indicator=="desi" & breakdown=="desi_conn" & unit_measure=="pc_desi"],
+         .[indicator=="desi" & breakdown=="desi_conn" & unit=="pc_desi"],
          .) %>% 
-    .[,.(time_period,ref_area,value,flag)] %>% 
-    setnames(c('time_period','ref_area','value','flag'),
+    .[,.(period,country,value,flag)] %>% 
+    setnames(c('period','country','value','flag'),
              c('time','geo','value_','flags_'))
 }
 

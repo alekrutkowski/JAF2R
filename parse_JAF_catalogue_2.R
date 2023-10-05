@@ -91,9 +91,14 @@ processCatalog <- function(catalog_dt, comment="")
           definitions %>% 
           paste(collapse="")),
     by=id_cols] %>% 
+  .[, definitions := definitions %>% 
+      ifelse(table=='ilc_lvhl11n',
+             sub('unit="PC_Y_LT65"','unit="PC"',.,fixed=TRUE),
+             .)] %>% 
   .[, func :=
       SOURCE %>% 
-      {kit::nif(grepl('lfse_',table) & !grepl('edat_lfse_',table), 'fromLFSspecialFile',
+      {kit::nif(grepl('^lfse_',table) & !grepl('^edat_lfse_',table), 'fromLFSspecialFile',
+                grepl('^trng_',table), 'fromEurostatDataset',
                 grepl('DESI_Connectivity',table),'fromDESI',
                 (grepl("^Eurostat,",.) & table!='vacancy_rate') |
                   .=='DG CONNECT' |
@@ -246,19 +251,75 @@ CodeLines <-
           c('on ' %+% Sys.time(),
             Number_of_defined_indics_message,
             Number_of_undefined_indics_message)),
-    'source("JAF_functions.R")',
-    'JAF_INDICATORS = list()',
-    # helpers,
-    CatalogFormulaOrCond$definitions,
-    '\n\n### Mis-specified indicators are commented-out below -- but some valid indicators below too,\n',
-    '\n\n### the valid ones are those with significantly modified definitions compared to the catalogue\n',
-    CatalogNoFormulaOrCond$definitions,
-    '\n')  %>% 
+    '
+init = function() {
+   source("H:/JAF_functions.R")
+   JAF_INDICATORS <<- list()
+}
+if (interactive() && exists("JAF_INDICATORS")) repeat {
+  answer = toupper(readline("Re-calculate everything? (Y/N): "))
+  if (answer=="Y") {
+    init()
+    break
+  } else if (answer=="N") break
+} else init()',
+# helpers,
+CatalogFormulaOrCond$definitions,
+'\n\n### Mis-specified indicators are commented-out below -- but some valid indicators below too,\n',
+'\n\n### the valid ones are those with significantly modified definitions compared to the catalogue\n',
+CatalogNoFormulaOrCond$definitions,
+'\n')  %>% 
   gsub('fromEurostatDataset( ','fromEurostatDataset(',.,fixed=TRUE)  %>% 
   gsub('with_filters( ','  with_filters(',.,fixed=TRUE)  %>% 
   gsub('fromFormula( ','fromFormula(',.,fixed=TRUE) %>% 
+  gsub("fromEurostatDataset('lfse_","fromLFSspecialFile('lfse_",.,fixed=TRUE) %>% 
+  #gsub('fromLFSspecialFile("trng_','fromEurostatDataset("trng_',.,fixed=TRUE) %>% 
   # enc2utf8() %>% 
   # Special treatment:
+  #   sub('
+  # inside(JAF_INDICATORS, indicator_named = "PA11.S3.T") = 
+  # specification(
+  # name = "People (aged 0-64) living in (quasi-)jobless households - total",
+  # unit = "% (of total popn)",
+  # source = "Eurostat, EU Statistics on Income and Living Conditions",
+  # high_is_good = FALSE,
+  # value = fromEurostatDataset("ilc_lvhl11n",
+#    with_filters(sex="T", unit="PC_Y_LT65", age="Y_LT65"))
+# )',
+# '
+# inside(JAF_INDICATORS, indicator_named = "PA11.S3.T") = 
+# specification(
+# name = "People (aged 0-64) living in (quasi-)jobless households - total",
+# unit = "% (of total popn)",
+# source = "Eurostat, EU Statistics on Income and Living Conditions",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("ilc_lvhl11n",
+#    with_filters(sex="T", unit="PC", age="Y_LT65"))
+# )',
+# .,
+# fixed=TRUE) %>% 
+sub('
+inside(JAF_INDICATORS, indicator_named = "PA9.2.C4.") = 
+specification(
+name = "Tertiary graduates in science and technology per 1000 of population aged 20-29",
+unit = "% (of population)",
+source = "Eurostat, Education Statistics",
+high_is_good = TRUE,
+value = fromEurostatDataset("educ_thflds",
+   with_filters(indic_ed="TC02_10"))
+)',
+'
+inside(JAF_INDICATORS, indicator_named = "PA9.2.C4.") = 
+specification(
+name = "Tertiary graduates in science and technology per 1000 of population aged 20-29",
+unit = "% (of population)",
+source = "Eurostat, Education Statistics",
+high_is_good = TRUE,
+value = fromEurostatDataset("educ_uoe_grad04",
+   with_filters(indiced11="ED5-8", sex="T", unit="P_THAB"))
+)',
+.,
+fixed=TRUE) %>% 
   sub(
     '
 # inside(JAF_INDICATORS, indicator_named = "PA6a.S5.") = 

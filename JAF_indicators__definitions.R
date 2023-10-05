@@ -1,10 +1,20 @@
 ### Compiled automatically by rutkoal
 ### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`
-###  on 2023-10-04 11:44:29
+###  on 2023-10-05 15:49:44
 ###  526 defined indicators.
 ###  40 mis-defined indicators.
-source("JAF_functions.R")
-JAF_INDICATORS = list()
+
+init = function() {
+   source("H:/JAF_functions.R")
+   JAF_INDICATORS <<- list()
+}
+if (interactive() && exists("JAF_INDICATORS")) repeat {
+  answer = toupper(readline("Re-calculate everything? (Y/N): "))
+  if (answer=="Y") {
+    init()
+    break
+  } else if (answer=="N") break
+} else init()
 
 inside(JAF_INDICATORS, indicator_named = "PA1.O1.") = 
 specification(
@@ -2830,9 +2840,9 @@ source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
 value = fromFormula(a-b,
 where = variables(
- a = fromEurostatDataset('lfse_er_child',
+ a = fromLFSspecialFile('lfse_er_child',
   with_filters(age="Y20-49", children="no", sex="T")),
- b = fromEurostatDataset('lfse_er_child',
+ b = fromLFSspecialFile('lfse_er_child',
   with_filters(age="Y20-49", children="yes", sex="T"))
 ))
 )
@@ -3394,9 +3404,9 @@ source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
 value = fromFormula(a-b,
 where = variables(
- a = fromEurostatDataset('lfse_er_child',
+ a = fromLFSspecialFile('lfse_er_child',
   with_filters(age="Y20-49", children="no", sex="F")),
- b = fromEurostatDataset('lfse_er_child',
+ b = fromLFSspecialFile('lfse_er_child',
   with_filters(age="Y20-49", children="yes", sex="F"))
 ))
 )
@@ -3489,9 +3499,9 @@ source = "Eurostat, EU Labour Force Survey",
 high_is_good = NA,
 value = fromFormula(a-b,
 where = variables(
- a = fromEurostatDataset('lfse_erfgap2064',
+ a = fromLFSspecialFile('lfse_erfgap2064',
   with_filters(age="Y20-64", sex="M")),
- b = fromEurostatDataset('lfse_erfgap2064',
+ b = fromLFSspecialFile('lfse_erfgap2064',
   with_filters(age="Y20-64", sex="F"))
 ))
 )
@@ -3534,9 +3544,9 @@ source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
 value = fromFormula(a-b,
 where = variables(
- a = fromEurostatDataset('lfse_er_child',
+ a = fromLFSspecialFile('lfse_er_child',
   with_filters(age="Y20-49", children="no", sex="M")),
- b = fromEurostatDataset('lfse_er_child',
+ b = fromLFSspecialFile('lfse_er_child',
   with_filters(age="Y20-49", children="yes", sex="M"))
 ))
 )
@@ -3549,9 +3559,9 @@ source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
 value = fromFormula(a-b,
 where = variables(
- a = fromEurostatDataset('lfse_er_child',
+ a = fromLFSspecialFile('lfse_er_child',
   with_filters(age="Y20-49", children="no", sex="F")),
- b = fromEurostatDataset('lfse_er_child',
+ b = fromLFSspecialFile('lfse_er_child',
   with_filters(age="Y20-49", children="yes", sex="F"))
 ))
 )
@@ -3811,7 +3821,7 @@ name = "Percentage of adult population (aged 25-64) participating in education a
 unit = "% (of unemployed 25-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("trng_lfse_02",
+value = fromEurostatDataset("trng_lfse_02",
    with_filters(sex="T", unit="PC", wstatus="UNE", age="Y25-64"))
 )
 
@@ -3821,7 +3831,7 @@ name = "Percentage of adult population (aged 25-64) participating in education a
 unit = "% (of employed 25-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("trng_lfse_02",
+value = fromEurostatDataset("trng_lfse_02",
    with_filters(sex="T", unit="PC", wstatus="EMP", age="Y25-64"))
 )
 
@@ -3831,7 +3841,7 @@ name = "Percentage of adult population (aged 25-64) participating in education a
 unit = "% (of inactive 25-64)",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromLFSspecialFile("trng_lfse_02",
+value = fromEurostatDataset("trng_lfse_02",
    with_filters(sex="T", unit="PC", wstatus="INAC", age="Y25-64"))
 )
 
@@ -4461,8 +4471,8 @@ name = "Tertiary graduates in science and technology per 1000 of population aged
 unit = "% (of population)",
 source = "Eurostat, Education Statistics",
 high_is_good = TRUE,
-value = fromEurostatDataset("educ_thflds",
-   with_filters(indic_ed="TC02_10"))
+value = fromEurostatDataset("educ_uoe_grad04",
+   with_filters(indiced11="ED5-8", sex="T", unit="P_THAB"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA10.O1.") = 
@@ -4588,7 +4598,7 @@ unit = "% (of total popn)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 value = fromEurostatDataset("ilc_lvhl11n",
-   with_filters(sex="T", unit="PC_Y_LT65", age="Y_LT65"))
+   with_filters(sex="T", unit="PC", age="Y_LT65"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.S3.M") = 
@@ -4598,7 +4608,7 @@ unit = "% (of male popn)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 value = fromEurostatDataset("ilc_lvhl11n",
-   with_filters(sex="M", unit="PC_Y_LT65", age="Y_LT65"))
+   with_filters(sex="M", unit="PC", age="Y_LT65"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.S3.F") = 
@@ -4608,7 +4618,7 @@ unit = "% (of female popn)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 value = fromEurostatDataset("ilc_lvhl11n",
-   with_filters(sex="F", unit="PC_Y_LT65", age="Y_LT65"))
+   with_filters(sex="F", unit="PC", age="Y_LT65"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.S4.") = 
@@ -5089,7 +5099,7 @@ unit = "% (of popn 0-17)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 value = fromEurostatDataset("ilc_lvhl11n",
-   with_filters(sex="T", unit="PC_Y_LT65", age="Y_LT18"))
+   with_filters(sex="T", unit="PC", age="Y_LT18"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.S4.") = 
@@ -5350,7 +5360,7 @@ unit = "% (of popn 18-64)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 value = fromEurostatDataset("ilc_lvhl11n",
-   with_filters(sex="T", unit="PC_Y_LT65", age="Y18-64"))
+   with_filters(sex="T", unit="PC", age="Y18-64"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11b.S4.") = 
@@ -6167,7 +6177,7 @@ where = variables(
 # source = "OECD and European Commission, Benefits and wages",
 # high_is_good = NA,
 # value = fromBenefitsAndWages("NA",
-#    with_filters(indicator="WITH_HOUSING"))
+#    with_filters(NA))
 # )
 
 # inside(JAF_INDICATORS, indicator_named = "PA11b.C1.N") = 
@@ -6177,7 +6187,7 @@ where = variables(
 # source = "OECD and European Commission, Benefits and wages",
 # high_is_good = NA,
 # value = fromBenefitsAndWages("NA",
-#    with_filters(indicator="NO_HOUSING"))
+#    with_filters(NA))
 # )
 
 # inside(JAF_INDICATORS, indicator_named = "PA11b.C2.") = 
