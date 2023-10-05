@@ -468,8 +468,8 @@ fromDESI <- function(desi_indic, with_filters) {
     `if`(desi_indic=='DESI_Connectivity',
          .[indicator=="desi" & breakdown=="desi_conn" & unit=="pc_desi"],
          .) %>% 
-    .[,.(period,country,value,flag)] %>% 
-    setnames(c('period','country','value','flag'),
+    .[,.(period,country,value,flags)] %>% 
+    setnames(c('period','country','value','flags'),
              c('time','geo','value_','flags_'))
 }
 
