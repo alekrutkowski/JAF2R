@@ -118,13 +118,18 @@ calculate <- memoise::memoise(
         is.logical(high_is_good),
         length(high_is_good)==1,
         is.data.frame(value),
-        'value_' %in% colnames(value),
-        nrow(value)>0
+        nrow(value)>0,
+        c('geo','time','value_') %in% colnames(value),
+        nrow(value[,.(geo,time)] %>% .[duplicated(.)])==0,
       )
       list(name=name,
            unit=unit,
            source=source,
-           value=value,
+           value = value %>% 
+             .[, grep('^(geo|time|value_|flags_.*|.)$',
+                      colnames(value),value=TRUE),
+               with=FALSE] %>% 
+             setorder(geo, time),
            problems=anyProblems(value))
     }, eval(unevaluated_specification_list)))
   }
@@ -474,7 +479,10 @@ fromDESI <- function(desi_indic, with_filters) {
 }
 
 fromSpecialCalculation <- function(indicator, with_filters=NULL)
-  get(indicator)(with_filters)
+  tryCatch(get(indicator),
+           error = function(e) {
+             stop('Function `',indicator,'` is not implemented!', call.=FALSE)
+           })(with_filters)
 
 EU_Members_geo_codes <-
   c("BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR",

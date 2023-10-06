@@ -1,8 +1,9 @@
 ### Compiled automatically by rutkoal
-### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`
-###  on 2023-10-05 15:49:44
-###  526 defined indicators.
-###  40 mis-defined indicators.
+### from `Indicators Table - JAF 2017 FINAL SPRING 2023.xlsx`, worksheet `IndicatorsTable`
+### and from `catalogue - jaf_h_2021 FINAL SPRING 2023.csv`
+### on 2023-10-06 13:16:01
+### 611 defined indicators.
+### 40 mis-defined indicators.
 
 init = function() {
    source("H:/JAF_functions.R")
@@ -5788,11 +5789,942 @@ value = fromEurostatDataset("demo_mlexpec",
    with_filters(sex="T", unit="YR", age="Y65"))
 )
 
+inside(JAF_INDICATORS, indicator_named = "PA11.O1._health") = 
+specification(
+name = "People at-risk-of poverty or social exclusion - total",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_peps01n",
+   with_filters(sex="T", unit="PC", age="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S1._health") = 
+specification(
+name = "At-risk-of poverty rate (60% of median income) - total",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li02",
+   with_filters(sex="T", unit="PC", indic_il="LI_R_MD60", age="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S2._health") = 
+specification(
+name = "Severe material deprivation rate (7+ items) â€“ total",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mddd11",
+   with_filters(sex="T", unit="PC", age="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S3.T_health") = 
+specification(
+name = "People (aged 0-64) living in (quasi-)jobless households â€“ total",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_lvhl11n",
+   with_filters(sex="T", unit="PC", age="Y_LT65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S3.M_health") = 
+specification(
+name = "People (aged 0-64) living in (quasi-)jobless households - men",
+unit = "% (of male popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_lvhl11n",
+   with_filters(sex="M", unit="PC", age="Y_LT65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S3.F_health") = 
+specification(
+name = "People (aged 0-64) living in (quasi-)jobless households â€“ women) )",
+unit = "% (of female popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_lvhl11n",
+   with_filters(sex="F", unit="PC", age="Y_LT65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S4._health") = 
+specification(
+name = "Impact of social transfers (other than pensions) in reducing poverty",
+unit = "% reduction in risk of poverty",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromFormula(100*((a-b)/a),
+where = variables(
+ a = fromEurostatDataset('ilc_li10',
+  with_filters(age="TOTAL", indic_il="LI_R_MD60BT", sex="T")),
+ b = fromEurostatDataset('ilc_li02',
+  with_filters(age="TOTAL", indic_il="LI_R_MD60", sex="T", unit="PC"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S5._health") = 
+specification(
+name = "Impact of social transfers (incl pensions) in reducing poverty",
+unit = "% reduction in risk of poverty",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromFormula(100*((a-b)/a),
+where = variables(
+ a = fromEurostatDataset('ilc_li09',
+  with_filters(age="TOTAL", indic_il="LI_R_MD60BTP", sex="T")),
+ b = fromEurostatDataset('ilc_li02',
+  with_filters(age="TOTAL", indic_il="LI_R_MD60", sex="T", unit="PC"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S6._health") = 
+specification(
+name = "At-risk of poverty rate for population living in (quasi-)jobless households",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li06",
+   with_filters(sex="T", workint="WI0-02", indic_il="LI_R_MD60", age="Y_LT65", hhtyp="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S8._health") = 
+specification(
+name = "Relative median poverty risk gap",
+unit = "% (of AROP threshold)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li11",
+   with_filters(sex="T", indic_il="LI_GAP_MD60", age="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S9._health") = 
+specification(
+name = "Persistent at-risk-of-poverty rate",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li21",
+   with_filters(sex="T", indic_il="LIP_MD60", age="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S10._health") = 
+specification(
+name = "S80/S20",
+unit = "ratio",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_di11",
+   with_filters(sex="T", unit="RAT", age="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S11._health") = 
+specification(
+name = "Housing cost overburden",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_lvho07a",
+   with_filters(sex="T", incgrp="TOTAL", unit="PC", age="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S12._health") = 
+specification(
+name = "Housing Deprivation",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromFormula(100-a,
+where = variables(
+ a = fromEurostatDataset('ilc_mddd04b',
+  with_filters(age="TOTAL", n_item="0", sex="T", unit="PC"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S13.T_health") = 
+specification(
+name = "Material and social deprivation - total",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07",
+   with_filters(age="TOTAL", sex="T", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S13.M_health") = 
+specification(
+name = "Material and social deprivation - males",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07",
+   with_filters(age="TOTAL", sex="M", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S13.F_health") = 
+specification(
+name = "Material and social deprivation - females",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07",
+   with_filters(age="TOTAL", sex="F", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S14._health") = 
+specification(
+name = "Interquintile share ratios S80/S50",
+unit = "ratio",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromFormula(a/(b+c),
+where = variables(
+ a = fromEurostatDataset('ilc_di01',
+  with_filters(currency="EUR", indic_il="SHARE", quantile="QU5")),
+ b = fromEurostatDataset('ilc_di01',
+  with_filters(currency="EUR", indic_il="SHARE", quantile="Q1")),
+ c = fromEurostatDataset('ilc_di01',
+  with_filters(currency="EUR", indic_il="SHARE", quantile="Q2"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S15._health") = 
+specification(
+name = "Interquintile share ratios S50/S20",
+unit = "ratio",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromFormula((a+b)/c,
+where = variables(
+ a = fromEurostatDataset('ilc_di01',
+  with_filters(currency="EUR", indic_il="SHARE", quantile="Q1")),
+ b = fromEurostatDataset('ilc_di01',
+  with_filters(currency="EUR", indic_il="SHARE", quantile="Q2")),
+ c = fromEurostatDataset('ilc_di01',
+  with_filters(currency="EUR", indic_il="SHARE", quantile="QU1"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.O1._health") = 
+specification(
+name = "Children at-risk-of poverty or social exclusion (aged 0-17)",
+unit = "% (of popn 0-17)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_peps01n",
+   with_filters(sex="T", unit="PC", age="Y_LT18"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.S1._health") = 
+specification(
+name = "At-risk-of poverty rate of children (aged 0-17)",
+unit = "% (of popn 0-17)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li02",
+   with_filters(sex="T", unit="PC", indic_il="LI_R_MD60", age="Y_LT18"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.S2._health") = 
+specification(
+name = "Children living in a household suffering from severe material deprivation(4+)",
+unit = "% (of popn 0-17)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mddd11",
+   with_filters(sex="T", unit="PC", age="Y_LT18"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.S3._health") = 
+specification(
+name = "Children (aged 0-17) living in (quasi-)jobless households",
+unit = "% (of popn 0-17)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_lvhl11",
+   with_filters(sex="T", unit="PC_Y_LT60", age="Y_LT18"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.S4._health") = 
+specification(
+name = "Impact of social transfers (other than pensions) in reducing child poverty",
+unit = "% reduction in risk of poverty for children (0-17)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromFormula(100*((a-b)/a),
+where = variables(
+ a = fromEurostatDataset('ilc_li10',
+  with_filters(age="Y_LT18", indic_il="LI_R_MD60BT", sex="T")),
+ b = fromEurostatDataset('ilc_li02',
+  with_filters(age="Y_LT18", indic_il="LI_R_MD60", sex="T", unit="PC"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.S5._health") = 
+specification(
+name = "Impact of social transfers (incl pensions) in reducing child poverty",
+unit = "% reduction in risk of poverty for children (0-17)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromFormula(100*((a-b)/a),
+where = variables(
+ a = fromEurostatDataset('ilc_li09',
+  with_filters(age="Y_LT18", indic_il="LI_R_MD60BTP", sex="T")),
+ b = fromEurostatDataset('ilc_li02',
+  with_filters(age="Y_LT18", indic_il="LI_R_MD60", sex="T", unit="PC"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.S6._health") = 
+specification(
+name = "Relative median poverty risk gap (0-17)",
+unit = "% (of AROP threshold)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li11",
+   with_filters(sex="T", indic_il="LI_GAP_MD60", age="Y_LT18"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.S7._health") = 
+specification(
+name = "Housing cost overburden (0-17)",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_lvho07a",
+   with_filters(sex="T", incgrp="TOTAL", unit="PC", age="Y_LT18"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.S8._health") = 
+specification(
+name = "Housing deprivation (0-17)",
+unit = "% (of popn 0-17)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromFormula(100-a,
+where = variables(
+ a = fromEurostatDataset('ilc_mddd04b',
+  with_filters(age="Y_LT18", n_item="0", sex="T", unit="PC"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.S9._health") = 
+specification(
+name = "At-risk-of poverty rate of children living in household at work (0.2<WI<=0.55)",
+unit = "% (of popn 0-17)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromFormula((a*b+c*d)/(b+d),
+where = variables(
+ a = fromEurostatDataset('ilc_li06',
+  with_filters(age="Y_LT18", hhtyp="HH_DCH", indic_il="LI_R_MD60", sex="T", workint="WI02-045")),
+ b = fromEurostatDataset('ilc_lvps03',
+  with_filters(age="Y_LT18", hhtyp="HH_DCH", sex="T", workint="WI02-045")),
+ c = fromEurostatDataset('ilc_li06',
+  with_filters(age="Y_LT18", hhtyp="HH_DCH", indic_il="LI_R_MD60", sex="T", workint="WI045-055")),
+ d = fromEurostatDataset('ilc_lvps03',
+  with_filters(age="Y_LT18", hhtyp="HH_DCH", sex="T", workint="WI045-055"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.S10._health") = 
+specification(
+name = "At-risk-of poverty rate of children living in household at work (0.55<WI<=1)",
+unit = "% (of popn 0-17)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromFormula((a*b+c*d)/(b+d),
+where = variables(
+ a = fromEurostatDataset('ilc_li06',
+  with_filters(age="Y_LT18", hhtyp="HH_DCH", indic_il="LI_R_MD60", sex="T", workint="WI055-085")),
+ b = fromEurostatDataset('ilc_lvps03',
+  with_filters(age="Y_LT18", hhtyp="HH_DCH", sex="T", workint="WI055-085")),
+ c = fromEurostatDataset('ilc_li06',
+  with_filters(age="Y_LT18", hhtyp="HH_DCH", indic_il="LI_R_MD60", sex="T", workint="WI085-1")),
+ d = fromEurostatDataset('ilc_lvps03',
+  with_filters(age="Y_LT18", hhtyp="HH_DCH", sex="T", workint="WI085-1"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.S11._health") = 
+specification(
+name = "Material and social deprivation for children (0-17)",
+unit = "% (of popn 0-17)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07",
+   with_filters(age="Y_LT18", sex="T", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.O1._health") = 
+specification(
+name = "People at risk of poverty or social exclusion (18-64)",
+unit = "% (of popn 18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_peps01n",
+   with_filters(sex="T", unit="PC", age="Y18-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S1.T_health") = 
+specification(
+name = "At-risk-of poverty rate (aged 18-64) - total",
+unit = "% (of popn 18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li02",
+   with_filters(sex="T", unit="PC", indic_il="LI_R_MD60", age="Y18-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S1.M_health") = 
+specification(
+name = "At-risk-of poverty rate (aged 18-64) - men",
+unit = "% (of men 18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li02",
+   with_filters(sex="M", unit="PC", indic_il="LI_R_MD60", age="Y18-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S1.F_health") = 
+specification(
+name = "At-risk-of poverty rate (aged 18-64) - women",
+unit = "% (of women 18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li02",
+   with_filters(sex="F", unit="PC", indic_il="LI_R_MD60", age="Y18-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S2._health") = 
+specification(
+name = "Adults (aged 18-64) living in a household suffering from severe material deprivation (4+)",
+unit = "% (of popn 18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mddd11",
+   with_filters(sex="T", unit="PC", age="Y18-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S3._health") = 
+specification(
+name = "Adults (aged 18-59) not students living in (quasi-)jobless households",
+unit = "% (of popn 18-59)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_lvhl11",
+   with_filters(sex="T", unit="PC_Y_LT60", age="Y18-59"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S4._health") = 
+specification(
+name = "Rate of long-term unemployment (as % active population) - total",
+unit = "% (of active popn)",
+source = "Eurostat, EU Labour Force Survey",
+high_is_good = FALSE,
+value = fromEurostatDataset("une_ltu_a",
+   with_filters(sex="T", unit="PC_ACT", age="Y15-74", indic_em="LTU"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S5.T_health") = 
+specification(
+name = "In-work poverty (18-64) - total",
+unit = "% (of employed 18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_iw01",
+   with_filters(sex="T", wstatus="EMP", age="Y18-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S5.M_health") = 
+specification(
+name = "In-work poverty (18-64) - men",
+unit = "% (of employed men 18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_iw01",
+   with_filters(sex="M", wstatus="EMP", age="Y18-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S5.F_health") = 
+specification(
+name = "In-work poverty (18-64) - women",
+unit = "% (of employed women 18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_iw01",
+   with_filters(sex="F", wstatus="EMP", age="Y18-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S6._health") = 
+specification(
+name = "Impact of social transfers (other than pensions) in reducing working age poverty (18-64)",
+unit = "% reduction in risk of poverty for working age popn (18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromFormula(100*((a-b)/a),
+where = variables(
+ a = fromEurostatDataset('ilc_li10',
+  with_filters(age="Y18-64", indic_il="LI_R_MD60BT", sex="T")),
+ b = fromEurostatDataset('ilc_li02',
+  with_filters(age="Y18-64", indic_il="LI_R_MD60", sex="T", unit="PC"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S7._health") = 
+specification(
+name = "Impact of social transfers (incl pensions) in reducing working age poverty (18-64)",
+unit = "% reduction in risk of poverty for working age popn (18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromFormula(100*((a-b)/a),
+where = variables(
+ a = fromEurostatDataset('ilc_li09',
+  with_filters(age="Y18-64", indic_il="LI_R_MD60BTP", sex="T")),
+ b = fromEurostatDataset('ilc_li02',
+  with_filters(age="Y18-64", indic_il="LI_R_MD60", sex="T", unit="PC"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S8._health") = 
+specification(
+name = "At-risk of poverty rate for population living in (quasi-)jobless households (18-59)",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li06",
+   with_filters(sex="T", workint="WI0-02", indic_il="LI_R_MD60", age="Y18-64", hhtyp="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S9._health") = 
+specification(
+name = "Relative median poverty risk gap (18-64)",
+unit = "% (of AROP threshold)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li11",
+   with_filters(sex="T", indic_il="LI_GAP_MD60", age="Y18-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S10._health") = 
+specification(
+name = "Housing cost overburden (18-64)",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_lvho07a",
+   with_filters(sex="T", incgrp="TOTAL", unit="PC", age="Y18-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S11._health") = 
+specification(
+name = "Housing deprivation (18-64)",
+unit = "% (of popn 18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromFormula(100-a,
+where = variables(
+ a = fromEurostatDataset('ilc_mddd04b',
+  with_filters(age="Y18-64", n_item="0", sex="T", unit="PC"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S12.T_health") = 
+specification(
+name = "Material and social deprivation - (18-64) total",
+unit = "% (of popn 18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07",
+   with_filters(age="Y18-64", sex="T", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S12.M_health") = 
+specification(
+name = "Material and social deprivation - (18-64) males",
+unit = "% (of popn 18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07",
+   with_filters(age="Y18-64", sex="M", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S12.F_health") = 
+specification(
+name = "Material and social deprivation - (18-64) females",
+unit = "% (of popn 18-64)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07",
+   with_filters(age="Y18-64", sex="F", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.O1._health") = 
+specification(
+name = "People at risk of poverty or social exclusion (aged 65+) - total",
+unit = "% (of popn 65+)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_peps01n",
+   with_filters(sex="T", unit="PC", age="Y_GE65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S1.T_health") = 
+specification(
+name = "At-risk-of poverty rate of older people (aged 65+) - total",
+unit = "% (of popn 65+)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li02",
+   with_filters(sex="T", unit="PC", indic_il="LI_R_MD60", age="Y_GE65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S1.M_health") = 
+specification(
+name = "At-risk-of poverty rate of older people (aged 65+) - men",
+unit = "% (of men 65+)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li02",
+   with_filters(sex="M", unit="PC", indic_il="LI_R_MD60", age="Y_GE65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S1.F_health") = 
+specification(
+name = "At-risk-of poverty rate of older people (aged 65+) - women",
+unit = "% (of women 65+)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li02",
+   with_filters(sex="F", unit="PC", indic_il="LI_R_MD60", age="Y_GE65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S2.T_health") = 
+specification(
+name = "Severe material deprivation of older people (aged 65+) - total",
+unit = "% (of popn 65+)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mddd11",
+   with_filters(sex="T", unit="PC", age="Y_GE65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S2.M_health") = 
+specification(
+name = "Severe material deprivation of older people (aged 65+) - men",
+unit = "% (of men 65+)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mddd11",
+   with_filters(sex="M", unit="PC", age="Y_GE65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S2.F_health") = 
+specification(
+name = "Severe material deprivation of older people (aged 65+) - women",
+unit = "% (of women 65+)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mddd11",
+   with_filters(sex="F", unit="PC", age="Y_GE65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S3._health") = 
+specification(
+name = "Impact of social transfers (incl pensions) in reducing old age poverty (65+)",
+unit = "% reduction in risk of poverty for elderly popn (65+)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromFormula(100*((a-b)/a),
+where = variables(
+ a = fromEurostatDataset('ilc_li09',
+  with_filters(age="Y_GE65", indic_il="LI_R_MD60BTP", sex="T")),
+ b = fromEurostatDataset('ilc_li02',
+  with_filters(age="Y_GE65", indic_il="LI_R_MD60", sex="T", unit="PC"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S4._health") = 
+specification(
+name = "Relative median poverty risk gap (65+)",
+unit = "% (of AROP threshold)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li11",
+   with_filters(sex="T", indic_il="LI_GAP_MD60", age="Y_GE65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S5._health") = 
+specification(
+name = "Aggregate replacement ratio (excl other social benefits)",
+unit = "ratio",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromEurostatDataset("ilc_pnp3",
+   with_filters(sex="T", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S6._health") = 
+specification(
+name = "Median relative income of elderly people (65+)",
+unit = "ratio",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromEurostatDataset("ilc_pnp2",
+   with_filters(sex="T", indic_il="R_GE65_LT65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S7._health") = 
+specification(
+name = "Housing cost overburden (65+)",
+unit = "% (of total popn)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_lvho07a",
+   with_filters(sex="T", incgrp="TOTAL", unit="PC", age="Y_GE65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S8._health") = 
+specification(
+name = "Housing deprivation (65+)",
+unit = "% (of popn 65+)",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromFormula(100-a,
+where = variables(
+ a = fromEurostatDataset('ilc_mddd04b',
+  with_filters(age="Y_GE65", n_item="0", sex="T", unit="PC"))
+))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S9.T_health") = 
+specification(
+name = "Material and social deprivation - (65+) total",
+unit = "% (of popn 65+)",
+source = "",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07",
+   with_filters(age="Y_GE65", sex="T", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S9.M_health") = 
+specification(
+name = "Material and social deprivation - (65+) males",
+unit = "% (of popn 65+)",
+source = "",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07",
+   with_filters(age="Y_GE65", sex="M", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.S9.F_health") = 
+specification(
+name = "Material and social deprivation - (65+) females",
+unit = "% (of popn 65+)",
+source = "",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07",
+   with_filters(age="Y_GE65", sex="F", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S1._health") = 
+specification(
+name = "Life expectancy at birth (T)",
+unit = "yrs",
+source = "",
+high_is_good = TRUE,
+value = fromEurostatDataset("tps00205",
+   with_filters(sex="T", age="Y_LT1", unit="YR"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S2._health") = 
+specification(
+name = "Life expectancy at birth (M)",
+unit = "yrs",
+source = "",
+high_is_good = TRUE,
+value = fromEurostatDataset("tps00205",
+   with_filters(sex="M", age="Y_LT1", unit="YR"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S3._health") = 
+specification(
+name = "Life expectancy at birth (W)",
+unit = "yrs",
+source = "",
+high_is_good = TRUE,
+value = fromEurostatDataset("tps00205",
+   with_filters(sex="F", age="Y_LT1", unit="YR"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S4._health") = 
+specification(
+name = "Life expectancy at 65 (T)",
+unit = "yrs",
+source = "",
+high_is_good = TRUE,
+value = fromEurostatDataset("demo_mlexpec",
+   with_filters(sex="T", age="Y65", unit="YR"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S5._health") = 
+specification(
+name = "Life expectancy at 65 (M)",
+unit = "yrs",
+source = "",
+high_is_good = TRUE,
+value = fromEurostatDataset("demo_mlexpec",
+   with_filters(sex="M", age="Y65", unit="YR"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S6._health") = 
+specification(
+name = "Life expectancy at 65 (W)",
+unit = "yrs",
+source = "",
+high_is_good = TRUE,
+value = fromEurostatDataset("demo_mlexpec",
+   with_filters(sex="F", age="Y65", unit="YR"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S7._health") = 
+specification(
+name = "Healthy life years at birth (M)",
+unit = "yrs",
+source = "",
+high_is_good = TRUE,
+value = fromEurostatDataset("hlth_hlye",
+   with_filters(indic_he="HLY_0", sex="M", unit="YR"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S8._health") = 
+specification(
+name = "Healthy life years at birth (W)",
+unit = "yrs",
+source = "",
+high_is_good = TRUE,
+value = fromEurostatDataset("hlth_hlye",
+   with_filters(indic_he="HLY_0", sex="F", unit="YR"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S9._health") = 
+specification(
+name = "Healthy life years at 65 (M)",
+unit = "yrs",
+source = "",
+high_is_good = TRUE,
+value = fromEurostatDataset("hlth_hlye",
+   with_filters(indic_he="HLY_65", sex="M", unit="YR"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S10._health") = 
+specification(
+name = "Healthy life years at 65 (W)",
+unit = "yrs",
+source = "",
+high_is_good = TRUE,
+value = fromEurostatDataset("hlth_hlye",
+   with_filters(indic_he="HLY_65", sex="F", unit="YR"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S11._health") = 
+specification(
+name = "Child mortality, 1-14",
+unit = "rate",
+source = "",
+high_is_good = TRUE,
+value = fromEurostatDataset("hlth_cd_acdr2",
+   with_filters(sex="T", age="Y_LT15", icd10="A-R_V-Y"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S12._health") = 
+specification(
+name = "Potential years of life lost (T)",
+unit = "yrs (per 100 000 inhab)",
+source = "",
+high_is_good = FALSE,
+value = fromEurostatDataset("hlth_cd_apyll",
+   with_filters(icd10="A-R_V-Y", sex="T", unit="YR"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S13._health") = 
+specification(
+name = "Amenable mortality",
+unit = "st rate",
+source = "",
+high_is_good = FALSE,
+value = fromEurostatDataset("hlth_cd_apr",
+   with_filters(mortalit="TRT", sex="T", unit="RT", icd10="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S14._health") = 
+specification(
+name = "Preventable mortality",
+unit = "st rate",
+source = "",
+high_is_good = FALSE,
+value = fromEurostatDataset("hlth_cd_apr",
+   with_filters(mortalit="PRVT", sex="T", unit="RT", icd10="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S15._health") = 
+specification(
+name = "Unmet need med care (costs, waiting or distance)",
+unit = "%",
+source = "",
+high_is_good = FALSE,
+value = fromEurostatDataset("hlth_silc_08",
+   with_filters(age="Y_GE16", quantile="TOTAL", reason="TOOEFW", sex="T", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S16._health") = 
+specification(
+name = "Unmet need med care - cost",
+unit = "%",
+source = "",
+high_is_good = FALSE,
+value = fromEurostatDataset("hlth_silc_08",
+   with_filters(age="Y_GE16", quantile="TOTAL", reason="TOOEXP", sex="T", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S17._health") = 
+specification(
+name = "Unmet need med care - waiting",
+unit = "%",
+source = "",
+high_is_good = FALSE,
+value = fromEurostatDataset("hlth_silc_08",
+   with_filters(age="Y_GE16", quantile="TOTAL", reason="WAITING", sex="T", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S18._health") = 
+specification(
+name = "Unmet need med care - distance",
+unit = "%",
+source = "",
+high_is_good = FALSE,
+value = fromEurostatDataset("hlth_silc_08",
+   with_filters(age="Y_GE16", quantile="TOTAL", reason="TOOFAR", sex="T", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA13.S19._health") = 
+specification(
+name = "Gap unmet need med care Q1-Q5",
+unit = "pp",
+source = "",
+high_is_good = FALSE,
+value = fromFormula(a-b,
+where = variables(
+ a = fromEurostatDataset('hlth_silc_08',
+  with_filters(age="Y_GE16", quantile="QU1", reason="TOOEFW", sex="T", unit="PC")),
+ b = fromEurostatDataset('hlth_silc_08',
+  with_filters(age="Y_GE16", quantile="QU5", reason="TOOEFW", sex="T", unit="PC"))
+))
+)
+
 
 ### Mis-specified indicators are commented-out below -- but some valid indicators below too,
-
-
-
 ### the valid ones are those with significantly modified definitions compared to the catalogue
 
 

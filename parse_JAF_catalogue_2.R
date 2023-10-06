@@ -102,7 +102,10 @@ processCatalog <- function(catalog_dt, comment="")
                 grepl('DESI_Connectivity',table),'fromDESI',
                 (grepl("^Eurostat,",.) & table!='vacancy_rate') |
                   .=='DG CONNECT' |
-                  table %in% c('earn_nt_unemtrp','earn_nt_taxwedge'),
+                  table %in% c('earn_nt_unemtrp','earn_nt_taxwedge','ilc_mdsd07',
+                               'hlth_hlye','hlth_cd_acdr2','hlth_cd_apyll',
+                               'hlth_cd_apr','hlth_silc_08') |
+                  grepl('tps00...',table),
                 'fromEurostatDataset',
                 grepl("^OECD, Pisa",.), 'fromEurostatDataset',
                 grepl("^OECD,",.), 'fromOECDdataset',
@@ -137,10 +140,25 @@ processCatalog <- function(catalog_dt, comment="")
 
 # Actions -----------------------------------------------------------------
 
+path_to_folder_with_source_definitions <-
+  'H:/'
+
+source_of_definitions <-
+  c('Indicators Table - JAF 2017 FINAL SPRING 2023.xlsx',
+    'catalogue - jaf_h_2021 FINAL SPRING 2023.csv')
+
 Catalog <-
-  openxlsx2::read_xlsx('//NET1.cec.eu.int/offline/03/rutkoal/Desktop/Indicators Table - JAF 2017 FINAL SPRING 2023.xlsx',
+  openxlsx2::read_xlsx(paste0(path_to_folder_with_source_definitions,
+                              source_of_definitions[1]),
                        sheet='IndicatorsTable') %>% 
-  as.data.table %>%  
+  as.data.table() %>%  
+  rbind(
+    fread(paste0(path_to_folder_with_source_definitions,
+                 source_of_definitions[2])) %>% 
+      as.data.table() %>% 
+      .[, JAF_KEY := paste0(JAF_KEY,'_health')],
+    fill=TRUE
+  ) %>% 
   .[, row_num := .I] %>% 
   .[, formula := ifelse(grepl('delete the formula',comments) | 
                           (!is.na(table) & standard=='Y'),
@@ -246,8 +264,9 @@ saveAsUtf8 <- function(contents, file_name) {
 
 CodeLines <-
   c(paste('### Compiled automatically by',Sys.getenv("USERNAME")),
-    '### from `JAF Indicators Table.xlsx`, worksheet `IndicatorsTable`',
-    paste('### ',
+    paste0('### from `',source_of_definitions[1],'`, worksheet `IndicatorsTable`'),
+    paste0('### and from `',source_of_definitions[2],'`'),
+    paste('###',
           c('on ' %+% Sys.time(),
             Number_of_defined_indics_message,
             Number_of_undefined_indics_message)),
@@ -265,14 +284,21 @@ if (interactive() && exists("JAF_INDICATORS")) repeat {
 } else init()',
 # helpers,
 CatalogFormulaOrCond$definitions,
-'\n\n### Mis-specified indicators are commented-out below -- but some valid indicators below too,\n',
-'\n\n### the valid ones are those with significantly modified definitions compared to the catalogue\n',
+'\n\n### Mis-specified indicators are commented-out below -- but some valid indicators below too,',
+'### the valid ones are those with significantly modified definitions compared to the catalogue\n',
 CatalogNoFormulaOrCond$definitions,
 '\n')  %>% 
   gsub('fromEurostatDataset( ','fromEurostatDataset(',.,fixed=TRUE)  %>% 
   gsub('with_filters( ','  with_filters(',.,fixed=TRUE)  %>% 
   gsub('fromFormula( ','fromFormula(',.,fixed=TRUE) %>% 
   gsub("fromEurostatDataset('lfse_","fromLFSspecialFile('lfse_",.,fixed=TRUE) %>% 
+  gsub(", , ))","))",.,fixed=TRUE) %>% 
+  gsub(", ))","))",.,fixed=TRUE) %>% 
+  gsub(", , , , ,  "," ",.,fixed=TRUE) %>% 
+  gsub(" [a-z]{1} = ,\\n","",.) %>% 
+  gsub(" [a-z]{1} = \\n)",")",.) %>% 
+  gsub(",\n)","\n)",.,fixed=TRUE) %>% 
+  gsub('tps00026','demo_mlexpec',.,fixed=TRUE) %>% 
   #gsub('fromLFSspecialFile("trng_','fromEurostatDataset("trng_',.,fixed=TRUE) %>% 
   # enc2utf8() %>% 
   # Special treatment:
