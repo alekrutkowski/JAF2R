@@ -1,7 +1,7 @@
 ### Compiled automatically by rutkoal
 ### from `Indicators Table - JAF 2017 FINAL SPRING 2023.xlsx`, worksheet `IndicatorsTable`
 ### and from `catalogue - jaf_h_2021 FINAL SPRING 2023.csv`
-### on 2023-10-06 13:16:01
+### on 2023-10-09 16:58:48
 ### 611 defined indicators.
 ### 40 mis-defined indicators.
 
@@ -4473,7 +4473,7 @@ unit = "% (of population)",
 source = "Eurostat, Education Statistics",
 high_is_good = TRUE,
 value = fromEurostatDataset("educ_uoe_grad04",
-   with_filters(indiced11="ED5-8", sex="T", unit="P_THAB"))
+   with_filters(isced11="ED5-8", sex="T", unit="P_THAB"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA10.O1.") = 

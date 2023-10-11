@@ -342,7 +342,7 @@ unit = "% (of population)",
 source = "Eurostat, Education Statistics",
 high_is_good = TRUE,
 value = fromEurostatDataset("educ_uoe_grad04",
-   with_filters(indiced11="ED5-8", sex="T", unit="P_THAB"))
+   with_filters(isced11="ED5-8", sex="T", unit="P_THAB"))
 )',
 .,
 fixed=TRUE) %>% 

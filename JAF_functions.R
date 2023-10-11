@@ -8,7 +8,22 @@ library(OECD)
 library(countrycode)
 library(rvest)
 library(kit)
-# library(retry)
+
+
+# Constants and aliases ---------------------------------------------------
+
+EU_Members_geo_codes <-
+  c("BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR",
+    "HR","IT","CY","LV","LT","LU","HU","MT","NL","AT",
+    "PL","PT","RO","SI","SK","FI","SE") %T>% 
+  {stopifnot(length(.)==27, all(nchar(.)==2),
+             all(. %in% eurodata::importLabels('geo')$geo))}
+
+large_EU_Members_geo_codes <-
+  c('DE','FR','IT','ES','PL','RO','NL') %T>% 
+  {stopifnot(all(. %in% EU_Members_geo_codes))}
+
+`%without%` <- setdiff
 
 delimiter <-
   rep.int('-',80) %>% paste(collapse="") %>% paste0('\n',.,'\n')
@@ -19,6 +34,18 @@ delimiter <-
   .list
 }
 
+variables <- list
+
+`%not in%` <- Negate(`%in%`)
+
+memoised_importData <-
+  memoise::memoise(eurodata::importData)
+
+memoised_importDataList <-
+  memoise::memoise(eurodata::importDataList)
+
+
+# Functions ---------------------------------------------------------------
 
 fromFormula <- function(formula_expression, where) {
   list_of_data_tables <- 
@@ -60,23 +87,13 @@ fromFormula <- function(formula_expression, where) {
 }
 
 
-variables <- list
-
-`%not in%` <- Negate(`%in%`)
-
-memoised_importData <-
-  memoise::memoise(eurodata::importData)
-
-memoised_importDataList <-
-  memoise::memoise(eurodata::importDataList)
-
 specification <- function(...)
   substitute(list(...))
 
 isError <- function(x)
   inherits(x,'simpleError')
 
-# For very temporary network problems
+# For short-lived network problems
 retry <- function(expr, timeout=6, interval=2) {
   t0 <- Sys.time()
   repeat {
@@ -119,8 +136,12 @@ calculate <- memoise::memoise(
         length(high_is_good)==1,
         is.data.frame(value),
         nrow(value)>0,
-        c('geo','time','value_') %in% colnames(value),
-        nrow(value[,.(geo,time)] %>% .[duplicated(.)])==0,
+        'The data.table has one or more of the identifier columns (`geo`, `time`) or the `value_` column missing!' =
+          c('geo','time','value_') %in% colnames(value),
+        'The columns `geo` and `time` do not uniquely identify the rows in the data.table - there are duplicates!' =
+          nrow(value[,.(geo,time)] %>% .[duplicated(.)])==0,
+        'The column `value_` is not numeric!' =
+          is.numeric(value$value_)
       )
       list(name=name,
            unit=unit,
@@ -129,8 +150,7 @@ calculate <- memoise::memoise(
              .[, grep('^(geo|time|value_|flags_.*|.)$',
                       colnames(value),value=TRUE),
                with=FALSE] %>% 
-             setorder(geo, time),
-           problems=anyProblems(value))
+             setorder(geo, time))
     }, eval(unevaluated_specification_list)))
   }
 )
@@ -222,7 +242,9 @@ fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0
             '"',EurostatDatasetCode,
             '" not found in the list of Eurostat datasets or tables!\n',
             'check https://ec.europa.eu/eurostat/api/dissemination/catalogue/toc/txt?lang=EN'))
-  memoised_importData(EurostatDatasetCode, with_filters) %>% 
+  memoised_importData(EurostatDatasetCode,
+                      c(with_filters,
+                        list(geo=c(EU_Members_geo_codes,'EU27_2022','EA20')))) %>% 
     `if`(nrow(.)==0,
          stop(cmd_line,
               "returned empty data.frame!\n",call.=FALSE),
@@ -387,7 +409,9 @@ fromBenefitsAndWages <- function(table_code, with_filters) {
   url_pfix <-
     'https://europa.eu/economy_finance/db_indicators/tab/wq/details_all_webquery.php?url='
   url_geos <-
-    'BE,BG,CZ,DK,DE,EE,IE,GR,ES,FR,HR,IT,CY,LV,LT,LU,HU,MT,NL,AT,PL,PT,RO,SI,SK,FI,SE'
+    EU_Members_geo_codes %>% 
+    sub('EL','GR',.,fixed=TRUE) %>% 
+    paste(collapse=',')
   url_years <-
     2000:as.integer(format(Sys.Date(),"%Y")) %>% 
     paste(collapse=',')
@@ -461,10 +485,6 @@ fromLFSspecialFile <- function(jaf_lfs_code, with_filters) {
 
 
 fromDESI <- function(desi_indic, with_filters) {
-  # tmpfile <- tempfile()
-  # download.file("https://digital-agenda-data.eu/download/DESI.csv.zip",
-  #               tmpfile)
-  # unzip(tmpfile) %>% 
   'https://digital-decade-desi.digital-strategy.ec.europa.eu/api/v1/chart-groups/desi-2022/facts/' %>% 
     fread() %>% 
     Reduce(\(dt,x) dt[dt[[x]] %in% with_filters[[x]]],
@@ -478,21 +498,13 @@ fromDESI <- function(desi_indic, with_filters) {
              c('time','geo','value_','flags_'))
 }
 
+
 fromSpecialCalculation <- function(indicator, with_filters=NULL)
   tryCatch(get(indicator),
            error = function(e) {
              stop('Function `',indicator,'` is not implemented!', call.=FALSE)
            })(with_filters)
 
-EU_Members_geo_codes <-
-  c("BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR",
-    "HR","IT","CY","LV","LT","LU","HU","MT","NL","AT",
-    "PL","PT","RO","SI","SK","FI","SE")
-
-large_EU_Members_geo_codes <-
-  c('DE','FR','IT','ES','PL','RO','NL')
-
-`%without%` <- setdiff
 
 vacancy_rate <- function(with_filters=NULL) {
   f <- eurodata::importData
