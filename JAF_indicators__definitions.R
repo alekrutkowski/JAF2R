@@ -1,21 +1,9 @@
 ### Compiled automatically by rutkoal
 ### from `Indicators Table - JAF 2017 FINAL SPRING 2023.xlsx`, worksheet `IndicatorsTable`
 ### and from `catalogue - jaf_h_2021 FINAL SPRING 2023.csv`
-### on 2023-10-09 16:58:48
+### on 2023-10-13 16:39:13
 ### 611 defined indicators.
 ### 40 mis-defined indicators.
-
-init = function() {
-   source("H:/JAF_functions.R")
-   JAF_INDICATORS <<- list()
-}
-if (interactive() && exists("JAF_INDICATORS")) repeat {
-  answer = toupper(readline("Re-calculate everything? (Y/N): "))
-  if (answer=="Y") {
-    init()
-    break
-  } else if (answer=="N") break
-} else init()
 
 inside(JAF_INDICATORS, indicator_named = "PA1.O1.") = 
 specification(

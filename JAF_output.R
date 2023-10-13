@@ -2,7 +2,30 @@ library(data.table)
 library(magrittr)
 library(collapse)
 
-message('Saving JAF_INDICATORS.Rds...')
+# Functions ---------------------------------------------------------------
+
+rename_with_mod_time <- function(file_path, time_format="%Y-%m-%d %H.%M.%S") {
+  modification_time <- 
+    file.info(file_path)$mtime
+  time_str <- 
+    format(modification_time, time_format)
+  new_file_path <-
+    sub("(.*)(\\.[a-zA-Z0-9]+)$", paste0("\\1 ",time_str,"\\2"), file_path)
+  success <- 
+    file.rename(file_path, new_file_path)
+  if (success) new_file_path else
+    stop("Failed to rename the file.")
+}
+
+
+# Actions -----------------------------------------------------------------
+
+if (file.exists('JAF_INDICATORS.Rds')) {
+  message('\nRenaming/archiving the exisitng/old\nJAF_INDICATORS.Rds -> ',
+          appendLF=FALSE)
+  message(rename_with_mod_time('JAF_INDICATORS.Rds'))
+}
+message('Saving new JAF_INDICATORS.Rds...')
 JAF_INDICATORS %>%
   saveRDS('JAF_INDICATORS.Rds')
 
@@ -94,14 +117,3 @@ JAF_SCORES <-
       {paste(.,'for latest_value;',.,'minus',.-3,'for change')}] %>% 
   setorder(JAF_KEY,geo,period)
 
-
-## TODO
-# Warning messages:
-# 1: In max(time[sufficiently_many_countries]) :
-#   no non-missing arguments to max; returning -Inf
-# 2: In `[.data.table`(., , `:=`(latest_year_overall, max(time[sufficiently_many_countries])),  :
-#   Group 476 column 'latest_year_overall': -inf (type 'double') at RHS position 1 truncated (precision lost) when assigning to type 'integer'
-# 3: In max(time[sufficiently_many_countries]) :
-#   no non-missing arguments to max; returning -Inf
-# 4: In `[.data.table`(., , `:=`(latest_year_overall, max(time[sufficiently_many_countries])),  :
-#   Group 477 column 'latest_year_overall': -inf (type 'double') at RHS position 1 truncated (precision lost) when assigning to type 'integer'

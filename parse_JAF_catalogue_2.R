@@ -270,24 +270,11 @@ CodeLines <-
           c('on ' %+% Sys.time(),
             Number_of_defined_indics_message,
             Number_of_undefined_indics_message)),
-    '
-init = function() {
-   source("H:/JAF_functions.R")
-   JAF_INDICATORS <<- list()
-}
-if (interactive() && exists("JAF_INDICATORS")) repeat {
-  answer = toupper(readline("Re-calculate everything? (Y/N): "))
-  if (answer=="Y") {
-    init()
-    break
-  } else if (answer=="N") break
-} else init()',
-# helpers,
-CatalogFormulaOrCond$definitions,
-'\n\n### Mis-specified indicators are commented-out below -- but some valid indicators below too,',
-'### the valid ones are those with significantly modified definitions compared to the catalogue\n',
-CatalogNoFormulaOrCond$definitions,
-'\n')  %>% 
+    CatalogFormulaOrCond$definitions,
+    '\n\n### Mis-specified indicators are commented-out below -- but some valid indicators below too,',
+    '### the valid ones are those with significantly modified definitions compared to the catalogue\n',
+    CatalogNoFormulaOrCond$definitions,
+    '\n')  %>% 
   gsub('fromEurostatDataset( ','fromEurostatDataset(',.,fixed=TRUE)  %>% 
   gsub('with_filters( ','  with_filters(',.,fixed=TRUE)  %>% 
   gsub('fromFormula( ','fromFormula(',.,fixed=TRUE) %>% 
