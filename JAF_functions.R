@@ -23,6 +23,12 @@ large_EU_Members_geo_codes <-
   c('DE','FR','IT','ES','PL','RO','NL') %T>% 
   {stopifnot(all(. %in% EU_Members_geo_codes))}
 
+EU_geo_code <-
+  'EU27_2020'
+
+EA_geo_code <-
+  'EA20'
+
 `%without%` <- setdiff
 
 delimiter <-
@@ -146,6 +152,7 @@ calculate <- memoise::memoise(
       list(name=name,
            unit=unit,
            source=source,
+           high_is_good=high_is_good,
            value = value %>% 
              .[, grep('^(geo|time|value_|flags_.*|.)$',
                       colnames(value),value=TRUE),
@@ -209,8 +216,8 @@ anyProblems <- function(dt) {
        `One or more large countries missing` = any(large_EU_Members_geo_codes %in% not_available_geos),
        `All large countries missing at the last time point` = all(large_EU_Members_geo_codes %in% not_available_geos_last_time_point),
        `One or more large countries missing at the last time point` = any(large_EU_Members_geo_codes %in% not_available_geos_last_time_point),
-       `No EU aggregate` = 'EU27_2020' %not in% unique(dt_nonmiss$geo),
-       `No EU aggregate for the last time point` = 'EU27_2020' %not in% unique(dt_nonmiss_last_t$geo)
+       `No EU aggregate` = EU_geo_code %not in% unique(dt_nonmiss$geo),
+       `No EU aggregate for the last time point` = EU_geo_code %not in% unique(dt_nonmiss_last_t$geo)
        # More checks to be added e.g. if high jumps in values or variance
   ) %>%
     if_add(.$`Old data`,
@@ -242,17 +249,16 @@ fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0
             '"',EurostatDatasetCode,
             '" not found in the list of Eurostat datasets or tables!\n',
             'check https://ec.europa.eu/eurostat/api/dissemination/catalogue/toc/txt?lang=EN'))
-  memoised_importData(EurostatDatasetCode,
-                      c(with_filters,
-                        list(geo=c(EU_Members_geo_codes,'EU27_2022','EA20')))) %>% 
+  memoised_importData(EurostatDatasetCode, with_filters) %>% 
     `if`(nrow(.)==0,
          stop(cmd_line,
               "returned empty data.frame!\n",call.=FALSE),
          .) %>%
     as.data.table() %>% 
-    .[, sapply(colnames(.),
-               \(colname) colname %in% c('geo','TIME_PERIOD') ||
-                 length(unique(.[[colname]]))!=1),
+    .[geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)] %>% 
+    .[, sapply(colnames(.), # 
+               \(colname) colname %in% c('geo','TIME_PERIOD','value_','flags_') ||
+                 length(unique(.[[colname]]))!=1), # drop columns with identifiers = single category
       with=FALSE] %>%
     setnames('TIME_PERIOD','time') %>% 
     .[, time := sub('-',"",time,fixed=TRUE)] %>% 
@@ -306,6 +312,7 @@ finaliseOECDdataset <- function(dt)
   .[, geo := countrycode(country,
                          origin='iso3c',
                          destination='eurostat')] %>% 
+  .[, value_ := as.numeric(value_)] %>% 
   .[, country := NULL]
 
 

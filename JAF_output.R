@@ -1,6 +1,7 @@
 library(data.table)
 library(magrittr)
 library(collapse)
+library(stringr)
 
 # Functions ---------------------------------------------------------------
 
@@ -15,6 +16,24 @@ rename_with_mod_time <- function(file_path, time_format="%Y-%m-%d %H.%M.%S") {
     file.rename(file_path, new_file_path)
   if (success) new_file_path else
     stop("Failed to rename the file.")
+}
+
+parseJAF_KEY <- function(dt) {
+  stopifnot('JAF_KEY' %in% colnames(dt))
+  newcols <-
+    dt$JAF_KEY %>% 
+    tstrsplit(split=".", fixed=TRUE)
+  newcol_names <-
+    c('PolicyArea', 'IndicCode',
+      paste0('IndicSpecif',seq_len(length(newcols)-2)))
+  dt %>% 
+    .[, (newcol_names) := newcols] %>% 
+    .[, PolicyArea := sub('^PA',"",PolicyArea)]
+  # TODO : corrections where IndicCode doesn't start with S or C %>%
+    # .[, PolicyArea := PolicyArea %>%
+    #     ifelse(IndicCode %in% c('1','2'),PolicyArea3,.)] %>% 
+    # .[, IndicCode := IndicCode %>%
+    #     ifelse(. %in% c('1','2'),PolicyArea3,.)] 
 }
 
 
@@ -39,7 +58,7 @@ JAF_GRAND_TABLE <-
       .[, high_is_good := JAF_INDICATORS[[x]]$high_is_good] %>% 
       setcolorder(c('JAF_KEY','high_is_good'))
   ) %>% rbindlist(fill=TRUE) %>% 
-  .[, grep('^(JAF_KEY|geo|time|value_|flags_.*|.)$',
+  .[, grep('^(JAF_KEY|high_is_good|geo|time|value_|flags_.*|.)$',
            colnames(.),value=TRUE),
     with=FALSE] %>% 
   setcolorder(c('JAF_KEY','geo','time','value_','flags_',
@@ -65,7 +84,7 @@ JAF_SCORES <-
   .[, time := as.integer(time)] %>% 
   .[, value_ := as.numeric(value_)] %>% 
   .[isNotNA(value_)] %>% 
-  .[geo %in% c(EU_Members_geo_codes,'EU27_2022','EA20')] %>% 
+  .[geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)] %>% 
   .[, sufficiently_many_countries :=
       value_[geo %in% EU_Members_geo_codes] %>% 
       {length(.)>=20}
@@ -92,7 +111,7 @@ JAF_SCORES <-
        variable.name="variable", value.name="value",
        na.rm=TRUE) %>%
   .[, reference :=
-      value[geo=='EU27_2020'] %>% 
+      value[geo==EU_geo_code] %>% 
       ifelse(length(.)==0, # EU not available
              mean(value[geo %in% EU_Members_geo_codes]),
              .)
@@ -115,5 +134,6 @@ JAF_SCORES <-
         fill=NA) %>% 
   .[, comment := time %>% 
       {paste(.,'for latest_value;',.,'minus',.-3,'for change')}] %>% 
-  setorder(JAF_KEY,geo,period)
+  setorder(JAF_KEY,geo,time) %>% 
+  parseJAF_KEY()
 
