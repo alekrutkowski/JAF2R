@@ -305,7 +305,7 @@ fromOECDdataset <- function(OECDdatasetCode, with_filters) {
 
 finaliseOECDdataset <- function(dt)
   dt %>% 
-  Filter(\(col) length(unique(col))!=1, .) %>% 
+  .[,sapply(.,\(col) length(unique(col))!=1), with=FALSE] %>% 
   setnames(c('Time','ObsValue','COU','COUNTRY','LOCATION','OBS_STATUS'),
            c('time','value_','country','country','country','flags_'),
            skip_absent=TRUE) %>% 

@@ -1,9 +1,11 @@
 library(data.table)
 library(magrittr)
+library(eurodata)
 library(collapse)
 library(stringr)
 
-# Functions ---------------------------------------------------------------
+
+# Functions and constants -------------------------------------------------
 
 rename_with_mod_time <- function(file_path, time_format="%Y-%m-%d %H.%M.%S") {
   modification_time <- 
@@ -18,6 +20,17 @@ rename_with_mod_time <- function(file_path, time_format="%Y-%m-%d %H.%M.%S") {
     stop("Failed to rename the file.")
 }
 
+`doesn't start with S or C or O` <- function(x)
+  !grepl('^(S.+|C.+|O.+)$', x)
+
+modifyRows <- function(dt, rowfilter, expr)
+  eval(bquote({
+    . <- dt[(.(substitute(rowfilter)))] # to make it compatible with %>%
+    dt[(.(substitute(rowfilter)))] <- 
+      dt[(.(substitute(rowfilter)))][,.(substitute(expr))]
+    dt
+  }))
+
 parseJAF_KEY <- function(dt) {
   stopifnot('JAF_KEY' %in% colnames(dt))
   newcols <-
@@ -28,14 +41,109 @@ parseJAF_KEY <- function(dt) {
       paste0('IndicSpecif',seq_len(length(newcols)-2)))
   dt %>% 
     .[, (newcol_names) := newcols] %>% 
-    .[, PolicyArea := sub('^PA',"",PolicyArea)]
-  # TODO : corrections where IndicCode doesn't start with S or C %>%
-    # .[, PolicyArea := PolicyArea %>%
-    #     ifelse(IndicCode %in% c('1','2'),PolicyArea3,.)] %>% 
-    # .[, IndicCode := IndicCode %>%
-    #     ifelse(. %in% c('1','2'),PolicyArea3,.)] 
+    .[, PolicyArea := sub('^PA',"",PolicyArea)] %>% 
+    .[, .temp_row_marker := IndicCode %>% `doesn't start with S or C or O`] %>% 
+    modifyRows(.temp_row_marker,
+               PolicyArea := paste0(PolicyArea,'.',IndicCode)) %>% 
+    modifyRows(.temp_row_marker,
+               IndicCode := IndicSpecif1) %>%
+    modifyRows(.temp_row_marker,
+               grep('IndicSpecif.+',colnames(.),value=TRUE) %>% head(-1) :=
+                 .[,grep('IndicSpecif.+',colnames(.),value=TRUE) %>% tail(-1),
+                   with=FALSE]) %>%
+    modifyRows(.temp_row_marker,
+               grep('IndicSpecif.+',colnames(.),value=TRUE) %>% tail(1) :=
+                 NA_character_) %>%
+    .[, .temp_row_marker := NULL] %>% 
+    .[, sapply(.,\(col) !all(is.na(col))), with=FALSE] %>% 
+    .[, IndicType := substr(IndicCode,1,1)]
 }
 
+sanitiseFilename <- function(string)
+  string %>%
+  # Replace reserved characters with an underscore
+  gsub('[<>:"/\\|?*]', '_', .) %>%
+  # Remove trailing spaces or periods
+  gsub('[ .]$', '', .) %>%
+  # Append an underscore if it matches reserved names
+  ifelse(. %in% c('CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4', 
+                  'COM5', 'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3', 
+                  'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9'),
+         paste0(., '_'),.) %>%
+  # Ensure filename doesn't exceed max length
+  substr(1, 255)
+
+isNotNA <- Negate(is.na)
+
+readMarkDownTable <- function(markdown_string)
+  markdown_string %>% 
+  fread(sep="|", header=TRUE) %>% 
+  .[-1] %>% 
+  .[, sapply(.,\(col) !is.logical(col)), with=FALSE]
+
+QuantAssessmentTable <-
+  # Levels in rows, changes in columns
+  '
+| Levels  | --  | -  | 0  | +  | ++  |
+|---------|-----|----|----|----|-----|
+| --      | 1   | 1  | 1  | 4  | 5   |
+| -       | 2   | 2  | 2  | 4  | 5   |
+| 0       | 10  | 9  |    |    |     |
+| +       | 6   |    |    | 7  | 8   |
+| ++      |     |    | 3  | 3  | 3   |
+' %>% 
+  readMarkDownTable() %>%
+  melt(id.vars='Levels',variable.name='Changes') %>% 
+  .[, value := as.integer(value)] %>% 
+  setnames(c('Levels','Changes','value'),
+           c('score_category_latest_value',
+             'score_category_change',
+             'QuantAssessmentNum'))
+
+QuantAssessmentLabels <-
+  '
+| Quantitative assessment                                                    | Challenge  | Positive Outcome  |
+|----------------------------------------------------------------------------|------------|-------------------|
+| 1. Indicator significantly worse than EU average                           | X          |                   |
+| 2. Indicator worse than EU average                                         | X          |                   |
+| 3. Indicator significantly better than EU average                          |            | X                 |
+| 4. Indicator worse than EU average & some positive development             | X          |                   |
+| 5. Indicator worse than EU average & significantly positive development    | X          |                   |
+| 6. Indicator better than EU average & significantly negative development   | X          |                   |
+| 7. Indicator above EU average & some positive development                  |            | X                 |
+| 8. Indicator above EU average & significantly positive development         |            | X                 |
+| 9. Indicator around EU average & some negative development                 | X          |                   |
+| 10. Indicator around EU average & significantly negative development       | X          |                   |
+' %>% 
+  readMarkDownTable() %>% 
+  .[, QuantAssessmentNum := .I] %>% 
+  .[, QuantAssessmentGood :=
+      kit::nif(`Positive Outcome`=='X', TRUE,
+               Challenge=='X', FALSE,
+               default=NA)] %>% 
+  .[,.(QuantAssessmentNum, `Quantitative assessment`, QuantAssessmentGood)]
+
+QuantAssessmentDescriptions <-
+  merge(QuantAssessmentTable, QuantAssessmentLabels,
+        all.x=TRUE,
+        by='QuantAssessmentNum')
+
+EU_Members_geo_names <-
+  importLabels('geo') %>% 
+  as.data.table() %>% 
+  .[, lapply(.,as.character)] %>% 
+  .[geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)]
+
+OUTPUT_FOLDER <-
+  Sys.time() %>% 
+  paste('JAF output',.) %>% 
+  gsub(':','.',.,fixed=TRUE)
+
+reportProblem <- function(message.) 
+  function(x) { # x = error or warning
+    message('Something went wrong:\n',x)
+    stop(message.,call.=FALSE)
+  }
 
 # Actions -----------------------------------------------------------------
 
@@ -69,8 +177,6 @@ JAF_GRAND_TABLE <-
 message('Compressing JAF_GRAND_TABLE.csv into JAF_GRAND_TABLE.csv.zip...')
 utils::zip('JAF_GRAND_TABLE.csv.zip',
            'JAF_GRAND_TABLE.csv')
-
-isNotNA <- Negate(is.na)
 
 message('Calculating scores')
 JAF_SCORES <-
@@ -106,7 +212,7 @@ JAF_SCORES <-
     , by=.(JAF_KEY,geo)] %>%
   .[, change := latest_value - previous_value] %>%
   .[time==latest_year_individual] %>%
-  melt(id.vars=c('JAF_KEY','geo','time','high_is_good'),
+  melt(id.vars=c('JAF_KEY','geo','time','high_is_good','flags_'),
        measure.vars=c('latest_value','change'),
        variable.name="variable", value.name="value",
        na.rm=TRUE) %>%
@@ -128,12 +234,27 @@ JAF_SCORES <-
                 . <= 7, '0',
                 . < 13, '+',
                 . >= 13, '++')}] %>% 
-  dcast(JAF_KEY + geo + time ~ variable,
+  dcast(JAF_KEY + geo + time + flags_ ~ variable,
         value.var=c('value','score','score_category'),
         fun.aggregate=identity,
         fill=NA) %>% 
   .[, comment := time %>% 
-      {paste(.,'for latest_value;',.,'minus',.-3,'for change')}] %>% 
+      {paste0(.,' for latest_value; ',.,' minus ',.-3,' for change',
+              ifelse(grepl('b',flags_),
+                     ' (but there is a break in time series!)',"")
+      )}] %>% 
   setorder(JAF_KEY,geo,time) %>% 
-  parseJAF_KEY()
+  parseJAF_KEY() %>% 
+  merge(QuantAssessmentDescriptions,
+        by=c('score_category_latest_value','score_category_change')) %>% 
+  merge(EU_Members_geo_names,
+        by='geo')
+
+message('\nCreating a new output directory/folder:\n',
+        paste0(getwd(),'/',OUTPUT_FOLDER))
+reportProblem('Folder not created!') %>% 
+  tryCatch(dir.create(OUTPUT_FOLDER),
+           error = .,
+           warning = .)
+
 
