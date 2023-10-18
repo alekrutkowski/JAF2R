@@ -145,6 +145,16 @@ reportProblem <- function(message.)
     stop(message.,call.=FALSE)
   }
 
+createFolder <- function(folder_name) {
+  message('\nCreating a new output directory/folder:\n',
+          paste0(getwd(),'/',folder_name))
+  reportProblem('Folder not created!') %>% 
+    tryCatch(dir.create(folder_name),
+             error = .,
+             warning = .)
+}
+
+
 # Actions -----------------------------------------------------------------
 
 if (file.exists('JAF_INDICATORS.Rds')) {
@@ -156,7 +166,15 @@ message('Saving new JAF_INDICATORS.Rds...')
 JAF_INDICATORS %>%
   saveRDS('JAF_INDICATORS.Rds')
 
-message('Preparing and saving JAF_GRAND_TABLE.csv...')
+JAF_NAMES_DESCRIPTIONS <-
+  JAF_INDICATORS %>% 
+  names() %>% 
+  lapply(\(x) data.table(JAF_KEY=x,
+                         name=JAF_INDICATORS[[x]]$name, 
+                         unit=JAF_INDICATORS[[x]]$unit)) %>% 
+  rbindlist()
+
+message('Preparing JAF_GRAND_TABLE...')
 JAF_GRAND_TABLE <-
   JAF_INDICATORS %>% 
   names() %>% 
@@ -171,12 +189,7 @@ JAF_GRAND_TABLE <-
     with=FALSE] %>% 
   setcolorder(c('JAF_KEY','geo','time','value_','flags_',
                 grep('^.$',colnames(.),value=TRUE),
-                grep('^flags_.$',colnames(.),value=TRUE))) %T>% 
-  fwrite('JAF_GRAND_TABLE.csv')
-
-message('Compressing JAF_GRAND_TABLE.csv into JAF_GRAND_TABLE.csv.zip...')
-utils::zip('JAF_GRAND_TABLE.csv.zip',
-           'JAF_GRAND_TABLE.csv')
+                grep('^flags_.$',colnames(.),value=TRUE)))
 
 message('Calculating scores')
 JAF_SCORES <-
@@ -248,13 +261,11 @@ JAF_SCORES <-
   merge(QuantAssessmentDescriptions,
         by=c('score_category_latest_value','score_category_change')) %>% 
   merge(EU_Members_geo_names,
-        by='geo')
+        by='geo') %>% 
+  merge(JAF_NAMES_DESCRIPTIONS,
+        by='JAF_KEY') %>% 
+  .[, Description := paste(name,unit)]
 
-message('\nCreating a new output directory/folder:\n',
-        paste0(getwd(),'/',OUTPUT_FOLDER))
-reportProblem('Folder not created!') %>% 
-  tryCatch(dir.create(OUTPUT_FOLDER),
-           error = .,
-           warning = .)
+createFolder(OUTPUT_FOLDER)
 
 
