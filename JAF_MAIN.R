@@ -15,3 +15,5 @@ source('JAF_indicators__definitions.R')
 source('JAF_output.R')
 
 source('JAF_KEC.R')
+
+source('JAF_Compendium.R')
