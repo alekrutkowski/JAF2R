@@ -2,9 +2,9 @@
 
 # Functions and constants -------------------------------------------------
 
-sq <- function(...) sQuote(paste0(...),FALSE)
+sq <- function(...) sQuote(paste0(...),FALSE) # single quote
 
-dq <- function(...) dQuote(paste0(...),FALSE)
+dq <- function(...) dQuote(paste0(...),FALSE) # double quote
 
 JAF_Compendium_Index <-
   '
@@ -548,4 +548,9 @@ JAF_Compendium_Index <-
              ",",
              dq("Compendium - ",CompendiumNum),
              ")")]
+
+
+# Actions -----------------------------------------------------------------
+
+
 

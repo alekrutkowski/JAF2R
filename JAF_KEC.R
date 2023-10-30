@@ -279,7 +279,7 @@ countrySheet <- function(geo_code)
   {data.table(row_order = .$`#`,
               `POLICY AREA` = .$`POLICY AREA`,
               Indicator = .$JAF_KEY,
-              Description = .$Description,
+              Description = .$Description %>% stringi::stri_trans_general("Latin-ASCII"), # stri_trans_general needed to sanitize, other Exce report broken file
               Levels = .$score_category_latest_value,
               Changes = .$score_category_change,
               Flags = .$flags_,
@@ -302,7 +302,7 @@ countrySheet_add <- function(geo_code)
   {data.table(row_order = .$`#`,
               `POLICY AREA` = .$`POLICY AREA`,
               Indicator = .$JAF_KEY,
-              Description = .$Description,
+              Description = .$Description %>% stringi::stri_trans_general("Latin-ASCII"), # stri_trans_general needed to sanitize, other Exce report broken file
               `Employment/Social challenges` = 
                 ifelse(.$QuantAssessmentGood,"",.$`Quantitative assessment`),
               `Good labour market/social outcomes` = 
@@ -334,11 +334,12 @@ KEC_wb <-
   openxlsx2::wb_workbook()
 
 for (geo_code in EU_Members_geo_codes) {
+# for (geo_code in 'BE') {
   cat(geo_code,"")
   for (dim2 in c("",'_add')) {
     dta <-
       get(paste0('countrySheet',dim2))(geo_code) %>% 
-      .[, lapply(.,. %>% `if`(is.character(.),ifelse(is.na(.),"",.),.))]
+      .[, lapply(.,. %>% `if`(is.character(.),ifelse(is.na(.),"",.),.))] 
     sheet_name <-
       paste0(geo_code,dim2)
     KEC_wb$add_worksheet(sheet_name)
@@ -365,7 +366,7 @@ for (geo_code in EU_Members_geo_codes) {
                           cols=seq_along(colnames(dta)),
                           widths="auto")
     KEC_wb$set_col_widths(sheet=sheet_name,
-                          cols=1,
+                          cols=c(1,3),
                           widths=70)
     if (dim2=='_add')
       KEC_wb$set_col_widths(sheet=sheet_name,
@@ -375,5 +376,5 @@ for (geo_code in EU_Members_geo_codes) {
 }
 for (ws in KEC_wb$worksheets)
   ws$sheetViews <- set_zoom(75, ws$sheetViews)
-wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/newKEC.xlsx'))
+wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/KEC.xlsx'))
 message('\nDone.')

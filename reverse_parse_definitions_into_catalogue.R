@@ -10,8 +10,14 @@ with_filters <- list
 variables <- list
 calculate <- list
 fromFormula <- function(formula., where)
-  list(deparse(substitute(formula.)), where=where)
+  list(paste(deparse(substitute(formula.)),collapse=""), where=where)
 fromEurostatDataset <- list
+fromOECDdataset <- list
+fromLFSspecialFile <- list
+fromLMPdataset <- list
+fromBenefitsAndWages <- list
+fromSpecialCalculation <- list
+fromDESI <- list
 JAF_INDICATORS <- list()
 
 message("\nPaste the full file path to the JAF2R definitions script to be reverse-parsed:")
