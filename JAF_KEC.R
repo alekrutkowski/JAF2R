@@ -279,7 +279,7 @@ countrySheet <- function(geo_code)
   {data.table(row_order = .$`#`,
               `POLICY AREA` = .$`POLICY AREA`,
               Indicator = .$JAF_KEY,
-              Description = .$Description %>% stringi::stri_trans_general("Latin-ASCII"), # stri_trans_general needed to sanitize, other Exce report broken file
+              Description = .$Description %>% stringi::stri_trans_general("Latin-ASCII"), # stri_trans_general needed to sanitize, otherwise Excel reports broken file
               Levels = .$score_category_latest_value,
               Changes = .$score_category_change,
               Flags = .$flags_,
@@ -302,7 +302,7 @@ countrySheet_add <- function(geo_code)
   {data.table(row_order = .$`#`,
               `POLICY AREA` = .$`POLICY AREA`,
               Indicator = .$JAF_KEY,
-              Description = .$Description %>% stringi::stri_trans_general("Latin-ASCII"), # stri_trans_general needed to sanitize, other Exce report broken file
+              Description = .$Description %>% stringi::stri_trans_general("Latin-ASCII"), # stri_trans_general needed to sanitize, otherwise Excel reports broken file
               `Employment/Social challenges` = 
                 ifelse(.$QuantAssessmentGood,"",.$`Quantitative assessment`),
               `Good labour market/social outcomes` = 

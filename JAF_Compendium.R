@@ -6,7 +6,13 @@ sq <- function(...) sQuote(paste0(...),FALSE) # single quote
 
 dq <- function(...) dQuote(paste0(...),FALSE) # double quote
 
-JAF_Compendium_Index <-
+sanitizeForExcel <- function(dt)
+  # Otherwise Excel report broken file
+  dt[, lapply(.SD,
+              \(col) if (is.character(col))
+                stringi::stri_trans_general(col,"Latin-ASCII") else col)]
+
+JAF_Compendium_Index_raw <-
   '
 | CompendiumNum  | JAF_KEY                  |
 |----------------|--------------------------|
@@ -537,9 +543,12 @@ JAF_Compendium_Index <-
 ' %>% 
   readMarkDownTable() %>% 
   .[, CompendiumNum := as.integer(CompendiumNum)] %>% 
-  .[, JAF_KEY := JAF_KEY %>% sub('^(PA11\\.C3)\\.n(\\..)$','\\1\\2',.)] %>% # remove n from PA11.C3.n.M and PA11.C3.n.F
+  .[, JAF_KEY := JAF_KEY %>% sub('^(PA11\\.C3)\\.n(\\..)$','\\1\\2',.)] # remove n from PA11.C3.n.M and PA11.C3.n.F
+
+JAF_Compendium_Index <-
+  JAF_Compendium_Index_raw %>% 
   merge(JAF_NAMES_DESCRIPTIONS, by='JAF_KEY') %>% 
-  .[, `Policy Area` := sub('$PA(.+)\\..*$','\\1',.)] %>% 
+  .[, `Policy Area` := sub("^([^\\.]+)\\..*$", "\\1", JAF_KEY)] %>% 
   .[, Indicator := name] %>% 
   .[, name := NULL] %>% 
   .[, Compendium := 
@@ -547,10 +556,102 @@ JAF_Compendium_Index <-
              dq("[Compendium-",CompendiumNum,".xlsx]",sq(JAF_KEY),"!A1"),
              ",",
              dq("Compendium - ",CompendiumNum),
-             ")")]
+             ")")] %>% 
+  .[, c('CompendiumNum','unit') := NULL] %>% 
+  sanitizeForExcel()
+
+indicTablesForCompendium <- function(JAF_KEY.) {
+  selected_dt <-
+    JAF_GRAND_TABLE[JAF_KEY==JAF_KEY. & !is.na(value_)] %>% 
+    .[, time := as.integer(time)] %>% 
+    .[time >= 2000] %>% 
+    .[, geo := as.character(geo)]
+  col_order <-
+    sort(unique(selected_dt$time)) %>% 
+    expand.grid(c('value_','flags_'),.) %>% 
+    do.call(paste0,.)
+  selected_dt %>% 
+    dcast(geo ~ time,
+          fun.aggregate=identity,
+          fill=NA, sep="",
+          value.var=c('value_','flags_')) %>% 
+    .[, ord. := nchar(geo)] %>% 
+    setorder(ord.,geo) %>% 
+    .[, ord. := NULL] %>% 
+    setcolorder(c('geo',col_order)) %>% 
+    list(with_flags = .,
+         without_flags =
+           .[, !grepl('^flags_',colnames(.)), with=FALSE]) %>% 
+    lapply(\(dt) dt %>% 
+             setnames(colnames(.),
+                      colnames(.) %>% sub('^(geo|value_|flags_.+)',"",.)))
+}
 
 
-# Actions -----------------------------------------------------------------
 
 
+# # Actions -----------------------------------------------------------------
+# 
+# message('\nCreating Compendium files...')
+# 
+# createFolder(paste0(OUTPUT_FOLDER,'/JAF Compendium'))
+# 
+# message('Creating Index.xlsx...')
+# openxlsx2::wb_workbook() %>% 
+#   wb_add_worksheet('Index') %>% 
+#   wb_add_data(dims='C1',
+#               x='Index Compendium') %>% 
+#   wb_add_font(dims='C1',
+#               bold="bold",
+#               size=18) %>% 
+#   wb_add_data(startRow=2,
+#               x=JAF_Compendium_Index %>% 
+#                 .[, colnames(.) %without% 'Compendium', with=FALSE]) %>% 
+#   wb_add_formula(x=JAF_Compendium_Index$Compendium,
+#                  startCol=ncol(JAF_Compendium_Index),
+#                  startRow=3) %>% 
+#   wb_add_data(x='Link to the file and worksheet',
+#               startCol=ncol(JAF_Compendium_Index),
+#               startRow=2) %>% 
+#   wb_freeze_pane(firstActiveRow=3) %>%
+#   wb_add_font(dims=paste0('A2:',int2col(ncol(JAF_Compendium_Index)),'2'),
+#               bold="bold",
+#               size=12) %>%
+#   wb_set_col_widths(cols=seq_along(JAF_Compendium_Index),
+#                     widths="auto") %>%
+#   wb_set_col_widths(cols=3,
+#                     widths=70) %>%
+#   {for (ws in .$worksheets)
+#     ws$sheetViews <- set_zoom(75, ws$sheetViews); .} %>%
+#   wb_save(paste0(OUTPUT_FOLDER,'/JAF Compendium/Index.xlsx'))
+# 
+# message('Done.')
 
+for (CompendiumNum. in unique(JAF_Compendium_Index_raw$CompendiumNum)) {
+  wb <-
+    openxlsx2::wb_workbook()
+  for (JAF_KEY. in JAF_Compendium_Index_raw[CompendiumNum==CompendiumNum., JAF_KEY]) {
+    message('Creating Compendium-',CompendiumNum.,'.xlsx...')
+    PA <-
+      JAF_Compendium_Index[JAF_KEY==JAF_KEY., `Policy Area`]
+    wb %>% 
+      wb_add_worksheet(JAF_KEY.) %>%
+      wb_add_formula(JAF_KEY.,
+                     r"{=HYPERLINK("[Index.xlsx]'Index'!A1","Back to index")}") %>% 
+      wb_add_data(JAF_KEY.,
+                  PA,
+                  dims='A3') %>% 
+      wb_add_data(JAF_KEY.,
+                  PolicyAreaLabels[paste0('PA',PolicyArea)==PA, `POLICY AREA`],
+                  dim='B3') %>% 
+      wb_add_data(JAF_KEY.,
+                  JAF_INDICATORS[[JAF_KEY.]]$name %>% stringi::stri_trans_general("Latin-ASCII"),
+                  dim='B5') %>% 
+      wb_add_data(JAF_KEY.,
+                  JAF_INDICATORS[[JAF_KEY.]]$unit %>% stringi::stri_trans_general("Latin-ASCII"),
+                  dim='B6') %>% 
+      wb_add_data(JAF_KEY.,
+                  paste('Source: ',JAF_INDICATORS[[JAF_KEY.]]$source),
+                  dim='B7')
+  }
+}
