@@ -324,57 +324,58 @@ set_zoom <- function(x, sheet_views) # from https://stackoverflow.com/a/74239871
   gsub('(?<=zoomScale=")[0-9]+', x,
        sheet_views, perl=TRUE)
 
-# Actions -----------------------------------------------------------------
-
-message('\nCreating KEC.xlsx...')
-
-createFolder(paste0(OUTPUT_FOLDER,'/KEC'))
-
-KEC_wb <-
-  openxlsx2::wb_workbook()
-
-for (geo_code in EU_Members_geo_codes) {
-# for (geo_code in 'BE') {
-  cat(geo_code,"")
-  for (dim2 in c("",'_add')) {
-    dta <-
-      get(paste0('countrySheet',dim2))(geo_code) %>% 
-      .[, lapply(.,. %>% `if`(is.character(.),ifelse(is.na(.),"",.),.))] 
-    sheet_name <-
-      paste0(geo_code,dim2)
-    KEC_wb$add_worksheet(sheet_name)
-    KEC_wb$add_data(sheet=sheet_name,
-                    dims='B1',
-                    x=EU_Members_geo_names[geo==geo_code]$geo_labels)
-    KEC_wb$add_data(sheet=sheet_name,
-                    startRow=4,
-                    x=dta)
-    KEC_wb$freeze_pane(sheet=sheet_name,
-                       firstActiveRow=5)
-    KEC_wb$add_fill(sheet=sheet_name,
-                    dims=paste0('A4:',int2col(ncol(dta)),'4'),
-                    color=wb_color(hex='e7e6e6'))
-    KEC_wb$add_font(sheet=sheet_name,
-                    dims='B1',
-                    bold="bold",
-                    size=18,
-                    color=wb_color(hex='4472c4'))
-    KEC_wb$add_font(sheet=sheet_name,
-                    dims=paste0('A4:',int2col(ncol(dta)),'4'),
-                    bold="bold")
-    KEC_wb$set_col_widths(sheet=sheet_name,
-                          cols=seq_along(colnames(dta)),
-                          widths="auto")
-    KEC_wb$set_col_widths(sheet=sheet_name,
-                          cols=c(1,3),
-                          widths=70)
-    if (dim2=='_add')
-      KEC_wb$set_col_widths(sheet=sheet_name,
-                            cols=3:4,
-                            widths=50)
-  }
-}
-for (ws in KEC_wb$worksheets)
-  ws$sheetViews <- set_zoom(75, ws$sheetViews)
-wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/KEC.xlsx'))
-message('\nDone.')
+# # Actions -----------------------------------------------------------------
+# Temporarily commented out for faster development of the next stages
+# 
+# message('\nCreating KEC.xlsx...')
+# 
+# createFolder(paste0(OUTPUT_FOLDER,'/KEC'))
+# 
+# KEC_wb <-
+#   openxlsx2::wb_workbook()
+# 
+# for (geo_code in EU_Members_geo_codes) {
+# # for (geo_code in 'BE') {
+#   cat(geo_code,"")
+#   for (dim2 in c("",'_add')) {
+#     dta <-
+#       get(paste0('countrySheet',dim2))(geo_code) %>% 
+#       .[, lapply(.,. %>% `if`(is.character(.),ifelse(is.na(.),"",.),.))] 
+#     sheet_name <-
+#       paste0(geo_code,dim2)
+#     KEC_wb$add_worksheet(sheet_name)
+#     KEC_wb$add_data(sheet=sheet_name,
+#                     dims='B1',
+#                     x=EU_Members_geo_names[geo==geo_code]$geo_labels)
+#     KEC_wb$add_data(sheet=sheet_name,
+#                     startRow=4,
+#                     x=dta)
+#     KEC_wb$freeze_pane(sheet=sheet_name,
+#                        firstActiveRow=5)
+#     KEC_wb$add_fill(sheet=sheet_name,
+#                     dims=paste0('A4:',int2col(ncol(dta)),'4'),
+#                     color=wb_color(hex='e7e6e6'))
+#     KEC_wb$add_font(sheet=sheet_name,
+#                     dims='B1',
+#                     bold="bold",
+#                     size=18,
+#                     color=wb_color(hex='4472c4'))
+#     KEC_wb$add_font(sheet=sheet_name,
+#                     dims=paste0('A4:',int2col(ncol(dta)),'4'),
+#                     bold="bold")
+#     KEC_wb$set_col_widths(sheet=sheet_name,
+#                           cols=seq_along(colnames(dta)),
+#                           widths="auto")
+#     KEC_wb$set_col_widths(sheet=sheet_name,
+#                           cols=c(1,3),
+#                           widths=70)
+#     if (dim2=='_add')
+#       KEC_wb$set_col_widths(sheet=sheet_name,
+#                             cols=3:4,
+#                             widths=50)
+#   }
+# }
+# for (ws in KEC_wb$worksheets)
+#   ws$sheetViews <- set_zoom(75, ws$sheetViews)
+# wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/KEC.xlsx'))
+# message('\nDone.')
