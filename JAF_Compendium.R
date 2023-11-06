@@ -7,7 +7,7 @@ sq <- function(...) sQuote(paste0(...),FALSE) # single quote
 dq <- function(...) dQuote(paste0(...),FALSE) # double quote
 
 sanitizeForExcel <- function(dt)
-  # Otherwise Excel report broken file
+  # Otherwise Excel reports a broken file
   dt[, lapply(.SD,
               \(col) if (is.character(col))
                 stringi::stri_trans_general(col,"Latin-ASCII") else col)]
