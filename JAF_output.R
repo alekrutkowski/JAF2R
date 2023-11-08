@@ -233,11 +233,24 @@ JAF_SCORES <-
        measure.vars=c('latest_value','change'),
        variable.name="variable", value.name="value",
        na.rm=TRUE) %>%
+  .[, reference_name :=
+      value[geo==EU_geo_code] %>% 
+      {ifelse(length(.)==0, # EU not available
+              'Simple Average', # *** should be consistent
+              EU_geo_code)}
+    , by=.(JAF_KEY, variable)] %>% 
   .[, reference :=
       value[geo==EU_geo_code] %>% 
       ifelse(length(.)==0, # EU not available
-             mean(value[geo %in% EU_Members_geo_codes]),
+             mean(value[geo %in% EU_Members_geo_codes]), # *** should be consistent
              .)
+    , by=.(JAF_KEY, variable)] %>% 
+  .[, reference_time :=
+      value[geo==EU_geo_code] %>% 
+      {ifelse(length(.)==0, # EU not available
+              paste(sort(unique(time[geo %in% EU_Members_geo_codes])),
+                    collapse=', '),
+              as.character(time[geo==EU_geo_code]))}
     , by=.(JAF_KEY, variable)] %>% 
   .[, std := sd(value[geo %in% EU_Members_geo_codes]),
     , by=.(JAF_KEY, variable)] %>% 
@@ -251,8 +264,9 @@ JAF_SCORES <-
                 . <= 7, '0',
                 . < 13, '+',
                 . >= 13, '++')}] %>% 
-  dcast(JAF_KEY + geo + time + flags_ ~ variable,
-        value.var=c('value','score','score_category'),
+  dcast(JAF_KEY + geo + time + flags_ + high_is_good ~ variable,
+        value.var=c('value','score','score_category',
+                    'reference','reference_name', 'reference_time'),
         fun.aggregate=identity,
         fill=NA) %>% 
   .[, comment := time %>% 
@@ -268,7 +282,7 @@ JAF_SCORES <-
         by='geo') %>% 
   merge(JAF_NAMES_DESCRIPTIONS,
         by='JAF_KEY') %>% 
-  .[, Description := paste(name,unit)]
+  .[, Description := paste0(name,', ',unit)]
 
 createFolder(OUTPUT_FOLDER)
 
