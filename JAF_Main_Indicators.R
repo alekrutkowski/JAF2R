@@ -41,7 +41,7 @@ Selected_Main_Indicators_Multiline_Header <-
   .[, 'High is: good = [+], bad = [\u2212]' :=
       get('High is: good = [+], bad = [\u2212]') %>% 
       ifelse(.=='[-]','[\u2212]',.)] %>% 
-  split(list(.$level_or_change), keep.by=FALSE) %>%
+  split(by='level_or_change', keep.by=FALSE) %>%
   lapply(t)
 
 Selected_Main_Indicators_Contents <-
@@ -63,10 +63,12 @@ Selected_Main_Indicators_Contents <-
       setnames(colnames(.),
                colnames(.) %>% sub(paste0('_',suffix,'$'),"",.)) %>% 
       .[, Flag :=
-          ifelse(time!=reference_time,reference_time,"") %>% 
-          paste(flags_,.) %>% 
+          paste(ifelse(!is.na(flags_),flags_,""),
+                ifelse(time!=reference_time,time,"")) %>% 
           trimws()] %>% 
       .[, c('time','flags_','reference_time') := NULL] %>% 
+      .[, score := round(score,1)] %>% 
+      .[, value := round(value,2)] %>% 
       setnames(c('score','value'),
                c('Score',ifelse(suffix=='latest_value','Level','Change'))) %>% 
       sanitizeForExcel() %>% 
@@ -98,11 +100,13 @@ for (indic_type in c('change','latest_value')) {
   Indic_Type <-
     ifelse(indic_type=='change','Changes',
            'Levels')
+  cat(Indic_Type,"")
   head. <-
     Selected_Main_Indicators_Multiline_Header[[indic_type]]
   vals. <-
     Selected_Main_Indicators_Contents[[indic_type]]
-  wb_Main_Indic %>%
+  wb_Main_Indic <-
+    wb_Main_Indic %>%
     wb_add_worksheet(Indic_Type) %>%
     wb_add_data(x=c('Main Indicators',Indic_Type),
                 dims='A1') %>%
@@ -114,7 +118,51 @@ for (indic_type in c('change','latest_value')) {
                 dims=paste0('A',3 + nrow(head.))) %>% 
     # TO DO: Excel formatting:
     # merging and centering cells, borders, shading/fills
-    setZoomInAllSheets(75) %>%
-    wb_save(paste0(OUTPUT_FOLDER,
-                   '/Main/Main_Indicators.xlsx'))
+    wb_set_col_widths(cols=1,
+                      widths=33) %>%
+    wb_freeze_pane(firstActiveRow=8,firstActiveCol=2) %>%
+    wb_add_filter(rows=7, cols=1) %>%
+    wb_add_font(dims='A1:A2',
+                bold="bold",
+                size=18) %>%
+    wb_add_font(dims=paste0('A3:',int2col(ncol(head.)),'5'),
+                bold="bold",
+                size=12) %>%
+    wb_add_font(dims=paste0('A',7+nrow(vals.)-1,':',int2col(ncol(vals.)),7+nrow(vals.)),
+                bold="bold") %>%
+    Reduce(init=.,
+           x=seq.int(8,8+nrow(vals.),2) %>%
+             paste0("A",.,":",int2col(ncol(vals.)),.),
+           f=\(wb.,x)
+           wb_add_fill(wb.,
+                       dims=x,
+                       color= wb_color(hex="e6f1ff"))) %>%
+    Reduce(init=.,
+           x=seq.int(2,2+ncol(head.),3),
+           f=\(wb.,x)
+           Reduce(init=wb.,
+                  x=3:5,
+                  f=\(wb..,y)
+                  wb_merge_cells(wb..,
+                                 rows=y,
+                                 cols=seq.int(x,x+2)) %>% 
+                    wb_add_cell_style(
+                      dims=paste0(int2col(x),y,':',int2col(x+2),y),
+                      horizontal='center', vertical='center',
+                      wrapText = "1"))) %>% 
+    Reduce(init=.,
+           x=seq.int(2,2+ncol(head.),3) %>%
+             {paste0(int2col(.),'3:',int2col(.+2),2+nrow(head.)+nrow(vals.)+1)},
+           f=\(wb.,x)
+           wb_add_border(wb.,
+                         dims=x)) %>%
+    wb_add_border(dims=paste0('A3:A',2+nrow(head.)+nrow(vals.)+1)) %>% 
+    wb_set_row_heights(rows=4, heights=60) %>% 
+    wb_set_col_widths(cols=seq.int(2,2+ncol(head.),3),
+                      widths=13.2) %>%
+    setZoomInAllSheets(75)
 }
+wb_Main_Indic %>% 
+  wb_save(paste0(OUTPUT_FOLDER,
+                 '/Main/Main_Indicators.xlsx'))
+message('\nDone.')
