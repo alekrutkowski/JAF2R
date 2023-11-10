@@ -6,10 +6,38 @@ library(openxlsx2)
 # Functions and constants -------------------------------------------------
 
 PolicyAreaLabels <- '
+| PolicyArea | POLICY AREA                                                                                                                                    |
+|------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1          | Increase overall employment                                                                                                                    |
+| 1b         | Improve labour market situation of youth                                                                                                       |
+| 1c         | Increase employment of older workers                                                                                                           |
+| 1d         | Increase employment of migrants                                                                                                                |
+| 2a         | Combating segmentation                                                                                                                         |
+| 2b         | Labour market fluidity                                                                                                                         |
+| 3          | Active labour market policies                                                                                                                  |
+| 4.1        | Adequate social security systems                                                                                                               |
+| 4.2        | Make work pay                                                                                                                                  |
+| 5          | Work-life balance                                                                                                                              |
+| 6a         | Exploiting job creation possibilities                                                                                                          |
+| 6b         | Demand creation                                                                                                                                |
+| 7.1        | Gender employment gap                                                                                                                          |
+| 7.2        | Gender pay gap                                                                                                                                 |
+| 8.1        | Improving skills supply and productivity, lifelong learning                                                                                    |
+| 8.2        | Lifelong learning                                                                                                                              |
+| 9.1        | Improving education and training systems                                                                                                       |
+| 9.2        | Improving higher education                                                                                                                     |
+| 10         | Wage setting mechanisms and labour cost developments                                                                                           |
+| 11         | Preventing poverty and social exclusion through inclusive labour markets, adequate and sustainable social protection and high quality services |
+| 11a        | Breaking the intergenerational transmission of poverty – tackling child poverty                                                                |
+| 11b        | Active inclusion – tackling poverty in working age                                                                                             |
+| 11c        | Elderly poverty                                                                                                                                |
+' %>% 
+  readMarkDownTable()
+
+PolicyAreaLabels_General <- '
 | PolicyArea  | POLICY AREA                                                                                                                                     |
 |-------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
 | 1           | Increase labour market participation                                                                                                            |
-| 1b          | Increase labour market participation                                                                                                            |
 | 1b          | Increase labour market participation                                                                                                            |
 | 1c          | Increase labour market participation                                                                                                            |
 | 1d          | Increase labour market participation                                                                                                            |
