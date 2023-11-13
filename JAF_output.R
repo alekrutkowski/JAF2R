@@ -178,7 +178,7 @@ JAF_NAMES_DESCRIPTIONS <-
                          unit=JAF_INDICATORS[[x]]$unit)) %>% 
   rbindlist()
 
-message('Preparing JAF_GRAND_TABLE...')
+message('\nPreparing JAF_GRAND_TABLE...')
 JAF_GRAND_TABLE <-
   JAF_INDICATORS %>% 
   names() %>% 

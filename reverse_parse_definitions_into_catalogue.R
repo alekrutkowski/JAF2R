@@ -62,4 +62,5 @@ JAF_catalogue <-
   ) %>% 
   rbindlist(fill=TRUE) %T>% 
   fwrite(paste0('JAF_mini_catalogue_',
-                Sys.time() %>% gsub(':',".",.,fixed=TRUE),'.csv'))
+                Sys.time() %>% gsub(':',".",.,fixed=TRUE),'.csv') %T>%
+           message('Saving ',.))
