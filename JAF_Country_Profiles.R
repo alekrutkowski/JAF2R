@@ -58,6 +58,8 @@ paCountryChart <- function(pa_code, geo_code, level_or_change) {
                       y=score),
                   hjust=.$hjust.) +
         theme_minimal() +
+        expand_limits(y = .$score*1.1 %>%
+                        {c(min(.,na.rm=TRUE),max(.,na.rm=TRUE))}) + # to avoid truncating the labels
         scale_y_continuous(labels=\(x) sub('-','\u2212',x),
                            sec.axis = dup_axis()) +
         theme(axis.title.x=element_blank(),
@@ -66,39 +68,41 @@ paCountryChart <- function(pa_code, geo_code, level_or_change) {
               axis.text.y=element_text(color="black"),
               text = element_text(size=13) # ,
               # aspect.ratio=length(.$JAF_KEY)/8
-              ) +
+        ) +
         geom_hline(aes(yintercept = 0)) +
         coord_flip() +
         ggtitle(EU_Members_geo_names[geo==geo_code,geo_labels],
                 subtitle =
                   paste0('[',pa_code,'] ',
                          PolicyAreaLabels[paste0('PA',PolicyArea)==pa_code,`POLICY AREA`],
-                         '  \u25AA  ',
-                         ifelse(level_or_change=='change','C H A N G E S','L E V E L S'))
+                         '\u00A0\u00A0\u25AA\u00A0\u00A0',
+                         ifelse(level_or_change=='change','CHANGES','LEVELS')  
+                  ) %>% strwrap(50) %>% paste(collapse='\n')
         )
     }
   list(nrows=nrow(dta), chart=chart)
 }
 
 
-# # Actions -----------------------------------------------------------------
+# Actions -----------------------------------------------------------------
 # Temporarily commented out for faster development of the next stages
 # createFolder(paste0(OUTPUT_FOLDER,'/Country Profiles'))
-# message('\nCreating Policy Area / Country charts (PNG files)...')
-# for (geo_code in EU_Members_geo_codes[1]) {
-#   createFolder(paste0(OUTPUT_FOLDER,'/Country Profiles/',geo_code))
-#   message('Starting ',geo_code,'...')
-#   for (pa_code in names(Selected_PAs_Codes)[1]) {
-#     cat(paste0(" ",pa_code,': '))
-#     for (indic_type in c('change','latest_value')) {
-#       Indic_Type <-
-#         ifelse(indic_type=='change','changes','levels')
-#       cat(Indic_Type,"")
-#       paCountryChart(pa_code, geo_code, indic_type) %>% 
-#         {ggsave(paste0(OUTPUT_FOLDER,'/Country Profiles/',geo_code,'/',
-#                        pa_code,'_',Indic_Type,'_',geo_code,'.png'),
-#                 .$chart, bg="white",
-#                 width=1000, height=1000*(.$nrows/8), units='px', dpi=120)}
-#     }
-#   }
-# }
+message('\nCreating Policy Area / Country charts (PNG files)...')
+for (geo_code in EU_Members_geo_codes[1]) {
+  # createFolder(paste0(OUTPUT_FOLDER,'/Country Profiles/',geo_code))
+  message('Starting ',geo_code,'...')
+  for (pa_code in names(Selected_PAs_Codes)[1]) {
+    cat(paste0(" ",pa_code,': '))
+    for (indic_type in c('change','latest_value')) {
+      Indic_Type <-
+        ifelse(indic_type=='change','changes','levels')
+      cat(Indic_Type,"")
+      paCountryChart(pa_code, geo_code, indic_type) %>%
+        {ggsave(paste0(OUTPUT_FOLDER,'/Country Profiles/',geo_code,'/',
+                       pa_code,'_',Indic_Type,'_',geo_code,'.png'),
+                .$chart, bg="white",
+                width=1000, height=900*(.$nrows/8)+150, units='px', dpi=120)}
+    }
+  }
+  message()
+}

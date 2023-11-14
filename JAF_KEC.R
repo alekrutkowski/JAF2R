@@ -28,8 +28,8 @@ PolicyAreaLabels <- '
 | 9.2        | Improving higher education                                                                                                                     |
 | 10         | Wage setting mechanisms and labour cost developments                                                                                           |
 | 11         | Preventing poverty and social exclusion through inclusive labour markets, adequate and sustainable social protection and high quality services |
-| 11a        | Breaking the intergenerational transmission of poverty – tackling child poverty                                                                |
-| 11b        | Active inclusion – tackling poverty in working age                                                                                             |
+| 11a        | Breaking the intergenerational transmission of poverty \u2013 tackling child poverty                                                           |
+| 11b        | Active inclusion \u2013 tackling poverty in working age                                                                                        |
 | 11c        | Elderly poverty                                                                                                                                |
 ' %>% 
   readMarkDownTable()
