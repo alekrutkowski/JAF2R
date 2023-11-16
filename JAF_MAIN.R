@@ -26,5 +26,9 @@ source('JAF_Main_Indicators.R')
 
 source('JAF_PAs.R')
 
+source('JAF_Country_Profiles.R')
 
-# Dev env: {source("H:/JAF_functions.R"); source('H:/JAF_output.R'); source('H:/JAF_KEC.R'); source('H:/JAF_Compendium.R'); source('H:/JAF_Country_Compendium.R'); source('H:/JAF_Main_Indicators.R'); source('H:/JAF_PAs.R')}
+source('JAF_pdf.R')
+
+
+# Dev env: {source("H:/JAF_functions.R"); source('H:/JAF_output.R'); source('H:/JAF_KEC.R'); source('H:/JAF_Compendium.R'); source('H:/JAF_Country_Compendium.R'); source('H:/JAF_Main_Indicators.R'); source('H:/JAF_PAs.R'); source('H:/JAF_Country_Profiles.R')}

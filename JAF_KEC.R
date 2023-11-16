@@ -363,7 +363,6 @@ set_zoom <- function(x, sheet_views) # from https://stackoverflow.com/a/74239871
 #   openxlsx2::wb_workbook()
 # 
 # for (geo_code in EU_Members_geo_codes) {
-# # for (geo_code in 'BE') {
 #   cat(geo_code,"")
 #   for (dim2 in c("",'_add')) {
 #     dta <-

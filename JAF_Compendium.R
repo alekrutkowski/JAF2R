@@ -793,26 +793,25 @@ escapeSpecialXmlChars <- function(charvec)
 #       wb_set_col_widths(JAF_KEY.,
 #                         cols=2,
 #                         widths="auto") %>%
-#       Reduce(init=.,
-#              x=seq.int(12,12+nrow(list_of_dts$with_flags),2) %>%
-#                paste0("B",.,":",int2col(ncol(list_of_dts$with_flags)+1),.),
-#              f=\(wb.,x) wb_add_fill(wb.,
-#                                     JAF_KEY.,
-#                                     dims = x,
-#                                     color = wb_color(hex = "f2f2f2"))) %>%
-#       Reduce(init=.,
-#              x=seq.int(12,12+nrow(list_of_dts$without_flags),2) %>%
-#                paste0(int2col(ncol(list_of_dts$with_flags)+4),.,":",
-#                       int2col(ncol(list_of_dts$without_flags)+ncol(list_of_dts$with_flags)+3),.),
-#              f=\(wb.,x) wb_add_fill(wb.,
-#                                     JAF_KEY.,
-#                                     dims = x,
-#                                     color = wb_color(hex = "e6f1ff"))) %>%
+#       wb_add_fill(wb.,
+#                   JAF_KEY.,
+#                   every_nth_row = 2,
+#                   dims = paste0("B12:",
+#                                 int2col(ncol(list_of_dts$with_flags)+1),
+#                                 12+nrow(list_of_dts$with_flags)),
+#                   color = wb_color(hex = "f2f2f2")) %>%
+#       wb_add_fill(wb.,
+#                   JAF_KEY.,
+#                   every_nth_row = 2,
+#                   dims = paste0(int2col(ncol(list_of_dts$with_flags)+4),"12:",
+#                                 int2col(ncol(list_of_dts$without_flags)+ncol(list_of_dts$with_flags)+3),
+#                                 12+nrow(list_of_dts$without_flags)),
+#                   color = wb_color(hex = "e6f1ff")) %>%
 #       wb_freeze_pane(JAF_KEY., firstActiveCol=3, firstActiveRow=10) %>%
 #       wb_set_row_heights(JAF_KEY.,
 #                          rows=c(2,4,8,9),
 #                          heights=3)
-# 
+#     
 #   }
 #   for (ws in wb$worksheets)
 #     ws$sheetViews <- set_zoom(65, ws$sheetViews)

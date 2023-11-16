@@ -365,107 +365,103 @@ selected_PAs_Indicators_Contents <- function(JAF_KEY_codes)
   )}
 
 
-# Actions -----------------------------------------------------------------
-
-
+# # Actions -----------------------------------------------------------------
+# Temporarily commented out for faster development of the next stages
 # createFolder(paste0(OUTPUT_FOLDER,'/PAs'))
-message('\nCreating PA Excel files...')
-for (pa_code in names(Selected_PAs_Codes)) {
-  message('Starting ',pa_code)
-  wb_PA_Indic <-
-    openxlsx2::wb_workbook()
-  for (indic_type in c('change','latest_value')) {
-    Indic_Type <-
-      ifelse(indic_type=='change','Changes',
-             'Levels')
-    cat(Indic_Type,"")
-    head. <-
-      Selected_PAs_Codes[[pa_code]] %>% 
-      selected_PAs_Indicators_Multiline_Header() %>% 
-      .[[indic_type]]
-    vals. <-
-      Selected_PAs_Codes[[pa_code]] %>% 
-      selected_PAs_Indicators_Contents() %>% 
-      .[[indic_type]]
-    wb_PA_Indic <-
-      wb_PA_Indic %>%
-      wb_add_worksheet(paste(pa_code,'-',Indic_Type)) %>%
-      wb_add_data(x=pa_code, dims='A1') %>%
-      wb_add_data(x=Indic_Type, dims='B1') %>%
-      wb_add_data(x=c(PolicyAreaLabels %>% 
-                        .[paste0('PA',PolicyArea)==pa_code, `POLICY AREA`],
-                      paste('General Policy Area:',
-                            PolicyAreaLabels_General %>% 
-                              .[paste0('PA',PolicyArea)==pa_code, `POLICY AREA`])), 
-                  dims='A2:A3') %>%
-      wb_add_data(x=head.,
-                  dims='B5',
-                  colNames=FALSE,
-                  rowNames=TRUE) %>%
-      wb_add_data(x=vals.,
-                  dims=paste0('B',5 + nrow(head.))) %>% 
-      wb_set_col_widths(cols=1:2,
-                        widths=c(13,33)) %>%
-      Reduce(init=.,
-             x=seq_len(ncol(head.))[-1],
-             \(wb.,x)
-             wb_add_formula(wb.,
-                            x=head.[1,x] %>% 
-                              {paste0('=HYPERLINK("[..\\compendium\\Compendium-',
-                                      JAF_Compendium_Index_raw[JAF_KEY==., CompendiumNum],
-                                      '.xlsx]\'',.,'\'!A1", "Compendium")')},
-                            startRow=4,
-                            startCol=3+x-2)) %>%
-      wb_add_formula(x=vals.$geo %>% 
-                       head(-2) %>% # without last two i.e. EU and EA
-                       {paste0('=HYPERLINK("..\\Country Profiles\\',.,
-                               '\\',pa_code,'_',Indic_Type,'_',.,'.png", "Country profile")')},
-                     dims='A10') %>%
-      wb_freeze_pane(firstActiveRow=10,firstActiveCol=3) %>%
-      wb_add_filter(rows=9, cols=2) %>%
-      wb_add_font(dims='A1:B2',
-                  bold="bold",
-                  size=18) %>%
-      wb_add_font(dims=paste0('B5:',int2col(ncol(head.)),'7'),
-                  bold="bold",
-                  size=12) %>%
-      wb_add_font(dims=paste0('A',9+nrow(vals.)-1,':',int2col(ncol(vals.)),9+nrow(vals.)),
-                  bold="bold") %>%
-      Reduce(init=.,
-             x=seq.int(10,10+nrow(vals.),2) %>%
-               paste0("A",.,":",int2col(ncol(vals.)+1),.),
-             f=\(wb.,x)
-             wb_add_fill(wb.,
-                         dims=x,
-                         color= wb_color(hex="e6f1ff"))) %>%
-      Reduce(init=.,
-             x=seq.int(3,3+ncol(head.)-3,3),
-             f=\(wb.,x)
-             Reduce(init=wb.,
-                    x=4:7,
-                    f=\(wb..,y)
-                    wb_merge_cells(wb..,
-                                   rows=y,
-                                   cols=seq.int(x,x+2)) %>% 
-                      wb_add_cell_style(
-                        dims=paste0(int2col(x),y,':',int2col(x+2),y),
-                        horizontal='center', vertical='center',
-                        wrapText = "1"))) %>% 
-      Reduce(init=.,
-             x=seq.int(3,3+ncol(head.)-3,3) %>%
-               {paste0(int2col(.),'5:',int2col(.+2),4+nrow(head.)+nrow(vals.)+1)},
-             f=\(wb.,x)
-             wb_add_border(wb.,
-                           dims=x)) %>%
-      wb_add_border(dims=paste0('A5:B',4+nrow(head.)+nrow(vals.)+1)) %>% 
-      wb_set_row_heights(rows=6, heights=60) %>% 
-      wb_set_col_widths(cols=seq.int(3,3+ncol(head.)-1,3),
-                        widths=13.2) %>%
-      setZoomInAllSheets(75)
-  }
-  wb_PA_Indic %>% 
-    wb_save(paste0(OUTPUT_FOLDER,
-                   paste0('/PAs/',pa_code,'.xlsx')))
-  message()
-}
-message('Done.')
+# message('\nCreating PA Excel files...')
+# for (pa_code in names(Selected_PAs_Codes)) {
+#   message('Starting ',pa_code)
+#   wb_PA_Indic <-
+#     openxlsx2::wb_workbook()
+#   for (indic_type in c('change','latest_value')) {
+#     Indic_Type <-
+#       ifelse(indic_type=='change','Changes',
+#              'Levels')
+#     cat(Indic_Type,"")
+#     head. <-
+#       Selected_PAs_Codes[[pa_code]] %>%
+#       selected_PAs_Indicators_Multiline_Header() %>%
+#       .[[indic_type]]
+#     vals. <-
+#       Selected_PAs_Codes[[pa_code]] %>%
+#       selected_PAs_Indicators_Contents() %>%
+#       .[[indic_type]]
+#     wb_PA_Indic <-
+#       wb_PA_Indic %>%
+#       wb_add_worksheet(paste(pa_code,'-',Indic_Type)) %>%
+#       wb_add_data(x=pa_code, dims='A1') %>%
+#       wb_add_data(x=Indic_Type, dims='B1') %>%
+#       wb_add_data(x=c(PolicyAreaLabels %>%
+#                         .[paste0('PA',PolicyArea)==pa_code, `POLICY AREA`],
+#                       paste('General Policy Area:',
+#                             PolicyAreaLabels_General %>%
+#                               .[paste0('PA',PolicyArea)==pa_code, `POLICY AREA`])),
+#                   dims='A2:A3') %>%
+#       wb_add_data(x=head.,
+#                   dims='B5',
+#                   colNames=FALSE,
+#                   rowNames=TRUE) %>%
+#       wb_add_data(x=vals.,
+#                   dims=paste0('B',5 + nrow(head.))) %>%
+#       wb_set_col_widths(cols=1:2,
+#                         widths=c(13,33)) %>%
+#       Reduce(init=.,
+#              x=seq_len(ncol(head.))[-1],
+#              \(wb.,x)
+#              wb_add_formula(wb.,
+#                             x=head.[1,x] %>%
+#                               {paste0('=HYPERLINK("[..\\compendium\\Compendium-',
+#                                       JAF_Compendium_Index_raw[JAF_KEY==., CompendiumNum],
+#                                       '.xlsx]\'',.,'\'!A1", "Compendium")')},
+#                             startRow=4,
+#                             startCol=3+x-2)) %>%
+#       wb_add_formula(x=vals.$geo %>%
+#                        head(-2) %>% # without last two i.e. EU and EA
+#                        {paste0('=HYPERLINK("..\\Country Profiles\\',.,
+#                                '\\',pa_code,'_',Indic_Type,'_',.,'.png", "Country profile")')},
+#                      dims='A10') %>%
+#       wb_freeze_pane(firstActiveRow=10,firstActiveCol=3) %>%
+#       wb_add_filter(rows=9, cols=2) %>%
+#       wb_add_font(dims='A1:B2',
+#                   bold="bold",
+#                   size=18) %>%
+#       wb_add_font(dims=paste0('B5:',int2col(ncol(head.)),'7'),
+#                   bold="bold",
+#                   size=12) %>%
+#       wb_add_font(dims=paste0('A',9+nrow(vals.)-1,':',int2col(ncol(vals.)),9+nrow(vals.)),
+#                   bold="bold") %>%
+#       wb_add_fill(wb.,
+#                   every_nth_row = 2,
+#                   dims=paste0("A10:",int2col(ncol(vals.)+1),10+nrow(vals.)),
+#                   color= wb_color(hex="e6f1ff")) %>%
+#       Reduce(init=.,
+#              x=seq.int(3,3+ncol(head.)-3,3),
+#              f=\(wb.,x)
+#              Reduce(init=wb.,
+#                     x=4:7,
+#                     f=\(wb..,y)
+#                     wb_merge_cells(wb..,
+#                                    rows=y,
+#                                    cols=seq.int(x,x+2)) %>%
+#                       wb_add_cell_style(
+#                         dims=paste0(int2col(x),y,':',int2col(x+2),y),
+#                         horizontal='center', vertical='center',
+#                         wrapText = "1"))) %>%
+#       Reduce(init=.,
+#              x=seq.int(3,3+ncol(head.)-3,3) %>%
+#                {paste0(int2col(.),'5:',int2col(.+2),4+nrow(head.)+nrow(vals.)+1)},
+#              f=\(wb.,x)
+#              wb_add_border(wb.,
+#                            dims=x)) %>%
+#       wb_add_border(dims=paste0('A5:B',4+nrow(head.)+nrow(vals.)+1)) %>%
+#       wb_set_row_heights(rows=6, heights=60) %>%
+#       wb_set_col_widths(cols=seq.int(3,3+ncol(head.)-1,3),
+#                         widths=13.2) %>%
+#       setZoomInAllSheets(75)
+#   }
+#   wb_PA_Indic %>%
+#     wb_save(paste0(OUTPUT_FOLDER,
+#                    paste0('/PAs/',pa_code,'.xlsx')))
+#   message()
+# }
+# message('Done.')

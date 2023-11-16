@@ -49,9 +49,9 @@ setZoomInAllSheets <- function(wb, zoom_level) {
 # for (geo_code in unique(JAF_GRAND_TABLE$geo)) {
 #   cat(geo_code,"")
 #   dta <-
-#     geo_code %>% 
-#     countryTableForCountryCompendium() %>% 
-#     sanitizeForExcel() %>% 
+#     geo_code %>%
+#     countryTableForCountryCompendium() %>%
+#     sanitizeForExcel() %>%
 #     setnames(colnames(.),
 #              colnames(.) %>%
 #                sub('^value__(.{4})$','\\1',.) %>%
@@ -59,27 +59,26 @@ setZoomInAllSheets <- function(wb, zoom_level) {
 #   openxlsx2::wb_workbook() %>%
 #     wb_add_worksheet(geo_code) %>%
 #     wb_add_data(x=EU_Members_geo_names[geo==geo_code, geo_labels],
-#                 dims='C1') %>% 
+#                 dims='C1') %>%
 #     wb_add_data(x=dta,
 #                 dims='A2') %>%
 #     wb_add_data(x='Values are in columns denoted with year headers. They are immediatelly followed by the corresponding flags in the columns without the headers.',
 #                 dims='E1') %>%
 #     wb_set_col_widths(cols=1:4,
-#                       widths=c(12,20,50,30)) %>% 
+#                       widths=c(12,20,50,30)) %>%
 #     wb_freeze_pane(firstActiveRow=3) %>%
 #     wb_add_filter(rows=2, cols=1:4) %>%
 #     wb_add_font(dims='C1',
 #                 bold="bold",
-#                 size=18) %>% 
+#                 size=18) %>%
 #     wb_add_font(dims=paste0('A2:',int2col(ncol(dta)),'2'),
-#                 bold="bold") %>% 
-#     Reduce(init=.,
-#            x=seq.int(3,3+nrow(dta),2) %>%
-#              paste0("A",.,":",int2col(ncol(dta)),.),
-#            f=\(wb.,x) wb_add_fill(wb.,
-#                                   dims=x,
-#                                   color= wb_color(hex="e6f1ff"))) %>% 
-#     setZoomInAllSheets(75) %>% 
+#                 bold="bold") %>%
+#     wb_add_fill(wb.,
+#                 every_nth_row = 2,
+#                 dims=paste0("A3:",
+#                             int2col(ncol(dta)),3+nrow(dta)),
+#                 color= wb_color(hex="e6f1ff")) %>%
+#     setZoomInAllSheets(75) %>%
 #     wb_save(paste0(OUTPUT_FOLDER,
 #                    '/Country Compendium/',geo_code,'.xlsx'))
 # }

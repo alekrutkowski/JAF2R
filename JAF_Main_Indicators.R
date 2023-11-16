@@ -115,7 +115,7 @@ Selected_Main_Indicators_Contents <-
 #                 colNames=FALSE,
 #                 rowNames=TRUE) %>%
 #     wb_add_data(x=vals.,
-#                 dims=paste0('A',3 + nrow(head.))) %>% 
+#                 dims=paste0('A',3 + nrow(head.))) %>%
 #     wb_set_col_widths(cols=1,
 #                       widths=33) %>%
 #     wb_freeze_pane(firstActiveRow=8,firstActiveCol=2) %>%
@@ -128,13 +128,10 @@ Selected_Main_Indicators_Contents <-
 #                 size=12) %>%
 #     wb_add_font(dims=paste0('A',7+nrow(vals.)-1,':',int2col(ncol(vals.)),7+nrow(vals.)),
 #                 bold="bold") %>%
-#     Reduce(init=.,
-#            x=seq.int(8,8+nrow(vals.),2) %>%
-#              paste0("A",.,":",int2col(ncol(vals.)),.),
-#            f=\(wb.,x)
-#            wb_add_fill(wb.,
-#                        dims=x,
-#                        color= wb_color(hex="e6f1ff"))) %>%
+#     wb_add_fill(wb.,
+#                 every_nth_row = 2,
+#                 dims=paste0("A8:",int2col(ncol(vals.)),8+nrow(vals.)),
+#                 color= wb_color(hex="e6f1ff")) %>%
 #     Reduce(init=.,
 #            x=seq.int(2,2+ncol(head.)-3,3),
 #            f=\(wb.,x)
@@ -143,24 +140,24 @@ Selected_Main_Indicators_Contents <-
 #                   f=\(wb..,y)
 #                   wb_merge_cells(wb..,
 #                                  rows=y,
-#                                  cols=seq.int(x,x+2)) %>% 
+#                                  cols=seq.int(x,x+2)) %>%
 #                     wb_add_cell_style(
 #                       dims=paste0(int2col(x),y,':',int2col(x+2),y),
 #                       horizontal='center', vertical='center',
-#                       wrapText = "1"))) %>% 
+#                       wrapText = "1"))) %>%
 #     Reduce(init=.,
 #            x=seq.int(2,2+ncol(head.)-3,3) %>%
 #              {paste0(int2col(.),'3:',int2col(.+2),2+nrow(head.)+nrow(vals.)+1)},
 #            f=\(wb.,x)
 #            wb_add_border(wb.,
 #                          dims=x)) %>%
-#     wb_add_border(dims=paste0('A3:A',2+nrow(head.)+nrow(vals.)+1)) %>% 
-#     wb_set_row_heights(rows=4, heights=60) %>% 
+#     wb_add_border(dims=paste0('A3:A',2+nrow(head.)+nrow(vals.)+1)) %>%
+#     wb_set_row_heights(rows=4, heights=60) %>%
 #     wb_set_col_widths(cols=seq.int(2,2+ncol(head.)-1,3),
 #                       widths=13.2) %>%
 #     setZoomInAllSheets(75)
 # }
-# wb_Main_Indic %>% 
+# wb_Main_Indic %>%
 #   wb_save(paste0(OUTPUT_FOLDER,
 #                  '/Main/Main_Indicators.xlsx'))
 # message('\nDone.')
