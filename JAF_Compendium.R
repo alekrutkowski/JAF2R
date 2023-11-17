@@ -589,11 +589,11 @@ indicTablesForCompendium <- function(JAF_KEY.) {
 }
 
 line_chart_template.xml <-
-  readLines("H:/line_chart_template.xml",warn=FALSE) %>% 
+  readLines("line_chart_template.xml",warn=FALSE) %>% 
   paste(collapse="")
 
 bar_chart_template.xml <-
-  readLines("H:/bar_chart_template.xml",warn=FALSE) %>% 
+  readLines("bar_chart_template.xml",warn=FALSE) %>% 
   paste(collapse="")
 
 seriesForLineChartXml <- function(number_of_series) {
