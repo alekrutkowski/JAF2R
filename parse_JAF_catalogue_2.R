@@ -154,7 +154,8 @@ Catalog <-
   as.data.table() %>%  
   rbind(
     fread(paste0(path_to_folder_with_source_definitions,
-                 source_of_definitions[2])) %>% 
+                 source_of_definitions[2]),
+          encoding='UTF-8') %>% 
       as.data.table() %>% 
       .[, JAF_KEY := paste0(JAF_KEY,'_health')],
     fill=TRUE
