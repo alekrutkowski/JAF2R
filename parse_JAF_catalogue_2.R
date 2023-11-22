@@ -95,6 +95,10 @@ processCatalog <- function(catalog_dt, comment="")
       ifelse(table=='ilc_lvhl11n',
              sub('unit="PC_Y_LT65"','unit="PC"',.,fixed=TRUE),
              .)] %>% 
+  .[, definitions := definitions %>% 
+      ifelse(table=='ilc_caindformal',
+             sub('age="CSA-Y12"','age="CSA1-Y12"',.,fixed=TRUE),
+             .)] %>% 
   .[, func :=
       SOURCE %>% 
       {kit::nif(grepl('^lfse_',table) & !grepl('^edat_lfse_',table), 'fromLFSspecialFile',
@@ -141,7 +145,8 @@ processCatalog <- function(catalog_dt, comment="")
 # Actions -----------------------------------------------------------------
 
 path_to_folder_with_source_definitions <-
-  'H:/'
+  # 'H:/'
+  ""
 
 source_of_definitions <-
   c('Indicators Table - JAF 2017 FINAL SPRING 2023.xlsx',
@@ -153,8 +158,8 @@ Catalog <-
                        sheet='IndicatorsTable') %>% 
   as.data.table() %>%  
   rbind(
-    fread(paste0(path_to_folder_with_source_definitions,
-                 source_of_definitions[2]),
+    fread(file=paste0(path_to_folder_with_source_definitions,
+                      source_of_definitions[2]),
           encoding='UTF-8') %>% 
       as.data.table() %>% 
       .[, JAF_KEY := paste0(JAF_KEY,'_health')],

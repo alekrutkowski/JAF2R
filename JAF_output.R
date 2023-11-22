@@ -158,16 +158,16 @@ createFolder <- function(folder_name) {
 # Actions -----------------------------------------------------------------
 
 ### Temporary dev version
-# if (file.exists('JAF_INDICATORS.Rds')) {
-#   message('\nRenaming/archiving the exisitng/old\nJAF_INDICATORS.Rds -> ',
-#           appendLF=FALSE)
-#   message(rename_with_mod_time('JAF_INDICATORS.Rds'))
-# }
-# message('Saving new JAF_INDICATORS.Rds...')
-# JAF_INDICATORS %>%
-#   saveRDS('JAF_INDICATORS.Rds')
-JAF_INDICATORS <-
-  readRDS('JAF_INDICATORS.Rds')
+if (file.exists('JAF_INDICATORS.Rds')) {
+  message('\nRenaming/archiving the exisitng/old\nJAF_INDICATORS.Rds -> ',
+          appendLF=FALSE)
+  message(rename_with_mod_time('JAF_INDICATORS.Rds'))
+}
+message('Saving new JAF_INDICATORS.Rds...')
+JAF_INDICATORS %>%
+  saveRDS('JAF_INDICATORS.Rds')
+# JAF_INDICATORS <-
+#   readRDS('JAF_INDICATORS.Rds')
 ###
 
 JAF_NAMES_DESCRIPTIONS <-

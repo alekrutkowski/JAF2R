@@ -90,74 +90,73 @@ Selected_Main_Indicators_Contents <-
   )}
 
 
-# # Actions -----------------------------------------------------------------
-# Temporarily commented out for faster development of the next stages
-# createFolder(paste0(OUTPUT_FOLDER,'/Main'))
-# message('\nCreating Main_Indicators.xlsx file...')
-# wb_Main_Indic <-
-#   openxlsx2::wb_workbook()
-# for (indic_type in c('change','latest_value')) {
-#   Indic_Type <-
-#     ifelse(indic_type=='change','Changes',
-#            'Levels')
-#   cat(Indic_Type,"")
-#   head. <-
-#     Selected_Main_Indicators_Multiline_Header[[indic_type]]
-#   vals. <-
-#     Selected_Main_Indicators_Contents[[indic_type]]
-#   wb_Main_Indic <-
-#     wb_Main_Indic %>%
-#     wb_add_worksheet(Indic_Type) %>%
-#     wb_add_data(x=c('Main Indicators',Indic_Type),
-#                 dims='A1') %>%
-#     wb_add_data(x=head.,
-#                 dims='A3',
-#                 colNames=FALSE,
-#                 rowNames=TRUE) %>%
-#     wb_add_data(x=vals.,
-#                 dims=paste0('A',3 + nrow(head.))) %>%
-#     wb_set_col_widths(cols=1,
-#                       widths=33) %>%
-#     wb_freeze_pane(firstActiveRow=8,firstActiveCol=2) %>%
-#     wb_add_filter(rows=7, cols=1) %>%
-#     wb_add_font(dims='A1:A2',
-#                 bold="bold",
-#                 size=18) %>%
-#     wb_add_font(dims=paste0('A3:',int2col(ncol(head.)),'5'),
-#                 bold="bold",
-#                 size=12) %>%
-#     wb_add_font(dims=paste0('A',7+nrow(vals.)-1,':',int2col(ncol(vals.)),7+nrow(vals.)),
-#                 bold="bold") %>%
-#     wb_add_fill(wb.,
-#                 every_nth_row = 2,
-#                 dims=paste0("A8:",int2col(ncol(vals.)),8+nrow(vals.)),
-#                 color= wb_color(hex="e6f1ff")) %>%
-#     Reduce(init=.,
-#            x=seq.int(2,2+ncol(head.)-3,3),
-#            f=\(wb.,x)
-#            Reduce(init=wb.,
-#                   x=3:5,
-#                   f=\(wb..,y)
-#                   wb_merge_cells(wb..,
-#                                  rows=y,
-#                                  cols=seq.int(x,x+2)) %>%
-#                     wb_add_cell_style(
-#                       dims=paste0(int2col(x),y,':',int2col(x+2),y),
-#                       horizontal='center', vertical='center',
-#                       wrapText = "1"))) %>%
-#     Reduce(init=.,
-#            x=seq.int(2,2+ncol(head.)-3,3) %>%
-#              {paste0(int2col(.),'3:',int2col(.+2),2+nrow(head.)+nrow(vals.)+1)},
-#            f=\(wb.,x)
-#            wb_add_border(wb.,
-#                          dims=x)) %>%
-#     wb_add_border(dims=paste0('A3:A',2+nrow(head.)+nrow(vals.)+1)) %>%
-#     wb_set_row_heights(rows=4, heights=60) %>%
-#     wb_set_col_widths(cols=seq.int(2,2+ncol(head.)-1,3),
-#                       widths=13.2) %>%
-#     setZoomInAllSheets(75)
-# }
-# wb_Main_Indic %>%
-#   wb_save(paste0(OUTPUT_FOLDER,
-#                  '/Main/Main_Indicators.xlsx'))
-# message('\nDone.')
+# Actions -----------------------------------------------------------------
+
+createFolder(paste0(OUTPUT_FOLDER,'/Main'))
+message('\nCreating Main_Indicators.xlsx file...')
+wb_Main_Indic <-
+  openxlsx2::wb_workbook()
+for (indic_type in c('change','latest_value')) {
+  Indic_Type <-
+    ifelse(indic_type=='change','Changes',
+           'Levels')
+  cat(Indic_Type,"")
+  head. <-
+    Selected_Main_Indicators_Multiline_Header[[indic_type]]
+  vals. <-
+    Selected_Main_Indicators_Contents[[indic_type]]
+  wb_Main_Indic <-
+    wb_Main_Indic %>%
+    wb_add_worksheet(Indic_Type) %>%
+    wb_add_data(x=c('Main Indicators',Indic_Type),
+                dims='A1') %>%
+    wb_add_data(x=head.,
+                dims='A3',
+                colNames=FALSE,
+                rowNames=TRUE) %>%
+    wb_add_data(x=vals.,
+                dims=paste0('A',3 + nrow(head.))) %>%
+    wb_set_col_widths(cols=1,
+                      widths=33) %>%
+    wb_freeze_pane(firstActiveRow=8,firstActiveCol=2) %>%
+    wb_add_filter(rows=7, cols=1) %>%
+    wb_add_font(dims='A1:A2',
+                bold="bold",
+                size=18) %>%
+    wb_add_font(dims=paste0('A3:',int2col(ncol(head.)),'5'),
+                bold="bold",
+                size=12) %>%
+    wb_add_font(dims=paste0('A',7+nrow(vals.)-1,':',int2col(ncol(vals.)),7+nrow(vals.)),
+                bold="bold") %>%
+    wb_add_fill(every_nth_row = 2,
+                dims=paste0("A8:",int2col(ncol(vals.)),8+nrow(vals.)),
+                color= wb_color(hex="e6f1ff")) %>%
+    Reduce(init=.,
+           x=seq.int(2,2+ncol(head.)-3,3),
+           f=\(wb.,x)
+           Reduce(init=wb.,
+                  x=3:5,
+                  f=\(wb..,y)
+                  wb_merge_cells(wb..,
+                                 rows=y,
+                                 cols=seq.int(x,x+2)) %>%
+                    wb_add_cell_style(
+                      dims=paste0(int2col(x),y,':',int2col(x+2),y),
+                      horizontal='center', vertical='center',
+                      wrapText = "1"))) %>%
+    Reduce(init=.,
+           x=seq.int(2,2+ncol(head.)-3,3) %>%
+             {paste0(int2col(.),'3:',int2col(.+2),2+nrow(head.)+nrow(vals.)+1)},
+           f=\(wb.,x)
+           wb_add_border(wb.,
+                         dims=x)) %>%
+    wb_add_border(dims=paste0('A3:A',2+nrow(head.)+nrow(vals.)+1)) %>%
+    wb_set_row_heights(rows=4, heights=60) %>%
+    wb_set_col_widths(cols=seq.int(2,2+ncol(head.)-1,3),
+                      widths=13.2) %>%
+    setZoomInAllSheets(75)
+}
+wb_Main_Indic %>%
+  wb_save(paste0(OUTPUT_FOLDER,
+                 '/Main/Main_Indicators.xlsx'))
+message('\nDone.')
