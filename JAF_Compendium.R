@@ -690,135 +690,132 @@ escapeSpecialXmlChars <- function(charvec)
   sub('&','&amp;',.,fixed=TRUE)
 
 
-# # Actions -----------------------------------------------------------------
-# Temporarily commented out for faster development of the next stages
-# 
-# message('\nCreating Compendium files...')
-# 
-# createFolder(paste0(OUTPUT_FOLDER,'/JAF Compendium'))
-# 
-# message('Creating Index.xlsx...')
-# openxlsx2::wb_workbook() %>%
-#   wb_add_worksheet('Index') %>%
-#   wb_add_data(dims='C1',
-#               x='Index Compendium') %>%
-#   wb_add_font(dims='C1',
-#               bold="bold",
-#               size=18) %>%
-#   wb_add_data(startRow=2,
-#               x=JAF_Compendium_Index %>%
-#                 .[, colnames(.) %without% 'Compendium', with=FALSE]) %>%
-#   wb_add_formula(x=JAF_Compendium_Index$Compendium,
-#                  startCol=ncol(JAF_Compendium_Index),
-#                  startRow=3) %>%
-#   wb_add_data(x='Link to the file and worksheet',
-#               startCol=ncol(JAF_Compendium_Index),
-#               startRow=2) %>%
-#   wb_freeze_pane(firstActiveRow=3) %>%
-#   wb_add_font(dims=paste0('A2:',int2col(ncol(JAF_Compendium_Index)),'2'),
-#               bold="bold",
-#               size=12) %>%
-#   wb_set_col_widths(cols=seq_along(JAF_Compendium_Index),
-#                     widths="auto") %>%
-#   wb_set_col_widths(cols=3,
-#                     widths=70) %>%
-#   {for (ws in .$worksheets)
-#     ws$sheetViews <- set_zoom(75, ws$sheetViews); .} %>%
-#   wb_save(paste0(OUTPUT_FOLDER,'/JAF Compendium/Index.xlsx'))
-# 
-# message('Done.')
-# 
-# for (CompendiumNum. in unique(JAF_Compendium_Index_raw$CompendiumNum)) {
-#   message('\nCreating Compendium-',CompendiumNum.,'.xlsx...')
-#   wb <-
-#     openxlsx2::wb_workbook()
-#   for (JAF_KEY. in
-#        JAF_Compendium_Index_raw[CompendiumNum==CompendiumNum., JAF_KEY] %>%
-#        intersect(unique(JAF_GRAND_TABLE$JAF_KEY))) { # to make sure that the indicator is in the JAF_GRAND_TABLE
-#     cat(JAF_KEY.," ")
-#     PA <-
-#       JAF_Compendium_Index[JAF_KEY==JAF_KEY., `Policy Area`]
-#     list_of_dts <-
-#       indicTablesForCompendium(JAF_KEY.)
-#     wb <-
-#       wb %>%
-#       wb_add_worksheet(JAF_KEY.) %>%
-#       wb_add_formula(JAF_KEY.,
-#                      r"{=HYPERLINK("[Index.xlsx]'Index'!A1","Back to index")}") %>%
-#       wb_add_data(JAF_KEY.,
-#                   PA,
-#                   dims='A3') %>%
-#       wb_add_data(JAF_KEY.,
-#                   PolicyAreaLabels[paste0('PA',PolicyArea)==PA, `POLICY AREA`],
-#                   dim='B3') %>%
-#       wb_add_data(JAF_KEY.,
-#                   JAF_INDICATORS[[JAF_KEY.]]$name %>% stringi::stri_trans_general("Latin-ASCII"),
-#                   dim='B5') %>%
-#       wb_add_data(JAF_KEY.,
-#                   JAF_INDICATORS[[JAF_KEY.]]$unit %>% stringi::stri_trans_general("Latin-ASCII"),
-#                   dim='B6') %>%
-#       wb_add_data(JAF_KEY.,
-#                   paste('Source: ',JAF_INDICATORS[[JAF_KEY.]]$source %>% stringi::stri_trans_general("Latin-ASCII")),
-#                   dim='B7') %>%
-#       wb_add_data(JAF_KEY.,
-#                   'Table with flags',
-#                   startCol=3, startRow=10) %>%
-#       wb_add_data(JAF_KEY.,
-#                   list_of_dts$with_flags,
-#                   startCol=2, startRow=11) %>%
-#       wb_add_data(JAF_KEY.,
-#                   'Table without flags',
-#                   startCol=5+ncol(list_of_dts$with_flags), startRow=10) %>%
-#       wb_add_data(JAF_KEY.,
-#                   list_of_dts$without_flags,
-#                   startCol=4+ncol(list_of_dts$with_flags), startRow=11) %>%
-#       wb_add_filter(JAF_KEY., rows=11, cols=2) %>%
-#       wb_add_data(JAF_KEY.,
-#                   'Use the filter in cell B11 to see only one or more selected coutries in the charts below.',
-#                   startCol=3, startRow=42+nrow(list_of_dts$with_flags)-29) %>%
-#       wb_add_chart_xml(JAF_KEY.,
-#                        dims=paste0('C',
-#                                    44+nrow(list_of_dts$with_flags)-29),
-#                        lineChartXml(JAF_KEY.,ncol(list_of_dts$with_flags),ncol(list_of_dts$without_flags),
-#                                     nrow(list_of_dts$with_flags))) %>%
-#       wb_add_chart_xml(JAF_KEY.,
-#                        dims=paste0('C',
-#                                    78+nrow(list_of_dts$with_flags)-29),
-#                        barChartXml(JAF_KEY.,ncol(list_of_dts$with_flags),ncol(list_of_dts$without_flags),
-#                                    nrow(list_of_dts$with_flags))) %>%
-#       {suppressWarnings(wb_add_font(.,JAF_KEY.,
-#                                     dims=c('A3','B3','B5','B6','C42'), # a vector generates a warning
-#                                     bold="bold",
-#                                     size=13))} %>%
-#       wb_set_col_widths(JAF_KEY.,
-#                         cols=2,
-#                         widths="auto") %>%
-#       wb_add_fill(wb.,
-#                   JAF_KEY.,
-#                   every_nth_row = 2,
-#                   dims = paste0("B12:",
-#                                 int2col(ncol(list_of_dts$with_flags)+1),
-#                                 12+nrow(list_of_dts$with_flags)),
-#                   color = wb_color(hex = "f2f2f2")) %>%
-#       wb_add_fill(wb.,
-#                   JAF_KEY.,
-#                   every_nth_row = 2,
-#                   dims = paste0(int2col(ncol(list_of_dts$with_flags)+4),"12:",
-#                                 int2col(ncol(list_of_dts$without_flags)+ncol(list_of_dts$with_flags)+3),
-#                                 12+nrow(list_of_dts$without_flags)),
-#                   color = wb_color(hex = "e6f1ff")) %>%
-#       wb_freeze_pane(JAF_KEY., firstActiveCol=3, firstActiveRow=10) %>%
-#       wb_set_row_heights(JAF_KEY.,
-#                          rows=c(2,4,8,9),
-#                          heights=3)
-#     
-#   }
-#   for (ws in wb$worksheets)
-#     ws$sheetViews <- set_zoom(65, ws$sheetViews)
-#   wb %>%
-#     wb_set_sheet_names(wb_get_sheet_names(.),
-#                        wb_get_sheet_names(.) %>% escapeSpecialXmlChars()) %>%
-#     wb_save(paste0(OUTPUT_FOLDER,
-#                    '/JAF Compendium/Compendium-',CompendiumNum.,'.xlsx'))
-#   message('\nCompendium-',CompendiumNum.,'.xlsx saved.')
-# }
+# Actions -----------------------------------------------------------------
+
+message('\nCreating Compendium files...')
+
+createFolder(paste0(OUTPUT_FOLDER,'/JAF Compendium'))
+
+message('Creating Index.xlsx...')
+openxlsx2::wb_workbook() %>%
+  wb_add_worksheet('Index') %>%
+  wb_add_data(dims='C1',
+              x='Index Compendium') %>%
+  wb_add_font(dims='C1',
+              bold="bold",
+              size=18) %>%
+  wb_add_data(startRow=2,
+              x=JAF_Compendium_Index %>%
+                .[, colnames(.) %without% 'Compendium', with=FALSE]) %>%
+  wb_add_formula(x=JAF_Compendium_Index$Compendium,
+                 startCol=ncol(JAF_Compendium_Index),
+                 startRow=3) %>%
+  wb_add_data(x='Link to the file and worksheet',
+              startCol=ncol(JAF_Compendium_Index),
+              startRow=2) %>%
+  wb_freeze_pane(firstActiveRow=3) %>%
+  wb_add_font(dims=paste0('A2:',int2col(ncol(JAF_Compendium_Index)),'2'),
+              bold="bold",
+              size=12) %>%
+  wb_set_col_widths(cols=seq_along(JAF_Compendium_Index),
+                    widths="auto") %>%
+  wb_set_col_widths(cols=3,
+                    widths=70) %>%
+  {for (ws in .$worksheets)
+    ws$sheetViews <- set_zoom(75, ws$sheetViews); .} %>%
+  wb_save(paste0(OUTPUT_FOLDER,'/JAF Compendium/Index.xlsx'))
+
+message('Done.')
+
+for (CompendiumNum. in unique(JAF_Compendium_Index_raw$CompendiumNum)) {
+  message('\nCreating Compendium-',CompendiumNum.,'.xlsx...')
+  wb <-
+    openxlsx2::wb_workbook()
+  for (JAF_KEY. in
+       JAF_Compendium_Index_raw[CompendiumNum==CompendiumNum., JAF_KEY] %>%
+       intersect(unique(JAF_GRAND_TABLE$JAF_KEY))) { # to make sure that the indicator is in the JAF_GRAND_TABLE
+    cat(JAF_KEY.," ")
+    PA <-
+      JAF_Compendium_Index[JAF_KEY==JAF_KEY., `Policy Area`]
+    list_of_dts <-
+      indicTablesForCompendium(JAF_KEY.)
+    wb <-
+      wb %>%
+      wb_add_worksheet(JAF_KEY.) %>%
+      wb_add_formula(JAF_KEY.,
+                     r"{=HYPERLINK("[Index.xlsx]'Index'!A1","Back to index")}") %>%
+      wb_add_data(JAF_KEY.,
+                  PA,
+                  dims='A3') %>%
+      wb_add_data(JAF_KEY.,
+                  PolicyAreaLabels[paste0('PA',PolicyArea)==PA, `POLICY AREA`],
+                  dim='B3') %>%
+      wb_add_data(JAF_KEY.,
+                  JAF_INDICATORS[[JAF_KEY.]]$name %>% stringi::stri_trans_general("Latin-ASCII"),
+                  dim='B5') %>%
+      wb_add_data(JAF_KEY.,
+                  JAF_INDICATORS[[JAF_KEY.]]$unit %>% stringi::stri_trans_general("Latin-ASCII"),
+                  dim='B6') %>%
+      wb_add_data(JAF_KEY.,
+                  paste('Source: ',JAF_INDICATORS[[JAF_KEY.]]$source %>% stringi::stri_trans_general("Latin-ASCII")),
+                  dim='B7') %>%
+      wb_add_data(JAF_KEY.,
+                  'Table with flags',
+                  startCol=3, startRow=10) %>%
+      wb_add_data(JAF_KEY.,
+                  list_of_dts$with_flags,
+                  startCol=2, startRow=11) %>%
+      wb_add_data(JAF_KEY.,
+                  'Table without flags',
+                  startCol=5+ncol(list_of_dts$with_flags), startRow=10) %>%
+      wb_add_data(JAF_KEY.,
+                  list_of_dts$without_flags,
+                  startCol=4+ncol(list_of_dts$with_flags), startRow=11) %>%
+      wb_add_filter(JAF_KEY., rows=11, cols=2) %>%
+      wb_add_data(JAF_KEY.,
+                  'Use the filter in cell B11 to see only one or more selected coutries in the charts below.',
+                  startCol=3, startRow=42+nrow(list_of_dts$with_flags)-29) %>%
+      wb_add_chart_xml(JAF_KEY.,
+                       dims=paste0('C',
+                                   44+nrow(list_of_dts$with_flags)-29),
+                       lineChartXml(JAF_KEY.,ncol(list_of_dts$with_flags),ncol(list_of_dts$without_flags),
+                                    nrow(list_of_dts$with_flags))) %>%
+      wb_add_chart_xml(JAF_KEY.,
+                       dims=paste0('C',
+                                   78+nrow(list_of_dts$with_flags)-29),
+                       barChartXml(JAF_KEY.,ncol(list_of_dts$with_flags),ncol(list_of_dts$without_flags),
+                                   nrow(list_of_dts$with_flags))) %>%
+      {suppressWarnings(wb_add_font(.,JAF_KEY.,
+                                    dims=c('A3','B3','B5','B6','C42'), # a vector generates a warning
+                                    bold="bold",
+                                    size=13))} %>%
+      wb_set_col_widths(JAF_KEY.,
+                        cols=2,
+                        widths="auto") %>%
+      wb_add_fill(JAF_KEY.,
+                  every_nth_row = 2,
+                  dims = paste0("B12:",
+                                int2col(ncol(list_of_dts$with_flags)+1),
+                                12+nrow(list_of_dts$with_flags)),
+                  color = wb_color(hex = "f2f2f2")) %>%
+      wb_add_fill(JAF_KEY.,
+                  every_nth_row = 2,
+                  dims = paste0(int2col(ncol(list_of_dts$with_flags)+4),"12:",
+                                int2col(ncol(list_of_dts$without_flags)+ncol(list_of_dts$with_flags)+3),
+                                12+nrow(list_of_dts$without_flags)),
+                  color = wb_color(hex = "e6f1ff")) %>%
+      wb_freeze_pane(JAF_KEY., firstActiveCol=3, firstActiveRow=10) %>%
+      wb_set_row_heights(JAF_KEY.,
+                         rows=c(2,4,8,9),
+                         heights=3)
+
+  }
+  for (ws in wb$worksheets)
+    ws$sheetViews <- set_zoom(65, ws$sheetViews)
+  wb %>%
+    wb_set_sheet_names(wb_get_sheet_names(.),
+                       wb_get_sheet_names(.) %>% escapeSpecialXmlChars()) %>%
+    wb_save(paste0(OUTPUT_FOLDER,
+                   '/JAF Compendium/Compendium-',CompendiumNum.,'.xlsx'))
+  message('\nCompendium-',CompendiumNum.,'.xlsx saved.')
+}

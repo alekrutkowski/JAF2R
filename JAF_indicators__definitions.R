@@ -1,7 +1,7 @@
 ### Compiled automatically by rutkoal
 ### from `Indicators Table - JAF 2017 FINAL SPRING 2023.xlsx`, worksheet `IndicatorsTable`
 ### and from `catalogue - jaf_h_2021 FINAL SPRING 2023.csv`
-### on 2023-10-13 16:39:13
+### on 2023-11-21 16:57:21
 ### 611 defined indicators.
 ### 40 mis-defined indicators.
 
@@ -5259,7 +5259,7 @@ unit = "% (of popn min CSA to 12 yrs)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
 value = fromEurostatDataset("ilc_caindformal",
-   with_filters(age="CSA-Y12", duration="H1-29"))
+   with_filters(age="CSA1-Y12", duration="H1-29"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.C2.6") = 
@@ -5269,7 +5269,7 @@ unit = "% (of popn min CSA to 12 yrs)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
 value = fromEurostatDataset("ilc_caindformal",
-   with_filters(age="CSA-Y12", duration="H_GE30"))
+   with_filters(age="CSA1-Y12", duration="H_GE30"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.C3.") = 
@@ -5799,7 +5799,7 @@ value = fromEurostatDataset("ilc_li02",
 
 inside(JAF_INDICATORS, indicator_named = "PA11.S2._health") = 
 specification(
-name = "Severe material deprivation rate (7+ items) â€“ total",
+name = "Severe material deprivation rate (7+ items) – total",
 unit = "% (of total popn)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
@@ -5809,7 +5809,7 @@ value = fromEurostatDataset("ilc_mddd11",
 
 inside(JAF_INDICATORS, indicator_named = "PA11.S3.T_health") = 
 specification(
-name = "People (aged 0-64) living in (quasi-)jobless households â€“ total",
+name = "People (aged 0-64) living in (quasi-)jobless households – total",
 unit = "% (of total popn)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
@@ -5829,7 +5829,7 @@ value = fromEurostatDataset("ilc_lvhl11n",
 
 inside(JAF_INDICATORS, indicator_named = "PA11.S3.F_health") = 
 specification(
-name = "People (aged 0-64) living in (quasi-)jobless households â€“ women) )",
+name = "People (aged 0-64) living in (quasi-)jobless households – women) )",
 unit = "% (of female popn)",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,

@@ -60,8 +60,8 @@ paCountryChart <- function(pa_code, geo_code, level_or_change) {
                       y=score),
                   hjust=.$hjust.) +
         theme_minimal() +
-        expand_limits(y = .$score*1.1 %>%
-                        {c(min(.,na.rm=TRUE),max(.,na.rm=TRUE))}) + # to avoid truncating the labels
+        expand_limits(y = .$score %>%
+                        {1.1*c(min(.,na.rm=TRUE),max(.,na.rm=TRUE))}) + # to avoid truncating the labels
         scale_y_continuous(labels=\(x) sub('-','\u2212',x),
                            sec.axis = dup_axis()) +
         theme(axis.title.x=element_blank(),
@@ -160,59 +160,58 @@ paCountryMSOfficeChart <- function(pa_code, geo_code, level_or_change) {
 }
 
 
-# # Actions -----------------------------------------------------------------
-# Temporarily commented out for faster development of the next stages
-# 
-# createFolder(paste0(OUTPUT_FOLDER,'/Country Profiles'))
-# message('\nCreating Policy Area / Country charts (PNG files)...')
-# for (geo_code in EU_Members_geo_codes) {
-#   createFolder(paste0(OUTPUT_FOLDER,'/Country Profiles/',geo_code))
-#   message('Starting ',geo_code,'...')
-#   for (pa_code in names(Selected_PAs_Codes)) {
-#     cat(paste0(" ",pa_code,': '))
-#     for (indic_type in c('change','latest_value')) {
-#       Indic_Type <-
-#         ifelse(indic_type=='change','changes','levels')
-#       cat(Indic_Type,"")
-#       paCountryChart(pa_code, geo_code, indic_type) %>%
-#         {ggsave(paste0(OUTPUT_FOLDER,'/Country Profiles/',geo_code,'/',
-#                        pa_code,'_',Indic_Type,'_',geo_code,'.png'),
-#                 .$chart, bg="white",
-#                 width=1000, height=900*(.$nrows/8)+150, units='px', dpi=120)}
-#     }
-#   }
-#   message()
-# }
-# message('All PNG files have been saved.')
-# 
-# # The following product used to be a huge Excel file with embedded png charts.
-# # Now it is a PowerPoint slide deck for each country with native Office charts.
-# message('\nPreparing Country_profile PowerPoint files...')
-# pptx0 <-
-#   read_pptx("Blank_16x9.pptx") # 16:9 proportion and Arial
-# for (geo_code in EU_Members_geo_codes) {
-#   message('Starting ',geo_code,'...')
-#   pptx <-
-#     pptx0 %>%
-#     ph_with(value=paste0('JAF charts for ',
-#                          EU_Members_geo_names[geo==geo_code,geo_labels]),
-#             location=ph_location_type(type="ctrTitle")) %>% 
-#     ph_with(value=paste0('European Commission, DG EMPL\n',Sys.Date()),
-#             location=ph_location_type(type="subTitle"))
-#   for (pa_code in names(Selected_PAs_Codes)) {
-#     cat(paste0(" ",pa_code,': '))
-#     for (indic_type in c('change','latest_value')) {
-#       cat(ifelse(indic_type=='change','changes','levels'),"")
-#       pptx <-
-#         pptx %>% 
-#         add_slide() %>%
-#         ph_with(paCountryMSOfficeChart(pa_code, geo_code, indic_type),
-#                 ph_location_fullsize())
-#     }
-#   }
-#   message('Saving...')
-#   print(pptx,
-#         target=paste0(OUTPUT_FOLDER,'/Country Profiles/Country_profile_',
-#                       geo_code,'.pptx'))
-# }
-# message('All PowerPoint files have been saved.')
+# Actions -----------------------------------------------------------------
+
+createFolder(paste0(OUTPUT_FOLDER,'/Country Profiles'))
+message('\nCreating Policy Area / Country charts (PNG files)...')
+for (geo_code in EU_Members_geo_codes) {
+  createFolder(paste0(OUTPUT_FOLDER,'/Country Profiles/',geo_code))
+  message('Starting ',geo_code,'...')
+  for (pa_code in names(Selected_PAs_Codes)) {
+    cat(paste0(" ",pa_code,': '))
+    for (indic_type in c('change','latest_value')) {
+      Indic_Type <-
+        ifelse(indic_type=='change','changes','levels')
+      cat(Indic_Type,"")
+      paCountryChart(pa_code, geo_code, indic_type) %>%
+        {ggsave(paste0(OUTPUT_FOLDER,'/Country Profiles/',geo_code,'/',
+                       pa_code,'_',Indic_Type,'_',geo_code,'.png'),
+                .$chart, bg="white",
+                width=1000, height=900*(.$nrows/8)+150, units='px', dpi=120)}
+    }
+  }
+  message()
+}
+message('All PNG files have been saved.')
+
+# The following product used to be a huge Excel file with embedded png charts.
+# Now it is a PowerPoint slide deck for each country with native Office charts.
+message('\nPreparing Country_profile PowerPoint files...')
+pptx0 <-
+  read_pptx("Blank_16x9.pptx") # 16:9 proportion and Arial
+for (geo_code in EU_Members_geo_codes) {
+  message('Starting ',geo_code,'...')
+  pptx <-
+    pptx0 %>%
+    ph_with(value=paste0('JAF charts for ',
+                         EU_Members_geo_names[geo==geo_code,geo_labels]),
+            location=ph_location_type(type="ctrTitle")) %>%
+    ph_with(value=paste0('European Commission, DG EMPL\n',Sys.Date()),
+            location=ph_location_type(type="subTitle"))
+  for (pa_code in names(Selected_PAs_Codes)) {
+    cat(paste0(" ",pa_code,': '))
+    for (indic_type in c('change','latest_value')) {
+      cat(ifelse(indic_type=='change','changes','levels'),"")
+      pptx <-
+        pptx %>%
+        add_slide() %>%
+        ph_with(paCountryMSOfficeChart(pa_code, geo_code, indic_type),
+                ph_location_fullsize())
+    }
+  }
+  message('Saving...')
+  print(pptx,
+        target=paste0(OUTPUT_FOLDER,'/Country Profiles/Country_profile_',
+                      geo_code,'.pptx'))
+}
+message('All PowerPoint files have been saved.')
