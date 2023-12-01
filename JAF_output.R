@@ -3,6 +3,7 @@ library(magrittr)
 library(eurodata)
 library(collapse)
 library(stringr)
+library(jsonlite) # to generate files for JAF2R_shinylive
 
 
 # Functions and constants -------------------------------------------------
@@ -131,6 +132,9 @@ QuantAssessmentDescriptions <-
 EU_Members_geo_names <-
   importLabels('geo') %>% 
   as.data.table() %>% 
+  .[, geo_labels := geo_labels %>%
+      sub('-','\u2013',.,fixed=TRUE) %>% 
+      sub('\u00e2\u20AC\u201C','\u2013',.,fixed=TRUE)] %>%
   .[, lapply(.,as.character)] %>% 
   .[geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)]
 
@@ -154,21 +158,32 @@ createFolder <- function(folder_name) {
              warning = .)
 }
 
+toJSON. <- function(x, filename)
+  x %>% 
+  serialize(NULL) %>% 
+  memCompress() %>% 
+  serializeJSON() %>%
+  cat(file=filename)
+
+
+
 
 # Actions -----------------------------------------------------------------
 
-### Temporary dev version
-if (file.exists('JAF_INDICATORS.Rds')) {
-  message('\nRenaming/archiving the exisitng/old\nJAF_INDICATORS.Rds -> ',
-          appendLF=FALSE)
-  message(rename_with_mod_time('JAF_INDICATORS.Rds'))
+if (exists('DEVMODE') && DEVMODE) { # development mode -- restoring pre-calculated JAF_INDICATORS from disk
+  message('\nDEVMODE=TRUE -- restoring JAF_INDICATORS from JAF_INDICATORS.Rds')
+  JAF_INDICATORS <-
+    readRDS('JAF_INDICATORS.Rds')
+} else {
+  if (file.exists('JAF_INDICATORS.Rds')) {
+    message('\nRenaming/archiving the exisitng/old\nJAF_INDICATORS.Rds -> ',
+            appendLF=FALSE)
+    message(rename_with_mod_time('JAF_INDICATORS.Rds'))
+  }
+  message('\nSaving new JAF_INDICATORS.Rds...')
+  JAF_INDICATORS %>%
+    saveRDS('JAF_INDICATORS.Rds')
 }
-message('Saving new JAF_INDICATORS.Rds...')
-JAF_INDICATORS %>%
-  saveRDS('JAF_INDICATORS.Rds')
-# JAF_INDICATORS <-
-#   readRDS('JAF_INDICATORS.Rds')
-###
 
 JAF_NAMES_DESCRIPTIONS <-
   JAF_INDICATORS %>% 
@@ -286,4 +301,21 @@ JAF_SCORES <-
 
 createFolder(OUTPUT_FOLDER)
 
-
+message('\nPreparing the data.Rds file for the Shiny/Shinylive app...')
+list(JAF_INDICATORS=JAF_INDICATORS,
+     JAF_GRAND_TABLE_reduced = JAF_GRAND_TABLE %>% 
+       .[isNotNA(.$value_) & 
+           .$geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)
+         , c('JAF_KEY','geo','time','value_','high_is_good',
+            grep('flags_',colnames(.),value=TRUE)), with=FALSE] %>% 
+       .[, all_flags := # collapse all flags_ columns into one column
+           do.call(paste0,c(mget(grep('flags_',colnames(.),value=TRUE)))) %>% 
+           gsub('NA',"",.,fixed=TRUE) %>% gsub(':',"",.,fixed=TRUE)] %>% 
+       .[, time := as.integer(time)] %>% 
+       .[, value_change := collapse::D(value_, t=time) 
+         , by=.(JAF_KEY,geo)],
+     JAF_SCORES=JAF_SCORES,
+     EU_Members_geo_names=EU_Members_geo_names,
+     EU_geo_code=EU_geo_code,
+     EA_geo_code=EA_geo_code) %>% 
+  saveRDS('../JAF2R_shinylive/data/data.Rds')
