@@ -311,8 +311,10 @@ list(JAF_INDICATORS=JAF_INDICATORS,
        .[, all_flags := # collapse all flags_ columns into one column
            do.call(paste0,c(mget(grep('flags_',colnames(.),value=TRUE)))) %>% 
            gsub('NA',"",.,fixed=TRUE) %>% gsub(':',"",.,fixed=TRUE)] %>% 
+       .[, grep('^flags_.*$',colnames(.),value=TRUE) := NULL] %>% 
        .[, time := as.integer(time)] %>% 
-       .[, value_change := collapse::D(value_, t=time) 
+       .[, value_change := 
+           if (length(value_)==1) NA_real_ else collapse::D(value_, t=time) 
          , by=.(JAF_KEY,geo)],
      JAF_SCORES=JAF_SCORES,
      EU_Members_geo_names=EU_Members_geo_names,
