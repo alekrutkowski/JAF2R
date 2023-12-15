@@ -125,34 +125,52 @@ retry <- function(expr, timeout=6, interval=2) {
   
 }
 
+is.string.scalar <- function(x)
+  is.character(x) && length(x)==1
+
+is.logical.scalar <- function(x)
+  is.logical(x) && length(x)==1
+
 calculate <- memoise::memoise(
   function(indicator_named, unevaluated_specification_list) {
+    if (!is.null(JAF_INDICATORS[[indicator_named]]))
+      stop('\nIndicator `',indicator_named,'` is already defined!')
     message(delimiter,'Calculating ',indicator_named)
+    # TODO add new arguments:
     retry(do.call(function(name,
-                           unit,
+                           indicator_group,
+                           unit_of_level,
+                           unit_of_change="",
                            source,
                            high_is_good,
+                           calculate_score_change=TRUE,
+                           reference_in_scores=EU_geo_code,
                            value) {
       stopifnot(
-        is.character(name),
-        length(name)==1,
-        is.character(source),
-        length(source)==1,
-        is.logical(high_is_good),
-        length(high_is_good)==1,
+        is.string.scalar(name),
+        is.string.scalar(indicator_group),
+        is.string.scalar(unit_of_level),
+        is.string.scalar(unit_of_change),
+        is.string.scalar(source),
+        is.logical.scalar(high_is_good),
+        is.logical.scalar(calculate_score_change),
         is.data.frame(value),
         nrow(value)>0,
-        'The data.table has one or more of the identifier columns (`geo`, `time`) or the `value_` column missing!' =
+        'The data.table has all the identifier columns (`geo`, `time`) and the `value_`' =
           c('geo','time','value_') %in% colnames(value),
-        'The columns `geo` and `time` do not uniquely identify the rows in the data.table - there are duplicates!' =
+        'Columns `geo` and `time` uniquely identify the rows in the data.table (there are no duplicates)' =
           nrow(value[,.(geo,time)] %>% .[duplicated(.)])==0,
-        'The column `value_` is not numeric!' =
+        'The column `value_` is numeric' =
           is.numeric(value$value_)
       )
       list(name=name,
-           unit=unit,
+           indicator_group=indicator_group,
+           unit_of_level=unit_of_level,
+           unit_of_change=unit_of_change,
            source=source,
            high_is_good=high_is_good,
+           calculate_score_change=calculate_score_change,
+           reference_in_scores=reference_in_scores,
            value = value %>% 
              .[, grep('^(geo|time|value_|flags_.*|.)$',
                       colnames(value),value=TRUE),
@@ -249,13 +267,15 @@ fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0
             '"',EurostatDatasetCode,
             '" not found in the list of Eurostat datasets or tables!\n',
             'check https://ec.europa.eu/eurostat/api/dissemination/catalogue/toc/txt?lang=EN'))
-  memoised_importData(EurostatDatasetCode, with_filters) %>% 
+  memoised_importData(EurostatDatasetCode,
+                      c(with_filters,
+                        list(geo=c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)))) %>% 
     `if`(nrow(.)==0,
          stop(cmd_line,
               "returned empty data.frame!\n",call.=FALSE),
          .) %>%
     as.data.table() %>% 
-    .[geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)] %>% 
+    # .[geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)] %>% moved to imortData
     .[, sapply(colnames(.), # 
                \(colname) colname %in% c('geo','TIME_PERIOD','value_','flags_') ||
                  length(unique(.[[colname]]))!=1), # drop columns with identifiers = single category

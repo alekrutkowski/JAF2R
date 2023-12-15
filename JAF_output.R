@@ -165,10 +165,57 @@ toJSON. <- function(x, filename)
   serializeJSON() %>%
   cat(file=filename)
 
-
+IndicatorsWithPopulationWeigths <-
+  '
+| JAF_KEY   | age     | sex  | isced11  | citizen         |
+|-----------|---------|------|----------|-----------------|
+| PA1.S1.M  | Y20-64  | M    | TOTAL    | TOTAL           |
+| PA1.S1.F  | Y20-64  | F    | TOTAL    | TOTAL           |
+| PA1.S2.   | Y55-64  | T    | TOTAL    | TOTAL           |
+| PA1.S3.   | Y20-29  | T    | TOTAL    | TOTAL           |
+| PA1.S4.   | Y20-64  | T    | ED0-2    | TOTAL           |
+| PA1.S5.   | Y20-64  | T    | TOTAL    | NEU27_2020_FOR  |
+' %>% 
+  readMarkDownTable()
 
 
 # Actions -----------------------------------------------------------------
+
+stopifnot('lfsa_pganws' %in% memoised_importDataList()$Code)
+
+POP_WEIGHTS <-
+  rbind(
+    retry(memoised_importData(
+      'lfsa_pganws',
+      with_filters(wstatus='POP',unit='THS_PER',
+                   citizen=unique(IndicatorsWithPopulationWeigths$citizen),
+                   geo=c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)))) %>% 
+      as.data.table() %>% 
+      .[, c('wstatus','unit','freq','flags_') := NULL],
+    retry(memoised_importData(
+      'lfsa_pgaed',
+      with_filters(unit='THS_PER',
+                   isced11=unique(IndicatorsWithPopulationWeigths$isced11),
+                   geo=c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)))) %>% 
+      as.data.table() %>% 
+      .[, c('unit','freq','flags_') := NULL],
+    fill=TRUE
+  ) %>% 
+  .[, lapply(.,. %>% `if`(is.factor(.),as.character(.),.))] %>% 
+  .[, time := TIME_PERIOD %>% as.integer()] %>% # year
+  .[, TIME_PERIOD := NULL] %>% 
+  .[, isced11 := isced11 %>% ifelse(is.na(.),'TOTAL',.)] %>% # filling in isced11 for lfsa_pganws
+  .[, citizen := citizen %>% ifelse(is.na(.),'TOTAL',.)] %>% # filling in citizen for lfsa_pgaed
+  .[, is_total := 
+      sex=="T" & age=="Y20-64" & isced11=='TOTAL' & citizen=='TOTAL'] %>% 
+  .[, total := ifelse(is_total, value_, NA_real_)] %>%
+  .[, total := mean(total, na.rm=TRUE), by=.(geo,time)] %>% 
+  .[, popweight := value_/total] %>% 
+  .[, c('value_','is_total','total') := NULL] %>%
+  merge(IndicatorsWithPopulationWeigths, 
+        by=colnames(IndicatorsWithPopulationWeigths) %without% 'JAF_KEY') %>% 
+  .[, .(geo,time,popweight)]
+
 
 if (exists('DEVMODE') && DEVMODE) { # development mode -- restoring pre-calculated JAF_INDICATORS from disk
   message('\nDEVMODE=TRUE -- restoring JAF_INDICATORS from JAF_INDICATORS.Rds')
@@ -176,6 +223,9 @@ if (exists('DEVMODE') && DEVMODE) { # development mode -- restoring pre-calculat
     readRDS('JAF_INDICATORS.Rds')
 } else {
   if (file.exists('JAF_INDICATORS.Rds')) {
+    if (!exists('JAF_INDICATORS'))
+      stop('\nObject `JAF_INDICATORS` not found!\n',
+           'Maybe you forgot to set DEVMODE=TRUE ?')
     message('\nRenaming/archiving the exisitng/old\nJAF_INDICATORS.Rds -> ',
             appendLF=FALSE)
     message(rename_with_mod_time('JAF_INDICATORS.Rds'))
@@ -190,7 +240,7 @@ JAF_NAMES_DESCRIPTIONS <-
   names() %>% 
   lapply(\(x) data.table(JAF_KEY=x,
                          name=JAF_INDICATORS[[x]]$name, 
-                         unit=JAF_INDICATORS[[x]]$unit)) %>% 
+                         unit=JAF_INDICATORS[[x]]$unit_of_level)) %>% 
   rbindlist()
 
 message('\nPreparing JAF_GRAND_TABLE...')
@@ -225,7 +275,7 @@ JAF_SCORES <-
   .[geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)] %>% 
   .[, sufficiently_many_countries :=
       value_[geo %in% EU_Members_geo_codes] %>% 
-      {length(.)>=20}
+      {length(.)>=18}
     , by=.(JAF_KEY,time)] %>% 
   .[, latest_year_overall :=
       suppressWarnings(max(time[sufficiently_many_countries])) %>% # suppressed warning if time[sufficiently_many_countries] is empty i.e. -> max = -Inf
@@ -272,6 +322,11 @@ JAF_SCORES <-
   .[, score := 
       ifelse(high_is_good,1,-1)*
       10*(value - reference)/std] %>% 
+  rbind(.[JAF_KEY %in% IndicatorsWithPopulationWeigths] %>%  # duplicate the selected indicators to create the population-weighted versions
+          .[, JAF_KEY := paste0(JAF_KEY,'_popweighted_score')] %>% 
+          merge(POP_WEIGHTS, by=c('JAF_KEY','geo','time')) %>% 
+          .[, score := score * popweight] %>% 
+          .[, popweight := NULL]) %>%
   .[, score_category :=
       score %>% 
       {kit::nif(. < -13, '--',
@@ -307,7 +362,7 @@ list(JAF_INDICATORS=JAF_INDICATORS,
        .[isNotNA(.$value_) & 
            .$geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)
          , c('JAF_KEY','geo','time','value_','high_is_good',
-            grep('flags_',colnames(.),value=TRUE)), with=FALSE] %>% 
+             grep('flags_',colnames(.),value=TRUE)), with=FALSE] %>% 
        .[, all_flags := # collapse all flags_ columns into one column
            do.call(paste0,c(mget(grep('flags_',colnames(.),value=TRUE)))) %>% 
            gsub('NA',"",.,fixed=TRUE) %>% gsub(':',"",.,fixed=TRUE)] %>% 
