@@ -45,11 +45,22 @@ quoteAndEscapeQuotes <- function(str)
   gsub('"','\\"',str,fixed=TRUE) %>% 
   paste0('"',.,'"')
 
+paste. <- function(...)
+  list(...) %>% 
+  lapply(. %>% ifelse(is.na(.),"",.)) %>% 
+  do.call(paste0,.)
+
+paste.. <- function(...)
+  list(...) %>% 
+  lapply(. %>% ifelse(is.na(.),"",.)) %>% 
+  do.call(paste,.)
+
 GENSENSE_to_Bool <- function(str)
   str=="+" # str may be: "+" or "-" or NA 
 
 processCatalog <- function(catalog_dt, comment="")
   catalog_dt %>% 
+  .[,lapply(.SD,as.character)] %>% 
   .[, c(id_cols,NumberedCatalogColumnNames), with=FALSE] %>%  
   {`if`(comment=="",
         .[!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl(table_names_without_cond_or_factor,table)] %T>% 
@@ -134,9 +145,23 @@ processCatalog <- function(catalog_dt, comment="")
              comment,'inside(JAF_INDICATORS, indicator_named = "',JAF_KEY,'") = \n',
              comment,'specification(\n',
              comment,'name = ',quoteAndEscapeQuotes(INDICATOR_FULL),',\n',
-             comment,'unit = ',quoteAndEscapeQuotes(UNITLONG),',\n',
-             comment,'source = ',quoteAndEscapeQuotes(SOURCE),',\n',
+             comment,'unit_of_level = ',quoteAndEscapeQuotes(UNITLONG),',\n', #modified
+             ifelse(!(CHANGE_CALCUL=='notpossible' & !is.na(CHANGE_CALCUL) | SILC_INCOME=='yes' & !is.na(SILC_INCOME)) & #new
+                      !is.na(UNITCHANGE) & UNITCHANGE!="",
+                    paste0(comment,'unit_of_change = ',quoteAndEscapeQuotes(UNITCHANGE),',\n'),""),
+             comment,'indicator_groups = ',quoteAndEscapeQuotes(
+               paste..(IFMAIN,INPUTOUTPUT,OS_CODE,IFCOMPEDIUM,
+                       ifelse(!is.na(IFCOMPEDIUM) & IFCOMPEDIUM!="",COMPENDIUMID,""),
+                       IFCOUNTRY) %>% 
+                 gsub("\\s+", " ", .) %>% toupper() %>% trimws()),',\n', #new
+             comment,'source = ',quoteAndEscapeQuotes(paste.( #modified
+               SOURCE,
+               FOOTNOTE_MAIN %>% ifelse(!is.na(.) & .!="",paste0(". ",.),.))),',\n',
              comment,'high_is_good = ',GENSENSE_to_Bool(GENSENSE),',\n',
+             ifelse(CHANGE_CALCUL=='notpossible' & !is.na(CHANGE_CALCUL) | SILC_INCOME=='yes' & !is.na(SILC_INCOME), #new
+                    paste0(comment,'calculate_score_change = FALSE,\n'),""),
+             ifelse(REFERNECPOINT=='AVERAGE' & !is.na(REFERNECPOINT), #new
+                    paste0(comment,'reference_in_scores = "Simple Average",\n'),""),
              comment,'value = ',definitions,'\n',
              comment,')')] %>%  # ,
   # ifelse(row_num!=max(row_num),',\n',""))] %>% 
@@ -179,6 +204,11 @@ StandardCatalogColumnNames <-
   quote(c(
     INDICATOR_FULL, # full name
     UNITLONG, # unit
+    UNITCHANGE,
+    CHANGE_CALCUL,
+    FOOTNOTE_MAIN,
+    IFMAIN,INPUTOUTPUT,IFCOMPEDIUM,COMPENDIUMID,IFCOUNTRY,SILC_INCOME,REFERNECPOINT,
+    OS_CODE, # Overall, Subindicator, Context, Main
     JAF_KEY, # unique indicator code
     SOURCE, # data source -> specific function?
     GENSENSE, # + if high is good, - if high is bad, blank otherwise
@@ -321,7 +351,9 @@ sub('
 inside(JAF_INDICATORS, indicator_named = "PA9.2.C4.") = 
 specification(
 name = "Tertiary graduates in science and technology per 1000 of population aged 20-29",
-unit = "% (of population)",
+unit_of_level = "% (of population)",
+unit_of_change = "pp",
+indicator_groups = "CONTEXT OUTPUT COMPENDIUM 7 COUNTRY",
 source = "Eurostat, Education Statistics",
 high_is_good = TRUE,
 value = fromEurostatDataset("educ_thflds",
@@ -331,7 +363,9 @@ value = fromEurostatDataset("educ_thflds",
 inside(JAF_INDICATORS, indicator_named = "PA9.2.C4.") = 
 specification(
 name = "Tertiary graduates in science and technology per 1000 of population aged 20-29",
-unit = "% (of population)",
+unit_of_level = "% (of population)",
+unit_of_change = "pp",
+indicator_groups = "CONTEXT OUTPUT COMPENDIUM 7 COUNTRY",
 source = "Eurostat, Education Statistics",
 high_is_good = TRUE,
 value = fromEurostatDataset("educ_uoe_grad04",
@@ -344,7 +378,9 @@ fixed=TRUE) %>%
 # inside(JAF_INDICATORS, indicator_named = "PA6a.S5.") = 
 # specification(
 # name = "Employment in newly established enterprises ",
-# unit = "% (of current employment in all active enterprises)",
+# unit_of_level = "% (of current employment in all active enterprises)",
+# unit_of_change = "pp",
+# indicator_groups = "SUBINDICATOR OUTPUT COMPENDIUM 5 COUNTRY",
 # source = "Eurostat, Structural Business Statistics ",
 # high_is_good = TRUE,
 # value = fromEurostatDataset("empl_new_enterprises",
@@ -353,9 +389,11 @@ fixed=TRUE) %>%
 '
 inside(JAF_INDICATORS, indicator_named = "PA6a.S5.") = 
 specification(
-name = "Employment in newly established enterprises",
-unit = "% (of current employment in all active enterprises)",
-source = "Eurostat, Structural Business Statistics",
+name = "Employment in newly established enterprises ",
+unit_of_level = "% (of current employment in all active enterprises)",
+unit_of_change = "pp",
+indicator_groups = "SUBINDICATOR OUTPUT COMPENDIUM 5 COUNTRY",
+source = "Eurostat, Structural Business Statistics ",
 high_is_good = TRUE,
 value = fromFormula((a + b + c + d)/e,
 where = variables(
@@ -378,7 +416,9 @@ fixed=TRUE)  %>%
 inside(JAF_INDICATORS, indicator_named = "PA4.2.S2.") = 
 specification(
 name = "Low wage trap – tax rate on low wage earners ",
-unit = "% (of increase in gross earnings)",
+unit_of_level = "% (of increase in gross earnings)",
+unit_of_change = "pp",
+indicator_groups = "SUBINDICATOR INPUT COMPENDIUM 4 COUNTRY",
 source = "OECD and European Commission, Benefits and wages",
 high_is_good = FALSE,
 value = fromBenefitsAndWages("earn_nt_lowwtrp",
@@ -388,7 +428,9 @@ value = fromBenefitsAndWages("earn_nt_lowwtrp",
 inside(JAF_INDICATORS, indicator_named = "PA4.2.S2.") = 
 specification(
 name = "Low wage trap – tax rate on low wage earners ",
-unit = "% (of increase in gross earnings)",
+unit_of_level = "% (of increase in gross earnings)",
+unit_of_change = "pp",
+indicator_groups = "SUBINDICATOR INPUT COMPENDIUM 4 COUNTRY",
 source = "Eurostat",
 high_is_good = FALSE,
 value = fromEurostatDataset("earn_nt_lowwtrp",
@@ -400,7 +442,9 @@ fixed=TRUE) %>%
 # inside(JAF_INDICATORS, indicator_named = "PA9.1.S5.") = 
 # specification(
 # name = "Annual expenditure in primary (ISCED 1) and secondary (ISCED 2-4) education per capita age group 6-18",
-# unit = "ratio (expenditure/GDP)",
+# unit_of_level = "ratio (expenditure/GDP)",
+# unit_of_change = "pp",
+# indicator_groups = "SUBINDICATOR OUTPUT COMPENDIUM 7 COUNTRY",
 # source = "Eurostat, EU Labour Force Survey, National Accounts and Education statistics",
 # high_is_good = TRUE,
 # value = fromEurostatDataset("educ_exp0_4",
@@ -410,7 +454,8 @@ fixed=TRUE) %>%
 inside(JAF_INDICATORS, indicator_named = "PA9.1.S5.") = 
 specification(
 name = "Annual expenditure in primary and secondary education per capita of age group 5-19 relative to GDP per capita",
-unit = "ratio of ratios (expenditure/young population)/(GDP/total population)",
+unit_of_level = "ratio of ratios (expenditure/young population)/(GDP/total population)",
+indicator_groups = "SUBINDICATOR OUTPUT COMPENDIUM 7 COUNTRY",
 source = "Eurostat",
 high_is_good = TRUE,
 value = fromFormula( ((a + b + c)/(d + e + f))/(g/h),
@@ -437,7 +482,9 @@ where = variables(
 # inside(JAF_INDICATORS, indicator_named = "PA9.2.S4.") = 
 # specification(
 # name = "Annual expenditure in tertiary education (ISCED 5+6) per capita age group 20-24",
-# unit = "ratio (expenditure/GDP)",
+# unit_of_level = "ratio (expenditure/GDP)",
+# unit_of_change = "pp",
+# indicator_groups = "SUBINDICATOR OUTPUT COMPENDIUM 7 COUNTRY",
 # source = "Eurostat, EU Labour Force Survey, National Accounts and Education statistics",
 # high_is_good = TRUE,
 # value = fromEurostatDataset("educ_exp5_6",
@@ -447,7 +494,8 @@ where = variables(
 inside(JAF_INDICATORS, indicator_named = "PA9.2.S4.") = 
 specification(
 name = "Annual expenditure in tertiary education per capita of age group 20-24 relative to GDP per capita",
-unit = "ratio of ratios (expenditure/young population)/(GDP/total population)",
+unit_of_level = "ratio of ratios (expenditure/young population)/(GDP/total population)",
+indicator_groups = "SUBINDICATOR OUTPUT COMPENDIUM 7 COUNTRY",
 source = "Eurostat",
 high_is_good = TRUE,
 value = fromFormula( (a/b)/(c/d),
