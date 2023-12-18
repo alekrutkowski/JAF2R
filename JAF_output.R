@@ -240,8 +240,14 @@ JAF_NAMES_DESCRIPTIONS <-
   names() %>% 
   lapply(\(x) data.table(JAF_KEY=x,
                          name=JAF_INDICATORS[[x]]$name, 
-                         unit=JAF_INDICATORS[[x]]$unit_of_level)) %>% 
+                         unit=JAF_INDICATORS[[x]]$unit_of_level,
+                         calculate_score_change=
+                           JAF_INDICATORS[[x]]$calculate_score_change,
+                         reference_in_scores=
+                           JAF_INDICATORS[[x]]$reference_in_scores)) %>% 
   rbindlist()
+JAF_KEY__SIMPLE_AVERAGE <- 
+  JAF_NAMES_DESCRIPTIONS[toupper(reference_in_scores)=='SIMPLE AVERAGE', JAF_KEY]
 
 message('\nPreparing JAF_GRAND_TABLE...')
 JAF_GRAND_TABLE <-
@@ -298,16 +304,19 @@ JAF_SCORES <-
        measure.vars=c('latest_value','change'),
        variable.name="variable", value.name="value",
        na.rm=TRUE) %>%
+  .[!(JAF_KEY %in% JAF_NAMES_DESCRIPTIONS[!(calculate_score_change), JAF_KEY] & 
+        variable=='change')] %>% 
   .[, reference_name :=
       value[geo==EU_geo_code] %>% 
-      {ifelse(length(.)==0, # EU not available
-              'Simple Average', # *** should be consistent
-              EU_geo_code)}
-    , by=.(JAF_KEY, variable)] %>% 
-  .[, reference :=
-      value[geo==EU_geo_code] %>% 
-      ifelse(length(.)==0, # EU not available
-             mean(value[geo %in% EU_Members_geo_codes]), # *** should be consistent
+      {ifelse(length(.)==0 |  # EU not available
+              unique(JAF_KEY) %in% JAF_KEY__SIMPLE_AVERAGE,
+              'Simple Average', # <== the functon description and ##########################################
+              EU_geo_code)}                                                                                #
+    , by=.(JAF_KEY, variable)] %>%                                                                         #
+  .[, reference :=                                                                                         #
+      value[geo==EU_geo_code] %>%                                                                          #
+      ifelse(length(.)==0, # EU not available                                                              #
+             mean(value[geo %in% EU_Members_geo_codes]), # <== the actual function should be consistent ####
              .)
     , by=.(JAF_KEY, variable)] %>% 
   .[, reference_time :=

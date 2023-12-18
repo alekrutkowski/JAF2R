@@ -136,7 +136,6 @@ calculate <- memoise::memoise(
     if (!is.null(JAF_INDICATORS[[indicator_named]]))
       stop('\nIndicator `',indicator_named,'` is already defined!')
     message(delimiter,'Calculating ',indicator_named)
-    # TODO add new arguments:
     retry(do.call(function(name,
                            indicator_group,
                            unit_of_level,
@@ -149,11 +148,16 @@ calculate <- memoise::memoise(
       stopifnot(
         is.string.scalar(name),
         is.string.scalar(indicator_group),
+        'Marked as COMPENDIUM and compendium number provided in `indicator_group`'=
+          indicator_group %>% {grepl("COMPENDIUM",.,ignore.case=TRUE) &
+              grepl("COMPENDIUM\\s+\\d+",.,ignore.case=TRUE)}
         is.string.scalar(unit_of_level),
         is.string.scalar(unit_of_change),
         is.string.scalar(source),
         is.logical.scalar(high_is_good),
         is.logical.scalar(calculate_score_change),
+        is.string.scalar(reference_in_scores),
+        toupper(reference_in_scores) %in% c('SIMPLE AVERAGE',toupper(EU_geo_code)),
         is.data.frame(value),
         nrow(value)>0,
         'The data.table has all the identifier columns (`geo`, `time`) and the `value_`' =
@@ -164,7 +168,7 @@ calculate <- memoise::memoise(
           is.numeric(value$value_)
       )
       list(name=name,
-           indicator_group=indicator_group,
+           indicator_group=toupper(indicator_group),
            unit_of_level=unit_of_level,
            unit_of_change=unit_of_change,
            source=source,
