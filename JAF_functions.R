@@ -131,6 +131,17 @@ is.string.scalar <- function(x)
 is.logical.scalar <- function(x)
   is.logical(x) && length(x)==1
 
+LIST_OF_REFERENCE_POINT_FUNCTIONS <- 
+  list()
+LIST_OF_REFERENCE_POINT_FUNCTIONS[[EU_geo_code]] <-
+  function(val,geo,is_time=FALSE) val[geo==EU_geo_code]
+LIST_OF_REFERENCE_POINT_FUNCTIONS[['SIMPLE AVERAGE']] <-
+  function(val,geo,is_time=FALSE) 
+    val[geo %in% EU_Members_geo_codes] %>% 
+  {`if`(is_time,
+        paste(sort(unique(.)),collapse=', '),
+        mean(.))}
+
 calculate <- memoise::memoise(
   function(indicator_named, unevaluated_specification_list) {
     if (!is.null(JAF_INDICATORS[[indicator_named]]))
@@ -157,7 +168,7 @@ calculate <- memoise::memoise(
         is.logical.scalar(high_is_good),
         is.logical.scalar(calculate_score_change),
         is.string.scalar(reference_in_scores),
-        toupper(reference_in_scores) %in% c('SIMPLE AVERAGE',toupper(EU_geo_code)),
+        toupper(reference_in_scores) %in% toupper(names(LIST_OF_REFERENCE_POINT_FUNCTIONS)),
         is.data.frame(value),
         nrow(value)>0,
         'The data.table has all the identifier columns (`geo`, `time`) and the `value_`' =

@@ -246,8 +246,11 @@ JAF_NAMES_DESCRIPTIONS <-
                          reference_in_scores=
                            JAF_INDICATORS[[x]]$reference_in_scores)) %>% 
   rbindlist()
-JAF_KEY__SIMPLE_AVERAGE <- 
-  JAF_NAMES_DESCRIPTIONS[toupper(reference_in_scores)=='SIMPLE AVERAGE', JAF_KEY]
+JAF_KEY__reference_name <- 
+  JAF_NAMES_DESCRIPTIONS %>% 
+  .[,.(JAF_KEY, reference_in_scores)] %>% 
+  .[, reference_name := toupper(reference_in_scores)] %>% 
+  .[, reference_in_scores := NULL]
 
 message('\nPreparing JAF_GRAND_TABLE...')
 JAF_GRAND_TABLE <-
@@ -306,25 +309,19 @@ JAF_SCORES <-
        na.rm=TRUE) %>%
   .[!(JAF_KEY %in% JAF_NAMES_DESCRIPTIONS[!(calculate_score_change), JAF_KEY] & 
         variable=='change')] %>% 
-  .[, reference_name :=
-      value[geo==EU_geo_code] %>% 
-      {ifelse(length(.)==0 |  # EU not available
-              unique(JAF_KEY) %in% JAF_KEY__SIMPLE_AVERAGE,
-              'Simple Average', # <== the functon description and ##########################################
-              EU_geo_code)}                                                                                #
-    , by=.(JAF_KEY, variable)] %>%                                                                         #
-  .[, reference :=                                                                                         #
-      value[geo==EU_geo_code] %>%                                                                          #
-      ifelse(length(.)==0, # EU not available                                                              #
-             mean(value[geo %in% EU_Members_geo_codes]), # <== the actual function should be consistent ####
+  merge(JAF_KEY__reference_name, by='JAF_KEY') %>% 
+  .[, reference_name := 
+      reference_name %>% 
+      ifelse(.==EU_geo_code & length(value[geo==EU_geo_code])==0, # EU wanted but not available
+             names(LIST_OF_REFERENCE_POINT_FUNCTIONS)[2], # fall-back option (currently 'SIMPLE AVERAGE')
              .)
     , by=.(JAF_KEY, variable)] %>% 
+  .[, reference :=
+      LIST_OF_REFERENCE_POINT_FUNCTIONS[[unique(reference_name)]](value, geo)
+    , by=.(JAF_KEY, variable)] %>% 
   .[, reference_time :=
-      value[geo==EU_geo_code] %>% 
-      {ifelse(length(.)==0, # EU not available
-              paste(sort(unique(time[geo %in% EU_Members_geo_codes])),
-                    collapse=', '),
-              as.character(time[geo==EU_geo_code]))}
+      LIST_OF_REFERENCE_POINT_FUNCTIONS[[unique(reference_name)]](time, geo, is_time=TRUE) %>% 
+      as.character()
     , by=.(JAF_KEY, variable)] %>% 
   .[, std := sd(value[geo %in% EU_Members_geo_codes]),
     , by=.(JAF_KEY, variable)] %>% 
