@@ -4,283 +4,14 @@
 Available_Codes <-
   unique(JAF_GRAND_TABLE$JAF_KEY)
 
-Selected_PAs_Codes <- list(
-  PA1 = c(
-    'PA1.O1.',
-    'PA1.S1.M',
-    'PA1.S1.F',
-    'PA1.S2.',
-    'PA1.S3.',
-    'PA1.S4.',
-    'PA1.S5.',
-    'PA1.O2.'
-  ),
-  PA1b = c(
-    'PA1b.O1.',
-    'PA1b.O1.n.',
-    'PA1b.S1.M',
-    'PA1b.S1.F',
-    'PA1b.S2.',
-    'PA1b.S3.',
-    'PA1b.S4.',
-    'PA1b.S5.',
-    'PA1b.S6.',
-    'PA1b.S1.n.M',
-    'PA1b.S1.n.F',
-    'PA1b.S5.n.',
-    'PA1b.S6.n.'
-  ),
-  PA1c = c(
-    'PA1c.O1.',
-    'PA1c.S1.Y55_59',
-    'PA1c.S1.Y60-64',
-    'PA1c.S1.M',
-    'PA1c.S1.F',
-    'PA1c.S2.T',
-    'PA1c.S2.M',
-    'PA1c.S2.F',
-    'PA1c.S3.',
-    'PA1c.S4.',
-    'PA1c.S5.'
-  ),
-  PA1d = c(
-    'PA1d.O1.',
-    'PA1d.S1.M',
-    'PA1d.S1.F',
-    'PA1d.S2.T',
-    'PA1d.S2.M',
-    'PA1d.S2.F'
-  ),
-  PA2a = c(
-    'PA2a.O1.',
-    'PA2a.S1.Y15-24',
-    'PA2a.S1.Y25-54',
-    'PA2a.S1.Y55-64',
-    'PA2a.S2.M',
-    'PA2a.S2.F',
-    'PA2a.S3.',
-    'PA2a.S4.',
-    'PA2a.S5.',
-    'PA2a.S6.T',
-    'PA2a.S6.Y15-24',
-    'PA2a.S6.M',
-    'PA2a.S6.F'
-  ),
-  PA2b = c(
-    'PA2b.O1.',
-    'PA2b.S1.',
-    'PA2b.S2.',
-    'PA2b.S3.',
-    'PA2b.S4.Y15_64',
-    'PA2b.S4.Y15_24',
-    'PA2b.S4.Y25_54',
-    'PA2b.S4.Y55_64',
-    'PA2b.S5.',
-    'PA2b.S6.',
-    'PA2b.S7.',
-    'PA2b.S8.'
-  ),
-  PA3 = c(
-    'PA3.O1.',
-    'PA3.S1.',
-    'PA3.S2.',
-    'PA3.S3.',
-    'PA3.S4.',
-    'PA3.S5.'
-  ),
-  PA4.1 = c(
-    'PA4.1.O1.',
-    'PA4.1.S1.',
-    'PA4.1.S2.A1',
-    'PA4.1.S2.A1_2DCH',
-    'PA4.1.S2.A2',
-    'PA4.1.S2.A2_2DCH',
-    'PA4.1.S3.A1',
-    'PA4.1.S3.A1_2DCH',
-    'PA4.1.S3.A2',
-    'PA4.1.S3.A2_2DCH',
-    'PA4.1.S4.',
-    'PA4.1.S5.'
-  ),
-  PA4.2 = c(
-    'PA4.2.O1.',
-    'PA4.2.S1.',
-    'PA4.2.S2.',
-    'PA4.2.S3.T',
-    'PA4.2.S4.',
-    'PA4.2.S5.',
-    'PA4.2.S6.'
-  ),
-  PA5 = c(
-    'PA5.O1.',
-    'PA5.S1.INAC',
-    'PA5.S1.PT',
-    'PA5.S1.M',
-    'PA5.S1.F',
-    'PA5.S2.',
-    'PA5.S3.T',
-    'PA5.S3.<30',
-    'PA5.S3.>30',
-    'PA5.S4.T',
-    'PA5.S4.<30',
-    'PA5.S4.>30',
-    'PA5.S5.',
-    'PA5.S6.',
-    'PA5.S7.'
-  ),
-  PA6a = c(
-    'PA6a.O1.',
-    'PA6a.S1.M',
-    'PA6a.S1.F',
-    'PA6a.S2.AGRI',
-    'PA6a.S2.IND',
-    'PA6a.S2.CONSTR',
-    'PA6a.S2.SERV',
-    'PA6a.S3.',
-    'PA6a.S4.',
-    'PA6a.S5.',
-    'PA6a.S6.'
-  ),
-  PA6b = c(
-    'PA6b.O1.', 
-    'PA6b.S1.', 
-    'PA6b.S2.', 
-    'PA6b.S3.', 
-    'PA6b.S4.'
-  ),
-  PA7.1 = c(
-    'PA7.1.O1.',
-    'PA7.1.S1.Y20-29',
-    'PA7.1.S1.Y30-54',
-    'PA7.1.S1.Y55-64',
-    'PA7.1.S2.F',
-    'PA7.1.S3.M',
-    'PA7.1.S3.F',
-    'PA7.1.S4.',
-    'PA7.1.S5.',
-    'PA7.1.S6.'
-  ),
-  PA7.2 = c(
-    'PA7.2.O1.',
-    'PA7.2.S1.M',
-    'PA7.2.S1.F',
-    'PA7.2.S2.M',
-    'PA7.2.S2.F',
-    'PA7.2.S3.',
-    'PA7.2.S4.'
-  ),
-  PA8.1 = c(
-    'PA8.1.O1.',
-    'PA8.1.S1.MED',
-    'PA8.1.S1.HIGH',
-    'PA8.1.S2.',
-    'PA8.1.S3.',
-    'PA8.1.S4.',
-    'PA8.1.S5.',
-    'PA8.1.S6.'
-  ),
-  PA8.2 = c(
-    'PA8.2.O1.',
-    'PA8.2.S1.',
-    'PA8.2.S2.',
-    'PA8.2.S3.',
-    'PA8.2.S4.',
-    'PA8.2.S5.'
-  ),
-  PA9.1 = c(
-    'PA9.1.O1.',
-    'PA9.1.S1.',
-    'PA9.1.S2.n.',
-    'PA9.1.S2.',
-    'PA9.1.S3.',
-    'PA9.1.S4.',
-    'PA9.1.S5.',
-    'PA9.1.S6.'
-  ),
-  PA9.2 = c(
-    'PA9.2.O1.',
-    'PA9.2.S1.READ',
-    'PA9.2.S1.MATH',
-    'PA9.2.S1.SCIE',
-    'PA9.2.S2.',
-    'PA9.2.S3.',
-    'PA9.2.S4.',
-    'PA9.2.S5.',
-    'PA9.2.S6.'
-  ),
-  PA10 = c(
-    'PA10.O1.', 
-    'PA10.S1.', 
-    'PA10.S2.'
-  ),
-  PA11 = c(
-    'PA11.O1.',
-    'PA11.S1.',
-    'PA11.S2.',
-    'PA11.S3.T',
-    'PA11.S3.M',
-    'PA11.S3.F',
-    'PA11.S4.',
-    'PA11.S5.',
-    'PA11.S6.',
-    'PA11.S8.',
-    'PA11.S9.',
-    'PA11.S10.',
-    'PA11.S11.',
-    'PA11.S12.',
-    'PA11.S13.',
-    'PA11.S14.',
-    'PA11.S15.'
-  ),
-  PA11a = c(
-    'PA11a.O1.',
-    'PA11a.S1.',
-    'PA11a.S2.',
-    'PA11a.S3.',
-    'PA11a.S4.',
-    'PA11a.S5.',
-    'PA11a.S6.',
-    'PA11a.S7.',
-    'PA11a.S8.',
-    'PA11a.S9.',
-    'PA11a.S10.'
-  ),
-  PA11b = c(
-    'PA11b.O1.',
-    'PA11b.S1.T',
-    'PA11b.S1.M',
-    'PA11b.S1.F',
-    'PA11b.S2.',
-    'PA11b.S3.',
-    'PA11b.S4.',
-    'PA11b.S5.T',
-    'PA11b.S5.M',
-    'PA11b.S5.F',
-    'PA11b.S6.',
-    'PA11b.S7.',
-    'PA11b.S8.',
-    'PA11b.S9.',
-    'PA11b.S10.',
-    'PA11b.S11.',
-    'PA11b.S12.'
-  ),
-  PA11c = c(
-    'PA11c.O1.',
-    'PA11c.S1.T',
-    'PA11c.S1.M',
-    'PA11c.S1.F',
-    'PA11c.S2.T',
-    'PA11c.S2.M',
-    'PA11c.S2.F',
-    'PA11c.S3.',
-    'PA11c.S4.',
-    'PA11c.S5.',
-    'PA11c.S6.',
-    'PA11c.S7.',
-    'PA11c.S8.'
-  )
-) %>% 
-  lapply(\(x) intersect(x,Available_Codes))
+Selected_PAs_Codes <- 
+  JAF_NAMES_DESCRIPTIONS %>%
+  .[(for_KEC), JAF_KEY] %>%
+  data.table(JAF_KEY=.,
+             PA = paste0('PA',`JAF_KEY->PA_string`(JAF_KEY))) %>% 
+  .[order(PA,sort_JAF_KEY(JAF_KEY))] %>% 
+  split(by='PA',keep.by=FALSE) %>% 
+  lapply(\(dt)dt[[1]]) 
 
 selected_PAs_Indicators_Multiline_Header <- function(JAF_KEY_codes)
   JAF_SCORES %>% 
@@ -367,7 +98,7 @@ selected_PAs_Indicators_Contents <- function(JAF_KEY_codes)
 
 # Actions -----------------------------------------------------------------
 
-createFolder(paste0(OUTPUT_FOLDER,'/PAs'))
+createFolder(paste0(OUTPUT_FOLDER,'/Policy Areas'))
 message('\nCreating PA Excel files...')
 for (pa_code in names(Selected_PAs_Codes)) {
   message('Starting ',pa_code)
@@ -460,7 +191,7 @@ for (pa_code in names(Selected_PAs_Codes)) {
   }
   wb_PA_Indic %>%
     wb_save(paste0(OUTPUT_FOLDER,
-                   paste0('/PAs/',pa_code,'.xlsx')))
+                   paste0('/Policy Areas/',pa_code,'.xlsx')))
   message()
 }
 message('Done.')

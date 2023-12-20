@@ -184,7 +184,7 @@ for (geo_code in EU_Members_geo_codes) {
 }
 message('All PNG files have been saved.')
 
-# The following product used to be a huge Excel file with embedded png charts.
+# The following product used to be a huge Excel file with embedded png charts (a worksheet per country).
 # Now it is a PowerPoint slide deck for each country with native Office charts.
 message('\nPreparing Country_profile PowerPoint files...')
 pptx0 <-

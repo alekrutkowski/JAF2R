@@ -165,6 +165,28 @@ toJSON. <- function(x, filename)
   serializeJSON() %>%
   cat(file=filename)
 
+`JAF_KEY->PA_string` <- function(JAF_KEY)
+  sub("PA(.*?)\\.(C|O|S).*",'\\1',JAF_KEY) # e.g. PA11c.S1.T -> 11c ; PA7.2.S2.F -> 7.2
+  
+`JAF_KEY->C_O_S_part` <- function(JAF_KEY)
+  sub("PA(.*?)\\.(C|O|S)(.+?)\\..*",'\\2\\3',JAF_KEY) # e.g. PA11c.S1.T -> S1 ; PA1.O1. -> O1
+
+sort_JAF_KEY <- function(JAF_KEY) {
+  pa <-
+    JAF_KEY %>% 
+    `JAF_KEY->PA_string` %>% 
+    list(as.numeric(gsub('[^0-9.]',"",.)),
+         .)
+  mid <- 
+    JAF_KEY %>% 
+    `JAF_KEY->C_O_S_part` %>% 
+    {list(substr(.,1,1) %>% kit::nswitch('O',1L, 'S',2L, 'C',3L,
+                                         default=4L),
+          substr(.,2,nchar(.)) %>% as.integer())}
+  JAF_KEY %>% 
+    .[order(pa[[1]],pa[[2]],mid[[1]],mid[[2]],.)]
+}
+
 IndicatorsWithPopulationWeigths <-
   '
 | JAF_KEY   | age     | sex  | isced11  | citizen         |
@@ -241,11 +263,19 @@ JAF_NAMES_DESCRIPTIONS <-
   lapply(\(x) data.table(JAF_KEY=x,
                          name=JAF_INDICATORS[[x]]$name, 
                          unit=JAF_INDICATORS[[x]]$unit_of_level,
+                         indicator_group=JAF_INDICATORS[[x]]$unit_of_level,
                          calculate_score_change=
                            JAF_INDICATORS[[x]]$calculate_score_change,
                          reference_in_scores=
                            JAF_INDICATORS[[x]]$reference_in_scores)) %>% 
-  rbindlist()
+  rbindlist() %>% 
+  .[, for_KEC := grepl('MAIN|OVERALL|SUBINDICATOR',indicator_group)] %>% 
+  .[, for_Compendium := grepl('COMPENDIUM',indicator_group)] %>% 
+  .[, for_Main := grepl('MAIN',indicator_group)] %>% 
+  .[, Compendium_Number := 
+      sub(".*COMPENDIUM\\s+(\\d+).*",'\\1',indicator_group) %>% 
+      as.integer()]
+
 JAF_KEY__reference_name <- 
   JAF_NAMES_DESCRIPTIONS %>% 
   .[,.(JAF_KEY, reference_in_scores)] %>% 
@@ -363,6 +393,7 @@ JAF_SCORES <-
 createFolder(OUTPUT_FOLDER)
 
 message('\nPreparing the data.Rds file for the Shiny/Shinylive app...')
+if (!dir.exists('../JAF2R_shinylive')) createFolder('../JAF2R_shinylive')
 list(JAF_INDICATORS=JAF_INDICATORS,
      JAF_GRAND_TABLE_reduced = JAF_GRAND_TABLE %>% 
        .[isNotNA(.$value_) & 
@@ -378,6 +409,7 @@ list(JAF_INDICATORS=JAF_INDICATORS,
            if (length(value_)==1) NA_real_ else collapse::D(value_, t=time) 
          , by=.(JAF_KEY,geo)],
      JAF_SCORES=JAF_SCORES,
+     JAF_NAMES_DESCRIPTIONS=JAF_NAMES_DESCRIPTIONS,
      EU_Members_geo_names=EU_Members_geo_names,
      EU_geo_code=EU_geo_code,
      EA_geo_code=EA_geo_code) %>% 

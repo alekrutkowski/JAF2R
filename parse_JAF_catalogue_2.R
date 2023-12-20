@@ -174,8 +174,8 @@ path_to_folder_with_source_definitions <-
   ""
 
 source_of_definitions <-
-  c('Indicators Table - JAF 2017 FINAL SPRING 2023.xlsx',
-    'catalogue - jaf_h_2021 FINAL SPRING 2023.csv')
+  c('Indicators Table - JAF 2017 2023-12-20.xlsx',
+    'catalogue - jaf_h_2021 2023-12-20.csv')
 
 Catalog <-
   openxlsx2::read_xlsx(paste0(path_to_folder_with_source_definitions,

@@ -2,12 +2,9 @@
 # Functions and constants -------------------------------------------------
 
 Selected_Main_Indicators_Codes <-
-  c("PA1.O1.", "PA1.S1.M", "PA1.S1.F", "PA1.S3.", "PA1.S4.", "PA1.C3.T", "PA1.C4.T",
-    "PA1.O2.", "PA1b.O1.", "PA1b.O1.n.", "PA1c.O1.", "PA1d.O1.", "PA2a.O1.", "PA2b.O1.",
-    "PA3.O1.", "PA4.1.O1.", "PA4.2.O1.", "PA5.O1.", "PA6a.O1.", "PA6b.O1.", "PA7.1.O1.",
-    "PA7.2.O1.", "PA8.1.O1.", "PA8.2.O1.", "PA9.1.O1.", "PA10.O1.", "PA11.O1.", "PA11.S1.",
-    "PA11.S2.", "PA11.S3.T", "PA11.S4.", "PA11.S5.", "PA11.S8.", "PA11.S15.", "PA11a.O1.",
-    "PA11b.O1.", "PA11c.O1.") %>%
+  JAF_NAMES_DESCRIPTIONS %>%
+  .[(for_Main), JAF_KEY] %>%
+  sort_JAF_KEY() %>%
   data.table(JAF_KEY=.,
              Main_Indicators_order = seq_along(.))
 
