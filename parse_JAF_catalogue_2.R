@@ -165,7 +165,45 @@ processCatalog <- function(catalog_dt, comment="")
              comment,'value = ',definitions,'\n',
              comment,')')] %>%  # ,
   # ifelse(row_num!=max(row_num),',\n',""))] %>% 
-  .[order(row_num)] 
+  # .[order(row_num)] 
+  order_by_JAF_KEY()
+
+standardiseCol <- function(vec)
+  vec %>% 
+  as.character %>% 
+  ifelse(.=="",NA_character_,.)
+
+`JAF_KEY->PA_string` <- function(JAF_KEY)
+  sub("PA(.*?)\\.(C|O|S).*",'\\1',JAF_KEY) # e.g. PA11c.S1.T -> 11c ; PA7.2.S2.F -> 7.2
+
+`JAF_KEY->C_O_S_part` <- function(JAF_KEY)
+  sub("PA(.*?)\\.(C|O|S)(.+?)\\..*",'\\2\\3',JAF_KEY) # e.g. PA11c.S1.T -> S1 ; PA1.O1. -> O1
+
+sort_JAF_KEY <- function(JAF_KEY) {
+  pa <-
+    JAF_KEY %>% 
+    `JAF_KEY->PA_string` %>% 
+    list(as.numeric(gsub('[^0-9.]',"",.)),
+         .)
+  mid <- 
+    JAF_KEY %>% 
+    `JAF_KEY->C_O_S_part` %>% 
+    {list(substr(.,1,1) %>% kit::nswitch('O',1L, 'S',2L, 'C',3L,
+                                         default=4L),
+          substr(.,2,nchar(.)) %>% as.integer())}
+  JAF_KEY %>% 
+    .[order(pa[[1]],pa[[2]],mid[[1]],mid[[2]],.)]
+}
+
+order_by_JAF_KEY <- function(dt)
+  dt$JAF_KEY %>% 
+  sort_JAF_KEY() %>% 
+  data.table(JAF_KEY=.,
+             .ordering.=seq_along(.)) %>% 
+  merge(dt, by='JAF_KEY') %>% 
+  setorder(.ordering.) %>% 
+  .[, .ordering. := NULL]
+             
 
 # Actions -----------------------------------------------------------------
 
@@ -182,14 +220,24 @@ Catalog <-
                               source_of_definitions[1]),
                        sheet='IndicatorsTable') %>% 
   as.data.table() %>%  
+  .[,lapply(.SD,standardiseCol)] %>% 
+  .[, catalogue:='main'] %>% 
+  .[, c("NEW=Y","IND_CODE"):=NULL] %>% 
   rbind(
     fread(file=paste0(path_to_folder_with_source_definitions,
                       source_of_definitions[2]),
           encoding='UTF-8') %>% 
-      as.data.table() %>% 
-      .[, JAF_KEY := paste0(JAF_KEY,'_health')],
-    fill=TRUE
+      as.data.table() %>%  
+      .[,lapply(.SD,standardiseCol)] %>%
+      .[, catalogue:='health'] %>% 
+      .[, c("NEW=Y","IND_CODE"):=NULL]
+    # .[, JAF_KEY := paste0(JAF_KEY,'_health')],
+    ,fill=TRUE
   ) %>% 
+  {message(nrow(.),' rows'); .} %>% 
+  .[!duplicated(.[, !"catalogue", with = FALSE])] %>% # remove duplicates of identical definitions across the two catalogues
+  {message(nrow(.),' rows'); .} %>% 
+  .[duplicated(JAF_KEY), JAF_KEY := paste0(JAF_KEY,"_health")] %>% # only if the two catalogues had difference definitons/specifications, add a suffix
   .[, row_num := .I] %>% 
   .[, formula := ifelse(grepl('delete the formula',comments) | 
                           (!is.na(table) & standard=='Y'),
