@@ -148,7 +148,7 @@ calculate <- memoise::memoise(
       stop('\nIndicator `',indicator_named,'` is already defined!')
     message(delimiter,'Calculating ',indicator_named)
     retry(do.call(function(name,
-                           indicator_group,
+                           indicator_groups,
                            unit_of_level,
                            unit_of_change="",
                            source,
@@ -158,10 +158,12 @@ calculate <- memoise::memoise(
                            value) {
       stopifnot(
         is.string.scalar(name),
-        is.string.scalar(indicator_group),
-        'Marked as COMPENDIUM and compendium number provided in `indicator_group`'=
-          indicator_group %>% {grepl("COMPENDIUM",.,ignore.case=TRUE) &
-              grepl("COMPENDIUM\\s+\\d+",.,ignore.case=TRUE)}
+        is.string.scalar(indicator_groups),
+        '\nIt is required that if `indicator_groups` contains the word COMPENDIUM then\nthat word is followed by a compendium number.'=
+          indicator_groups %>% 
+          {grepl("COMPENDIUM",.,ignore.case=TRUE) &
+              grepl("COMPENDIUM\\s+\\d+",.,ignore.case=TRUE) | 
+              !grepl("COMPENDIUM",.,ignore.case=TRUE)},
         is.string.scalar(unit_of_level),
         is.string.scalar(unit_of_change),
         is.string.scalar(source),
@@ -171,15 +173,15 @@ calculate <- memoise::memoise(
         toupper(reference_in_scores) %in% toupper(names(LIST_OF_REFERENCE_POINT_FUNCTIONS)),
         is.data.frame(value),
         nrow(value)>0,
-        'The data.table has all the identifier columns (`geo`, `time`) and the `value_`' =
+        '\nIt is required that the data.table has all the\nidentifier columns (`geo`, `time`) and the `value_`.' =
           c('geo','time','value_') %in% colnames(value),
-        'Columns `geo` and `time` uniquely identify the rows in the data.table (there are no duplicates)' =
+        '\nIt is required that columns `geo` and `time` uniquely\nidentify the rows in the data.table (there are no duplicates).' =
           nrow(value[,.(geo,time)] %>% .[duplicated(.)])==0,
-        'The column `value_` is numeric' =
+        '\nIt is required that the column `value_` is numeric.' =
           is.numeric(value$value_)
       )
       list(name=name,
-           indicator_group=toupper(indicator_group),
+           indicator_groups=toupper(indicator_groups),
            unit_of_level=unit_of_level,
            unit_of_change=unit_of_change,
            source=source,
@@ -283,14 +285,13 @@ fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0
             '" not found in the list of Eurostat datasets or tables!\n',
             'check https://ec.europa.eu/eurostat/api/dissemination/catalogue/toc/txt?lang=EN'))
   memoised_importData(EurostatDatasetCode,
-                      c(with_filters,
-                        list(geo=c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)))) %>% 
+                      c(with_filters)) %>% 
     `if`(nrow(.)==0,
          stop(cmd_line,
               "returned empty data.frame!\n",call.=FALSE),
          .) %>%
     as.data.table() %>% 
-    # .[geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)] %>% moved to imortData
+    .[geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)] %>% # not in filters because sometimes some geo not available, that would result in HTTP error 400
     .[, sapply(colnames(.), # 
                \(colname) colname %in% c('geo','TIME_PERIOD','value_','flags_') ||
                  length(unique(.[[colname]]))!=1), # drop columns with identifiers = single category

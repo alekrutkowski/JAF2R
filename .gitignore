@@ -8,3 +8,4 @@ JAF output*.zip
 Form for JAF indicator modifications *.xlsx
 JAF_mini_catalogue_*.csv
 ~*.xlsx
+JAF_INDICATORS * *.Rds

@@ -145,7 +145,7 @@ for (geo_code in EU_Members_geo_codes) {
                     dims='B1',
                     x=EU_Members_geo_names[geo==geo_code]$geo_labels)
     KEC_wb$add_data(sheet=sheet_name,
-                    startRow=4,
+                    start_row=4,
                     x=dta)
     KEC_wb$freeze_pane(sheet=sheet_name,
                        firstActiveRow=5)

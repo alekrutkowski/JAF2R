@@ -144,8 +144,8 @@ for (pa_code in names(Selected_PAs_Codes)) {
                               {paste0('=HYPERLINK("[..\\compendium\\Compendium-',
                                       JAF_Compendium_Index_raw[JAF_KEY==., CompendiumNum],
                                       '.xlsx]\'',.,'\'!A1", "Compendium")')},
-                            startRow=4,
-                            startCol=3+x-2)) %>%
+                            start_row=4,
+                            start_col=3+x-2)) %>%
       wb_add_formula(x=vals.$geo %>%
                        head(-2) %>% # without last two i.e. EU and EA
                        {paste0('=HYPERLINK("..\\Country Profiles\\',.,

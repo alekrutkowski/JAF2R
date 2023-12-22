@@ -140,6 +140,7 @@ EU_Members_geo_names <-
 
 OUTPUT_FOLDER <-
   Sys.time() %>% 
+  format("%Y-%m-%d %H:%M:%S") %>% 
   paste('JAF output',.) %>% 
   gsub(':','.',.,fixed=TRUE)
 
@@ -187,6 +188,15 @@ sort_JAF_KEY <- function(JAF_KEY) {
     .[order(pa[[1]],pa[[2]],mid[[1]],mid[[2]],.)]
 }
 
+order_by_JAF_KEY <- function(dt)
+  dt$JAF_KEY %>% 
+  sort_JAF_KEY() %>% 
+  data.table(JAF_KEY=.,
+             .ordering.=seq_along(.)) %>% 
+  merge(dt, by='JAF_KEY') %>% 
+  setorder(.ordering.) %>% 
+  .[, .ordering. := NULL]
+
 IndicatorsWithPopulationWeigths <-
   '
 | JAF_KEY   | age     | sex  | isced11  | citizen         |
@@ -203,7 +213,23 @@ IndicatorsWithPopulationWeigths <-
 
 # Actions -----------------------------------------------------------------
 
-stopifnot('lfsa_pganws' %in% memoised_importDataList()$Code)
+if (exists('DEVMODE') && DEVMODE) { # development mode -- restoring pre-calculated JAF_INDICATORS from disk
+  message('\nDEVMODE=TRUE -- restoring JAF_INDICATORS from JAF_INDICATORS.Rds')
+  JAF_INDICATORS <-
+    readRDS('JAF_INDICATORS.Rds')
+} else {
+  if (file.exists('JAF_INDICATORS.Rds')) {
+    if (!exists('JAF_INDICATORS'))
+      stop('\nObject `JAF_INDICATORS` not found!\n',
+           'Maybe you forgot to set DEVMODE=TRUE ?')
+    message('\nRenaming/archiving the exisitng/old\nJAF_INDICATORS.Rds -> ',
+            appendLF=FALSE)
+    message(rename_with_mod_time('JAF_INDICATORS.Rds'))
+  }
+  message('\nSaving new JAF_INDICATORS.Rds...')
+  JAF_INDICATORS %>%
+    saveRDS('JAF_INDICATORS.Rds')
+}
 
 POP_WEIGHTS <-
   rbind(
@@ -236,26 +262,7 @@ POP_WEIGHTS <-
   .[, c('value_','is_total','total') := NULL] %>%
   merge(IndicatorsWithPopulationWeigths, 
         by=colnames(IndicatorsWithPopulationWeigths) %without% 'JAF_KEY') %>% 
-  .[, .(geo,time,popweight)]
-
-
-if (exists('DEVMODE') && DEVMODE) { # development mode -- restoring pre-calculated JAF_INDICATORS from disk
-  message('\nDEVMODE=TRUE -- restoring JAF_INDICATORS from JAF_INDICATORS.Rds')
-  JAF_INDICATORS <-
-    readRDS('JAF_INDICATORS.Rds')
-} else {
-  if (file.exists('JAF_INDICATORS.Rds')) {
-    if (!exists('JAF_INDICATORS'))
-      stop('\nObject `JAF_INDICATORS` not found!\n',
-           'Maybe you forgot to set DEVMODE=TRUE ?')
-    message('\nRenaming/archiving the exisitng/old\nJAF_INDICATORS.Rds -> ',
-            appendLF=FALSE)
-    message(rename_with_mod_time('JAF_INDICATORS.Rds'))
-  }
-  message('\nSaving new JAF_INDICATORS.Rds...')
-  JAF_INDICATORS %>%
-    saveRDS('JAF_INDICATORS.Rds')
-}
+  .[, .(JAF_KEY,geo,time,popweight)]
 
 JAF_NAMES_DESCRIPTIONS <-
   JAF_INDICATORS %>% 
@@ -263,17 +270,18 @@ JAF_NAMES_DESCRIPTIONS <-
   lapply(\(x) data.table(JAF_KEY=x,
                          name=JAF_INDICATORS[[x]]$name, 
                          unit=JAF_INDICATORS[[x]]$unit_of_level,
-                         indicator_group=JAF_INDICATORS[[x]]$unit_of_level,
+                         indicator_groups=JAF_INDICATORS[[x]]$indicator_groups,
                          calculate_score_change=
                            JAF_INDICATORS[[x]]$calculate_score_change,
                          reference_in_scores=
                            JAF_INDICATORS[[x]]$reference_in_scores)) %>% 
   rbindlist() %>% 
-  .[, for_KEC := grepl('MAIN|OVERALL|SUBINDICATOR',indicator_group)] %>% 
-  .[, for_Compendium := grepl('COMPENDIUM',indicator_group)] %>% 
-  .[, for_Main := grepl('MAIN',indicator_group)] %>% 
+  .[, is_INPUT := grepl('INPUT',indicator_groups)] %>% 
+  .[, for_KEC := grepl('MAIN|OVERALL|SUBINDICATOR',indicator_groups)] %>% 
+  .[, for_Compendium := grepl('COMPENDIUM',indicator_groups)] %>% 
+  .[, for_Main := grepl('MAIN',indicator_groups)] %>% 
   .[, Compendium_Number := 
-      sub(".*COMPENDIUM\\s+(\\d+).*",'\\1',indicator_group) %>% 
+      sub(".*COMPENDIUM\\s+(\\d+).*",'\\1',indicator_groups) %>% 
       as.integer()]
 
 JAF_KEY__reference_name <- 

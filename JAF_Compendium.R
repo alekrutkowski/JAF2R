@@ -16,7 +16,9 @@ JAF_Compendium_Index_raw <-
   JAF_NAMES_DESCRIPTIONS %>%
   .[(for_Compendium), .(Compendium_Number,JAF_KEY)] %>%
   setnames('Compendium_Number','CompendiumNum') %>% 
-  .[order(CompendiumNum,sort_JAF_KEY(JAF_KEY))]
+  split(by='CompendiumNum') %>% 
+  lapply(order_by_JAF_KEY) %>% 
+  rbindlist()
 
 JAF_Compendium_Index <-
   JAF_Compendium_Index_raw %>% 
@@ -30,8 +32,11 @@ JAF_Compendium_Index <-
              ",",
              dq("Compendium - ",CompendiumNum),
              ")")] %>% 
-  .[, c('CompendiumNum','unit') := NULL] %>% 
-  sanitizeForExcel()
+  sanitizeForExcel() %>% 
+  split(by='CompendiumNum') %>% 
+  lapply(order_by_JAF_KEY) %>% 
+  rbindlist() %>% 
+  .[, .(JAF_KEY,`Policy Area`,Indicator,Compendium)]
 
 indicTablesForCompendium <- function(JAF_KEY.) {
   selected_dt <-
@@ -177,15 +182,15 @@ openxlsx2::wb_workbook() %>%
   wb_add_font(dims='C1',
               bold="bold",
               size=18) %>%
-  wb_add_data(startRow=2,
+  wb_add_data(start_row=2,
               x=JAF_Compendium_Index %>%
-                .[, colnames(.) %without% 'Compendium', with=FALSE]) %>%
+                .[, !'Compendium', with=FALSE]) %>%
   wb_add_formula(x=JAF_Compendium_Index$Compendium,
-                 startCol=ncol(JAF_Compendium_Index),
-                 startRow=3) %>%
+                 start_col=ncol(JAF_Compendium_Index),
+                 start_row=3) %>%
   wb_add_data(x='Link to the file and worksheet',
-              startCol=ncol(JAF_Compendium_Index),
-              startRow=2) %>%
+              start_col=ncol(JAF_Compendium_Index),
+              start_row=2) %>%
   wb_freeze_pane(firstActiveRow=3) %>%
   wb_add_font(dims=paste0('A2:',int2col(ncol(JAF_Compendium_Index)),'2'),
               bold="bold",
@@ -197,7 +202,6 @@ openxlsx2::wb_workbook() %>%
   {for (ws in .$worksheets)
     ws$sheetViews <- set_zoom(75, ws$sheetViews); .} %>%
   wb_save(paste0(OUTPUT_FOLDER,'/JAF Compendium/Index.xlsx'))
-
 message('Done.')
 
 for (CompendiumNum. in unique(JAF_Compendium_Index_raw$CompendiumNum)) {
@@ -233,21 +237,21 @@ for (CompendiumNum. in unique(JAF_Compendium_Index_raw$CompendiumNum)) {
                   paste('Source: ',JAF_INDICATORS[[JAF_KEY.]]$source %>% stringi::stri_trans_general("Latin-ASCII")),
                   dim='B7') %>%
       wb_add_data(JAF_KEY.,
-                  'Table with flags',
-                  startCol=3, startRow=10) %>%
+                  'Table with flags -- For the table without flags scroll to the right =>',
+                  start_col=3, start_row=10) %>%
       wb_add_data(JAF_KEY.,
                   list_of_dts$with_flags,
-                  startCol=2, startRow=11) %>%
+                  start_col=2, start_row=11) %>%
       wb_add_data(JAF_KEY.,
                   'Table without flags',
-                  startCol=5+ncol(list_of_dts$with_flags), startRow=10) %>%
+                  start_col=5+ncol(list_of_dts$with_flags), start_row=10) %>%
       wb_add_data(JAF_KEY.,
                   list_of_dts$without_flags,
-                  startCol=4+ncol(list_of_dts$with_flags), startRow=11) %>%
+                  start_col=4+ncol(list_of_dts$with_flags), start_row=11) %>%
       wb_add_filter(JAF_KEY., rows=11, cols=2) %>%
       wb_add_data(JAF_KEY.,
                   'Use the filter in cell B11 to see only one or more selected coutries in the charts below.',
-                  startCol=3, startRow=42+nrow(list_of_dts$with_flags)-29) %>%
+                  start_col=3, start_row=42+nrow(list_of_dts$with_flags)-29) %>%
       wb_add_chart_xml(JAF_KEY.,
                        dims=paste0('C',
                                    44+nrow(list_of_dts$with_flags)-29),
@@ -258,10 +262,12 @@ for (CompendiumNum. in unique(JAF_Compendium_Index_raw$CompendiumNum)) {
                                    78+nrow(list_of_dts$with_flags)-29),
                        barChartXml(JAF_KEY.,ncol(list_of_dts$with_flags),ncol(list_of_dts$without_flags),
                                    nrow(list_of_dts$with_flags))) %>%
-      {suppressWarnings(wb_add_font(.,JAF_KEY.,
-                                    dims=c('A3','B3','B5','B6','C42'), # a vector generates a warning
-                                    bold="bold",
-                                    size=13))} %>%
+      Reduce(init=.,
+             x=c('A3','B3','B5','B6','C42'),
+             f=\(wb,x) wb_add_font(wb, JAF_KEY.,
+                                   dims=x,
+                                   bold="bold",
+                                   size=13)) %>%
       wb_set_col_widths(JAF_KEY.,
                         cols=2,
                         widths="auto") %>%
@@ -281,14 +287,15 @@ for (CompendiumNum. in unique(JAF_Compendium_Index_raw$CompendiumNum)) {
       wb_set_row_heights(JAF_KEY.,
                          rows=c(2,4,8,9),
                          heights=3)
-
+    
   }
   for (ws in wb$worksheets)
     ws$sheetViews <- set_zoom(65, ws$sheetViews)
+  message('\nSaving...')
   wb %>%
     wb_set_sheet_names(wb_get_sheet_names(.),
                        wb_get_sheet_names(.) %>% escapeSpecialXmlChars()) %>%
     wb_save(paste0(OUTPUT_FOLDER,
                    '/JAF Compendium/Compendium-',CompendiumNum.,'.xlsx'))
-  message('\nCompendium-',CompendiumNum.,'.xlsx saved.')
+  message('Compendium-',CompendiumNum.,'.xlsx saved.')
 }

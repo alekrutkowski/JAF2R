@@ -1,5 +1,5 @@
 init = function() {
-  source("H:/JAF_functions.R")
+  source("JAF_functions.R")
   JAF_INDICATORS <<- list()
 }
 if (interactive() && exists("JAF_INDICATORS")) repeat {

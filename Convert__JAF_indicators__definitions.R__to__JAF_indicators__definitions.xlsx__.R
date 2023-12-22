@@ -34,7 +34,7 @@ ifelse(reference_in_scores!=EU_geo_code,
   c(paste('### Compiled automatically by',Sys.getenv("USERNAME")),
     paste('### on',format(Sys.time(),"%Y-%m-%d %H:%M:%S")),
     paste('### from `JAF_indicators__definitions.xlsx`, worksheet',
-          openxlsx::getSheetNames('JAF_indicators__definitions.xlsx')[1]),
+          wb_get_sheet_names('JAF_indicators__definitions.xlsx')[1]),
     "",
     .) %>% 
   cat(file='JAF_indicators__definitions.R',sep='\n')
