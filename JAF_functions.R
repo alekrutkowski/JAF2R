@@ -8,6 +8,7 @@ library(OECD)
 library(countrycode)
 library(rvest)
 library(kit)
+library(xml2)
 
 
 # Constants and aliases ---------------------------------------------------
@@ -116,13 +117,6 @@ retry <- function(expr, timeout=6, interval=2) {
     message('Re-trying...')
   }
   result
-  if (!isError(result)) result else {
-    if (grepl('HTTP error 400',result))
-      message('\nCheck if `with_filters()` contains the correct filters!')
-    stop(sub('Error in doTryCatch(return(expr), name, parentenv, handler): ',
-             "",result,fixed=TRUE), call.=FALSE)
-  }
-  
 }
 
 is.string.scalar <- function(x)
@@ -284,8 +278,21 @@ fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0
             '"',EurostatDatasetCode,
             '" not found in the list of Eurostat datasets or tables!\n',
             'check https://ec.europa.eu/eurostat/api/dissemination/catalogue/toc/txt?lang=EN'))
-  memoised_importData(EurostatDatasetCode,
-                      c(with_filters)) %>% 
+  tryCatch(memoised_importData(EurostatDatasetCode,
+                               c(with_filters)),
+           error = function(e) e) %>% 
+    `if`(grepl('HTTP error 400',.),
+         stop('\nIn',
+              cmd_line,
+              '\n`with_filters()` contains invalid filter name(s):\n',
+              estatDatasetDimNames(EurostatDatasetCode) %>% 
+                suggestedWords(names(with_filters) %without% .,
+                               .) %>% 
+                paste0('\nSee also\n',
+                       'https://ec.europa.eu/eurostat/databrowser/view/',
+                       EurostatDatasetCode
+                       ,'/default/table?lang=en')),
+         .) %>% 
     `if`(nrow(.)==0,
          stop(cmd_line,
               "returned empty data.frame!\n",call.=FALSE),
@@ -582,3 +589,39 @@ vacancy_rate <- function(with_filters=NULL) {
       by=geo] %>% 
     .[!is.na(value_)]
 }
+
+estatDatasetDimNames <- function(EurostatDatasetCode)
+  EurostatDatasetCode %>% 
+  toupper(.) %>% 
+  paste0(eurodata:::EurostatBaseUrl,'datastructure/estat/',.) %>% 
+  xml2::read_xml() %>% 
+  xml2::as_list() %>% 
+  {.$Structure$
+      Structures$
+      DataStructures$
+      DataStructure$
+      DataStructureComponents$
+      DimensionList} %>% 
+  sapply(function(x) attr(x$ConceptIdentity$Ref,'id'))
+
+normalizedAdist <- function(x,y,partial)
+  utils::adist(x, y, ignore.case=TRUE, partial=partial) %>% 
+  {./max(.)}
+
+suggestedWords <- function(wrong_words, correct_words)
+  (normalizedAdist(wrong_words, correct_words, partial=FALSE) +
+     normalizedAdist(wrong_words, correct_words, partial=TRUE)) %>% 
+  set_colnames(correct_words) %>% 
+  as.data.table() %>% 
+  .[, wrong_words := paste0('`',wrong_words,'`')] %>% 
+  melt(id.vars='wrong_words',
+       variable.name='correct_words') %>% 
+  .[, min_val := min(value), by=wrong_words] %>% 
+  .[value==min_val] %>% 
+  .[,.(wrong_words,correct_words)] %>% 
+  .[, .(correct_words = paste0('`',correct_words,'`',collapse=' or ')),
+    , by=wrong_words] %>% 
+  setnames(c('wrong_words','correct_words'),
+           c('Wrong names','  Suggested names')) %>% 
+  {capture.output(print(., nrows=nrow(.), row.names=FALSE))} %>% 
+  paste(collapse='\n')
