@@ -602,15 +602,19 @@ estatDatasetDimNames <- function(EurostatDatasetCode)
       DataStructure$
       DataStructureComponents$
       DimensionList} %>% 
-  sapply(function(x) attr(x$ConceptIdentity$Ref,'id'))
+  sapply(function(x) attr(x$ConceptIdentity$Ref,'id')) %without% 
+  'TIME_PERIOD'
 
-normalizedAdist <- function(x,y,partial)
-  utils::adist(x, y, ignore.case=TRUE, partial=partial) %>% 
-  {./max(.)}
+normalizedAdist <- function(x,y)
+  c(TRUE,FALSE) %>% 
+  lapply(function(p)
+    utils::adist(x, y, ignore.case=TRUE, partial=p) %>% 
+      {10*./median(.)} %>% 
+      round()) %>% 
+  do.call(`+`,.)
 
 suggestedWords <- function(wrong_words, correct_words)
-  (normalizedAdist(wrong_words, correct_words, partial=FALSE) +
-     normalizedAdist(wrong_words, correct_words, partial=TRUE)) %>% 
+  normalizedAdist(wrong_words, correct_words) %>% 
   set_colnames(correct_words) %>% 
   as.data.table() %>% 
   .[, wrong_words := paste0('`',wrong_words,'`')] %>% 
@@ -622,6 +626,6 @@ suggestedWords <- function(wrong_words, correct_words)
   .[, .(correct_words = paste0('`',correct_words,'`',collapse=' or ')),
     , by=wrong_words] %>% 
   setnames(c('wrong_words','correct_words'),
-           c('Wrong names','  Suggested names')) %>% 
+           c('Wrong name(s)','  Suggested name(s)')) %>% 
   {capture.output(print(., nrows=nrow(.), row.names=FALSE))} %>% 
   paste(collapse='\n')
