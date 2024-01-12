@@ -6,60 +6,74 @@ library(openxlsx2)
 # Functions and constants -------------------------------------------------
 
 PolicyAreaLabels <- '
-| PolicyArea | POLICY AREA                                                                                                                                    |
-|------------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1          | Increase overall employment                                                                                                                    |
-| 1b         | Improve labour market situation of youth                                                                                                       |
-| 1c         | Increase employment of older workers                                                                                                           |
-| 1d         | Increase employment of migrants                                                                                                                |
-| 2a         | Combating segmentation                                                                                                                         |
-| 2b         | Labour market fluidity                                                                                                                         |
-| 3          | Active labour market policies                                                                                                                  |
-| 4.1        | Adequate social security systems                                                                                                               |
-| 4.2        | Make work pay                                                                                                                                  |
-| 5          | Work-life balance                                                                                                                              |
-| 6a         | Exploiting job creation possibilities                                                                                                          |
-| 6b         | Demand creation                                                                                                                                |
-| 7.1        | Gender employment gap                                                                                                                          |
-| 7.2        | Gender pay gap                                                                                                                                 |
-| 8.1        | Improving skills supply and productivity, lifelong learning                                                                                    |
-| 8.2        | Lifelong learning                                                                                                                              |
-| 9.1        | Improving education and training systems                                                                                                       |
-| 9.2        | Improving higher education                                                                                                                     |
-| 10         | Wage setting mechanisms and labour cost developments                                                                                           |
-| 11         | Preventing poverty and social exclusion through inclusive labour markets, adequate and sustainable social protection and high quality services |
-| 11a        | Breaking the intergenerational transmission of poverty \u2013 tackling child poverty                                                           |
-| 11b        | Active inclusion \u2013 tackling poverty in working age                                                                                        |
-| 11c        | Elderly poverty                                                                                                                                |
+| PolicyArea | POLICY AREA                                                                                               |
+|------------|-----------------------------------------------------------------------------------------------------------|
+| 1          | Increase overall employment                                                                               |
+| 1b         | Improve labour market situation of youth                                                                  |
+| 1c         | Increase employment of older workers                                                                      |
+| 1d         | Increase employment of migrants                                                                           |
+| 2a         | Combating segmentation                                                                                    |
+| 2b         | Labour market fluidity                                                                                    |
+| 3          | Active labour market policies                                                                             |
+| 4.1        | Adequate social security systems                                                                          |
+| 4.2        | Make work pay                                                                                             |
+| 5          | Work-life balance                                                                                         |
+| 6a         | Exploiting job creation possibilities                                                                     |
+| 6b         | Demand creation                                                                                           |
+| 7.1        | Gender employment gap                                                                                     |
+| 7.2        | Gender pay gap                                                                                            |
+| 8.1        | Improving skills supply and productivity, lifelong learning                                               |
+| 8.2        | Lifelong learning                                                                                         |
+| 9.1        | Improving education and training systems                                                                  |
+| 9.2        | Improving higher education                                                                                |
+| 10         | Wage setting mechanisms and labour cost developments                                                      |
+| 11         | Promoting equal opportunities for all, fostering social inclusion and fighting poverty - total population |
+| 11a        | Tackling child poverty and exclusion                                                                      |
+| 11b        | Tackling poverty and exclusion in working age - active inclusion                                          |
+| 11c        | Tackling old age poverty and exclusion                                                                    |
+| 11d        | Inequality and inequality of opportunity                                                                  |
+| 11e        | Access to quality social services and benefits                                                            |
+| 11f1       | Focus on poverty and exclusion of disadvantaged groups - people with disabilities                         |
+| 11f2       | Focus on poverty and exclusion of disadvantaged groups - migrants                                         |
+| 11f3       | Focus on poverty and exclusion of disadvantaged groups - low-skilled people                               |
+| 11f4       | Focus on poverty and exclusion of disadvantaged groups - (quasi-)jobless households                       |
+| 11f5       | Focus on poverty and exclusion of disadvantaged groups - youth                                            |
 ' %>% 
   readMarkDownTable()
 
 PolicyAreaLabels_General <- '
-| PolicyArea  | POLICY AREA                                                                                                                                     |
-|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1           | Increase labour market participation                                                                                                            |
-| 1b          | Increase labour market participation                                                                                                            |
-| 1c          | Increase labour market participation                                                                                                            |
-| 1d          | Increase labour market participation                                                                                                            |
-| 2a          | Enhancing labour market functioning                                                                                                             |
-| 2b          | Enhancing labour market functioning                                                                                                             |
-| 3           | Active labour market policies                                                                                                                   |
-| 4.1         | Adequate and employment oriented social security systems                                                                                        |
-| 4.2         | Adequate and employment oriented social security systems                                                                                        |
-| 5           | Work-life balance                                                                                                                               |
-| 6a          | Exploiting job creation possibilities                                                                                                           |
-| 6b          | Exploiting job creation possibilities                                                                                                           |
-| 7.1         | Gender equality                                                                                                                                 |
-| 7.2         | Gender equality                                                                                                                                 |
-| 8.1         | Improving skills supply and productivity, effective life-long learning                                                                          |
-| 8.2         | Improving skills supply and productivity, effective life-long learning                                                                          |
-| 9.1         | Improving education and training systems                                                                                                        |
-| 9.2         | Improving education and training systems                                                                                                        |
-| 10          | Wage setting mechanisms and labour cost developments                                                                                            |
-| 11          | Preventing poverty and social exclusion through inclusive labour markets, adequate and sustainable social protection and high quality services  |
-| 11a         | Preventing poverty and social exclusion through inclusive labour markets, adequate and sustainable social protection and high quality services  |
-| 11b         | Preventing poverty and social exclusion through inclusive labour markets, adequate and sustainable social protection and high quality services  |
-| 11c         | Preventing poverty and social exclusion through inclusive labour markets, adequate and sustainable social protection and high quality services  |
+| PolicyArea  | POLICY AREA                                                                            |
+|-------------|----------------------------------------------------------------------------------------|
+| 1           | Increase labour market participation                                                   |
+| 1b          | Increase labour market participation                                                   |
+| 1c          | Increase labour market participation                                                   |
+| 1d          | Increase labour market participation                                                   |
+| 2a          | Enhancing labour market functioning                                                    |
+| 2b          | Enhancing labour market functioning                                                    |
+| 3           | Active labour market policies                                                          |
+| 4.1         | Adequate and employment oriented social security systems                               |
+| 4.2         | Adequate and employment oriented social security systems                               |
+| 5           | Work-life balance                                                                      |
+| 6a          | Exploiting job creation possibilities                                                  |
+| 6b          | Exploiting job creation possibilities                                                  |
+| 7.1         | Gender equality                                                                        |
+| 7.2         | Gender equality                                                                        |
+| 8.1         | Improving skills supply and productivity, effective life-long learning                 |
+| 8.2         | Improving skills supply and productivity, effective life-long learning                 |
+| 9.1         | Improving education and training systems                                               |
+| 9.2         | Improving education and training systems                                               |
+| 10          | Wage setting mechanisms and labour cost developments                                   |
+| 11          | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
+| 11a         | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
+| 11b         | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
+| 11c         | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
+| 11d         | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
+| 11e         | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
+| 11f1        | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
+| 11f2        | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
+| 11f3        | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
+| 11f4        | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
+| 11f5        | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
 ' %>% 
   readMarkDownTable()
 
