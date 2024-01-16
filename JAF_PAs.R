@@ -4,14 +4,23 @@
 Available_Codes <-
   unique(JAF_GRAND_TABLE$JAF_KEY)
 
+sort_PAs <- function(pa_codes)
+  pa_codes %>% 
+  data.table(num=as.numeric(gsub('[^0-9.]',"",.)) %>% 
+               ifelse(.>=100,floor(./10),.),# so that codes like PA11f1 don't become 111
+             str=.) %>% 
+  .[order(num,str)] %>% 
+  .$str
+
 Selected_PAs_Codes <- 
   JAF_NAMES_DESCRIPTIONS %>%
   .[(for_KEC), JAF_KEY] %>%
   data.table(JAF_KEY=.,
-             PA = paste0('PA',`JAF_KEY->PA_string`(JAF_KEY))) %>% 
+             PA = paste0('PA',`JAF_KEY->PA_string`(.))) %>% 
   .[order(PA,sort_JAF_KEY(JAF_KEY))] %>% 
-  split(by='PA',keep.by=FALSE) %>% 
-  lapply(\(dt)dt[[1]]) 
+  split(by='PA',keep.by=FALSE) %>%
+  lapply(\(dt)dt[[1]]) %>% 
+  .[names(.) %>% sort_PAs()]
 
 selected_PAs_Indicators_Multiline_Header <- function(JAF_KEY_codes)
   JAF_SCORES %>% 
@@ -104,18 +113,18 @@ for (pa_code in names(Selected_PAs_Codes)) {
   message('Starting ',pa_code)
   wb_PA_Indic <-
     openxlsx2::wb_workbook()
-  for (indic_type in c('change','latest_value')) {
+  for (indic_type in c('latest_value','change')) {
     Indic_Type <-
       ifelse(indic_type=='change','Changes',
              'Levels')
     cat(Indic_Type,"")
-    head. <-
-      Selected_PAs_Codes[[pa_code]] %>%
-      selected_PAs_Indicators_Multiline_Header() %>%
-      .[[indic_type]]
     vals. <-
       Selected_PAs_Codes[[pa_code]] %>%
       selected_PAs_Indicators_Contents() %>%
+      .[[indic_type]]
+    head. <-
+      Selected_PAs_Codes[[pa_code]] %>%
+      selected_PAs_Indicators_Multiline_Header() %>%
       .[[indic_type]]
     wb_PA_Indic <-
       wb_PA_Indic %>%

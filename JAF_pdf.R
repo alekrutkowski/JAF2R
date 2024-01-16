@@ -34,10 +34,10 @@ JAF_SCORES_for_Main_Indicators <-
                                 setorder(Main_Indicators_order) %>% 
                                 .$Indicator)] %>% 
       .[, c('time','flags_','reference_time','Flag','name') := NULL] %>% 
-      .[, max. := max(score), by=JAF_KEY] %>% 
-      .[, min. := min(score), by=JAF_KEY] %>% 
-      .[, p25 := quantile(score,.25), by=JAF_KEY] %>% 
-      .[, p75 := quantile(score,.75), by=JAF_KEY]
+      .[, max. := max(score,na.rm=TRUE), by=JAF_KEY] %>% 
+      .[, min. := min(score,na.rm=TRUE), by=JAF_KEY] %>% 
+      .[, p25 := quantile(score,.25,na.rm=TRUE), by=JAF_KEY] %>% 
+      .[, p75 := quantile(score,.75,na.rm=TRUE), by=JAF_KEY]
   )}
 
 mainIndicCountryChart <- function(geo_code, level_or_change) {

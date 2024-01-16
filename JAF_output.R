@@ -391,6 +391,7 @@ JAF_SCORES <-
   setorder(JAF_KEY,geo,time) %>% 
   parseJAF_KEY() %>% 
   merge(QuantAssessmentDescriptions,
+        all.x=TRUE, # needed to keep those indics for which change is not calculated
         by=c('score_category_latest_value','score_category_change')) %>% 
   merge(EU_Members_geo_names,
         by='geo') %>% 

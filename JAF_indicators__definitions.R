@@ -8240,7 +8240,7 @@ inside(JAF_INDICATORS, indicator_named = "PA11.S20.") =
   specification(
     name = "Material and social deprivation rate - total",
     unit_of_level = "% (of total popn)",
-    indicator_groups = "SUBINDICATOR COMPENDIUM COUNTRY",
+    indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
     source = "Eurostat, EU Statistics on Income and Living Conditions",
     high_is_good = FALSE,
     value = fromEurostatDataset("ilc_mdsd07",
@@ -8251,7 +8251,7 @@ inside(JAF_INDICATORS, indicator_named = "PA11a.S20.") =
   specification(
     name = "Material and social deprivation rate (0-17)",
     unit_of_level = "NA",
-    indicator_groups = "SUBINDICATOR COMPENDIUM COUNTRY",
+    indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
     source = "Eurostat, EU Statistics on Income and Living Conditions",
     high_is_good = FALSE,
     value = fromEurostatDataset("ilc_mdsd07",
@@ -8262,7 +8262,7 @@ inside(JAF_INDICATORS, indicator_named = "PA11b.S12.M") =
   specification(
     name = "Material and Social Deprivation rate (18-64) - men",
     unit_of_level = "NA",
-    indicator_groups = "SUBINDICATOR COMPENDIUM COUNTRY",
+    indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
     source = "Eurostat, EU Statistics on Income and Living Conditions",
     high_is_good = FALSE,
     value = fromEurostatDataset("ilc_mdsd07",
@@ -8273,7 +8273,7 @@ inside(JAF_INDICATORS, indicator_named = "PA11c.S20.") =
   specification(
     name = "Material and social deprivation rate (65+)",
     unit_of_level = "NA",
-    indicator_groups = "SUBINDICATOR COMPENDIUM COUNTRY",
+    indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
     source = "Eurostat, EU Statistics on Income and Living Conditions",
     high_is_good = FALSE,
     value = fromEurostatDataset("ilc_mdsd07",
@@ -8296,7 +8296,7 @@ inside(JAF_INDICATORS, indicator_named = "PA11f1.O1.") =
   specification(
     name = "At-risk-of poverty or social exclusion rate for people with disabilities  - total",
     unit_of_level = "NA",
-    indicator_groups = "OVERALL COMPENDIUM COUNTRY",
+    indicator_groups = "OVERALL COMPENDIUM 8 COUNTRY",
     source = "Eurostat, EU Statistics on Income and Living Conditions",
     high_is_good = FALSE,
     value = fromEurostatDataset("HLTH_DPE010",
@@ -8307,7 +8307,7 @@ inside(JAF_INDICATORS, indicator_named = "PA11f1.S1.") =
   specification(
     name = "At-risk-of poverty rate (60% of median income) for people with disabilities - total",
     unit_of_level = "NA",
-    indicator_groups = "SUBINDICATOR COMPENDIUM COUNTRY",
+    indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
     source = "Eurostat, EU Statistics on Income and Living Conditions",
     high_is_good = FALSE,
     value = fromEurostatDataset("HLTH_DPE020",
@@ -8318,7 +8318,7 @@ inside(JAF_INDICATORS, indicator_named = "PA11f2.O1.") =
   specification(
     name = "At-risk-of poverty or social exclusion for migrants  - total aged 18 and over",
     unit_of_level = "NA",
-    indicator_groups = "OVERALL COMPENDIUM COUNTRY",
+    indicator_groups = "OVERALL COMPENDIUM 8 COUNTRY",
     source = "Eurostat, EU Statistics on Income and Living Conditions",
     high_is_good = FALSE,
     value = fromEurostatDataset("ILC_PEPS06N",
@@ -8329,7 +8329,7 @@ inside(JAF_INDICATORS, indicator_named = "PA11f2.S1.") =
   specification(
     name = "At-risk-of poverty rate (60% of median income) for migrants - total aged 18 and over",
     unit_of_level = "NA",
-    indicator_groups = "SUBINDICATOR COMPENDIUM COUNTRY",
+    indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
     source = "Eurostat, EU Statistics on Income and Living Conditions",
     high_is_good = FALSE,
     value = fromEurostatDataset("ILC_LI32",
@@ -8340,7 +8340,7 @@ inside(JAF_INDICATORS, indicator_named = "PA11f3.O1.") =
   specification(
     name = "At-risk-of poverty or social exclusion for low-skilled people  - total",
     unit_of_level = "NA",
-    indicator_groups = "OVERALL COMPENDIUM COUNTRY",
+    indicator_groups = "OVERALL COMPENDIUM 8 COUNTRY",
     source = "Eurostat, EU Statistics on Income and Living Conditions",
     high_is_good = FALSE,
     value = fromEurostatDataset("ILC_PEPS04N",
@@ -8351,18 +8351,18 @@ inside(JAF_INDICATORS, indicator_named = "PA11f3.S1.") =
   specification(
     name = "At-risk-of poverty rate (60% of median income) for low-skilled people - total",
     unit_of_level = "NA",
-    indicator_groups = "SUBINDICATOR COMPENDIUM COUNTRY",
+    indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
     source = "Eurostat, EU Statistics on Income and Living Conditions",
     high_is_good = FALSE,
     value = fromEurostatDataset("ILC_LI07",
-                                with_filters(sex="T", unit="PC", isced11="ED0-2", age="Y_GE18"))
+                                with_filters(sex="T", unit="PC", isced11="ED0-2", age="Y_GE18", indic_il="LI_R_MD60"))
   )
 
 inside(JAF_INDICATORS, indicator_named = "PA11f4.O1.") = 
   specification(
     name = "At-risk-of poverty rate (60% of median income) for people living in (quasi-)jobless households - total",
     unit_of_level = "NA",
-    indicator_groups = "SUBINDICATOR COMPENDIUM COUNTRY",
+    indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
     source = "Eurostat, EU Statistics on Income and Living Conditions",
     high_is_good = FALSE,
     value = fromEurostatDataset("ILC_LI06",
@@ -8373,7 +8373,7 @@ inside(JAF_INDICATORS, indicator_named = "PA11f5.O1.") =
   specification(
     name = "At-risk-of poverty or social exclusion for young people (18- 24) - total",
     unit_of_level = "NA",
-    indicator_groups = "OVERALL COMPENDIUM COUNTRY",
+    indicator_groups = "OVERALL COMPENDIUM 8 COUNTRY",
     source = "Eurostat, EU Statistics on Income and Living Conditions",
     high_is_good = FALSE,
     value = fromEurostatDataset("ilc_peps01n",

@@ -116,7 +116,7 @@ retry <- function(expr, timeout=6, interval=2) {
     Sys.sleep(interval)
     message('Re-trying...')
   }
-  result
+  if (isError(result)) stop(result) else result
 }
 
 is.string.scalar <- function(x)
@@ -269,7 +269,7 @@ fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0
            ifelse(time_period!=0L,
                   paste0(', time_period = ',time_period,')\n'),
                   ")\n"))
-  `if`(EurostatDatasetCode %not in% c(memoised_importDataList()$Code,
+  `if`(tolower(EurostatDatasetCode) %not in% c(memoised_importDataList()$Code,
                                       # The datasets below are for some reason absent in
                                       # https://ec.europa.eu/eurostat/api/dissemination/catalogue/toc/txt?lang=EN
                                       'lfsa_ergaed','lfsa_ergan','lfsa_urgaed',
@@ -281,7 +281,7 @@ fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0
   tryCatch(memoised_importData(EurostatDatasetCode,
                                c(with_filters)),
            error = function(e) e) %>% 
-    `if`(grepl('HTTP error 400',.),
+    `if`(isError(.) && grepl('HTTP error 400',.),
          stop('\nIn',
               cmd_line,
               '\n`with_filters()` contains invalid filter name(s):\n',
