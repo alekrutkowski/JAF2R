@@ -31,10 +31,11 @@ paCountryData <- function(pa_code)
           strwrap(45) %>% 
           paste(collapse='\n'), by=.(geo,JAF_KEY)] %>% 
       .[, c('time','flags_','reference_time','Flag','name') := NULL] %>% 
-      .[, max. := max(score,na.rm=TRUE), by=JAF_KEY] %>% 
-      .[, min. := min(score,na.rm=TRUE), by=JAF_KEY] %>% 
-      .[, p25 := quantile(score,.25,na.rm=TRUE), by=JAF_KEY] %>% 
-      .[, p75 := quantile(score,.75,na.rm=TRUE), by=JAF_KEY]
+      .[!is.na(score)] %>% 
+      .[, max. := max(score), by=JAF_KEY] %>% 
+      .[, min. := min(score), by=JAF_KEY] %>% 
+      .[, p25 := quantile(score,.25), by=JAF_KEY] %>% 
+      .[, p75 := quantile(score,.75), by=JAF_KEY]
   )}
 
 memo_paCountryData <- memoise::memoise(paCountryData)
@@ -86,12 +87,20 @@ paCountryChart <- function(pa_code, geo_code, level_or_change) {
   list(nrows=nrow(dta), chart=chart)
 }
 
-extendedScale <- function(vals., fun.) {
+extendedScale <- function(vals., fun., id) {
   range. <- max(vals.,na.rm=TRUE) - min(vals.,na.rm=TRUE)
   op. <- ifelse(fun.=='max',`+`,`-`)
   get(fun.)(vals.,na.rm=TRUE) %>% 
-    op.(0.1*range.)
+    op.(ifelse(as.logical(id%%2), # alternating pattern
+               0.1,
+               ifelse(max(id)>20,0.3,0.2))*
+          range.)
 }
+
+standardiseFontSize <- function(default_size, lower_bound, higher_bound, denominator)
+  round(default_size*default_size/denominator) %>% 
+  max(lower_bound) %>% 
+  min(higher_bound)
 
 paCountryMSOfficeChart <- function(pa_code, geo_code, level_or_change) {
   dta <-
@@ -100,17 +109,21 @@ paCountryMSOfficeChart <- function(pa_code, geo_code, level_or_change) {
     .[geo==geo_code] %>%
     .[, c('pos_score','neg_score') := list(ifelse(score>=0,score,NA_real_),
                                            ifelse(score<0,score,NA_real_))] %>% 
+    .[, num_of_indics := length(unique(Indicator))] %>% 
     .[, Indicator :=
         Indicator %>% 
         gsub('\n',' ',.,fixed=TRUE) %>% 
-        strwrap(15) %>% 
+        strwrap(ifelse(num_of_indics>20,10,15)) %>% 
         paste(collapse="\n")
       , by=Indicator] %>% 
     .[, id := as.factor(Indicator) %>% as.integer()] %>% 
     .[, ind_pos := 0] %>% 
     melt(id.vars=c('id','Indicator'),
          measure=c('max.','min.','p25','p75','pos_score','neg_score','ind_pos')) %>% 
-    .[, value := ifelse(variable=='ind_pos',extendedScale(value,'min'),value)] %>% 
+    .[, value := 
+        value %>% 
+        # ifelse(is.infinite(.),NA_real_,.) %>% # due to earlier calculations of max. or min. when all NAs (with na.rm=TRUE)
+        ifelse(variable=='ind_pos',extendedScale(.,'min',id),.)] %>% 
     .[, value. := 
         kit::nif(grepl('score',variable),
                  value %>% 
@@ -119,7 +132,11 @@ paCountryMSOfficeChart <- function(pa_code, geo_code, level_or_change) {
                    paste0('           ',.),
                  variable=='ind_pos',
                  Indicator,
-                 default="")]
+                 default="")] # %>% 
+  # .[id %not in% # where original score is missing, e.g. no change calculated:
+  #     intersect(.[is.na(value) & variable=='pos_score',id],
+  #               .[is.na(value) & variable=='neg_score',id])] # %>% 
+  # .[,id := frank(id,ties.method='dense')]
   chart <-
     if (nrow(dta)>0)
       ms_scatterchart(dta, x="id", y="value", group="variable", labels="value.") %>%
@@ -141,9 +158,14 @@ paCountryMSOfficeChart <- function(pa_code, geo_code, level_or_change) {
                       c(min.=20, max.=20,
                         p25=16, p75=16,
                         neg_score=12, pos_score=12)) %>% 
-    chart_labels_text(list(ind_pos=fp_text(font.size=8, shading.color='white',bol=TRUE),
-                           pos_score=fp_text(color="#b6d4f2",font.size=14, bold=TRUE),
-                           neg_score=fp_text(color="red",font.size=14, bold=TRUE))) %>% 
+    chart_labels_text(list(ind_pos=fp_text(font.size=standardiseFontSize(10,5,10,length(unique(dta$id))),
+                                           shading.color='white',bold=TRUE),
+                           pos_score=fp_text(color="#b6d4f2",
+                                             font.size=standardiseFontSize(14,6,14,length(unique(dta$id))),
+                                             bold=TRUE),
+                           neg_score=fp_text(color="red",
+                                             font.size=standardiseFontSize(14,6,14,length(unique(dta$id))),
+                                             bold=TRUE))) %>% 
     chart_ax_x(display=FALSE,
                limit_min=0,
                limit_max=max(dta$id)+1) %>% 
@@ -170,7 +192,7 @@ for (geo_code in EU_Members_geo_codes) {
   message('Starting ',geo_code,'...')
   for (pa_code in names(Selected_PAs_Codes)) {
     cat(paste0(" ",pa_code,': '))
-    for (indic_type in c('change','latest_value')) {
+    for (indic_type in c('latest_value','change')) {
       Indic_Type <-
         ifelse(indic_type=='change','changes','levels')
       cat(Indic_Type,"")
@@ -179,7 +201,7 @@ for (geo_code in EU_Members_geo_codes) {
           ggsave(paste0(OUTPUT_FOLDER,'/Country Profiles/',geo_code,'/',
                         pa_code,'_',Indic_Type,'_',geo_code,'.png'),
                  .$chart, bg="white",
-                 width=1000, height=900*(.$nrows/8)+150, units='px', dpi=120) else cat('skipping')}
+                 width=1000, height=900*(.$nrows/8)+150, units='px', dpi=120) else cat('<-skipped ')}
     }
   }
   message()
@@ -189,10 +211,10 @@ message('All PNG files have been saved.')
 # The following product used to be a huge Excel file with embedded png charts (a worksheet per country).
 # Now it is a PowerPoint slide deck for each country with native Office charts.
 message('\nPreparing Country_profile PowerPoint files...')
-pptx0 <-
-  read_pptx("Blank_16x9.pptx") # 16:9 proportion and Arial
-for (geo_code in EU_Members_geo_codes) {
+for (geo_code in EU_Members_geo_codes                 %>% .[.=='BE']) {
   message('Starting ',geo_code,'...')
+  pptx0 <- # needed here, not outside the first loop, because ph_... functions appear to modify contents in place
+    read_pptx("Blank_16x9.pptx") # 16:9 proportion and Arial
   pptx <-
     pptx0 %>%
     ph_with(value=paste0('JAF charts for ',
@@ -200,9 +222,9 @@ for (geo_code in EU_Members_geo_codes) {
             location=ph_location_type(type="ctrTitle")) %>%
     ph_with(value=paste0('European Commission, DG EMPL\n',Sys.Date()),
             location=ph_location_type(type="subTitle"))
-  for (pa_code in names(Selected_PAs_Codes)) {
+  for (pa_code in names(Selected_PAs_Codes)         %>% .[. %in% c('PA3','PA4.1','PA4.2','PA6a','PA6b','PA8.1','PA9.2')]) {
     cat(paste0(" ",pa_code,': '))
-    for (indic_type in c('change','latest_value')) {
+    for (indic_type in c('latest_value','change')) {
       cat(ifelse(indic_type=='change','changes','levels'),"")
       chart <-
         paCountryMSOfficeChart(pa_code, geo_code, indic_type)
@@ -211,10 +233,10 @@ for (geo_code in EU_Members_geo_codes) {
         pptx %>%
         add_slide() %>%
         ph_with(chart,
-                ph_location_fullsize()) else cat('skipping')
+                ph_location_fullsize()) else cat('<-skipped ')
     }
   }
-  message('Saving...')
+  message('\nSaving...')
   print(pptx,
         target=paste0(OUTPUT_FOLDER,'/Country Profiles/Country_profile_',
                       geo_code,'.pptx'))
