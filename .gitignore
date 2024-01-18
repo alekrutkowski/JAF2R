@@ -3,7 +3,7 @@
 .RData
 .Ruserdata
 IESS*.csv
-JAF output*/
+*JAF output*/
 JAF output*.zip
 Form for JAF indicator modifications *.xlsx
 JAF_mini_catalogue_*.csv

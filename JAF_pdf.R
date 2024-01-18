@@ -34,10 +34,11 @@ JAF_SCORES_for_Main_Indicators <-
                                 setorder(Main_Indicators_order) %>% 
                                 .$Indicator)] %>% 
       .[, c('time','flags_','reference_time','Flag','name') := NULL] %>% 
-      .[, max. := max(score,na.rm=TRUE), by=JAF_KEY] %>% 
-      .[, min. := min(score,na.rm=TRUE), by=JAF_KEY] %>% 
-      .[, p25 := quantile(score,.25,na.rm=TRUE), by=JAF_KEY] %>% 
-      .[, p75 := quantile(score,.75,na.rm=TRUE), by=JAF_KEY]
+      .[!is.na(score)] %>% 
+      .[, max. := max(score), by=JAF_KEY] %>% 
+      .[, min. := min(score), by=JAF_KEY] %>% 
+      .[, p25 := quantile(score,.25), by=JAF_KEY] %>% 
+      .[, p75 := quantile(score,.75), by=JAF_KEY]
   )}
 
 mainIndicCountryChart <- function(geo_code, level_or_change) {
@@ -153,7 +154,7 @@ message('\nCreating Main Indicators / Country charts (PNG files)...')
 createFolder(paste0(OUTPUT_FOLDER,'/Main/charts'))
 for (geo_code in EU_Members_geo_codes) {
   cat(paste0("  ",geo_code,': '))
-  for (indic_type in c('change','latest_value')) {
+  for (indic_type in c('latest_value','change')) {
     Indic_Type <-
       ifelse(indic_type=='change','changes','levels')
     cat(Indic_Type,"")
@@ -164,7 +165,7 @@ for (geo_code in EU_Members_geo_codes) {
               width=1300, height=410*(.$nrows/8)+20, units='px', dpi=120)}
   }
 }
-message('All PNG files have been saved.')
+message('\nAll PNG files have been saved.')
 
 # /pdf/Main.pdf
 message('\nProducing PDF file with charts for Main Indicators...')

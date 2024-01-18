@@ -30,5 +30,6 @@ source('JAF_Country_Profiles.R')
 
 source('JAF_pdf.R')
 
+message('\nAll JAF scripts finished.')
 
 # Dev env: {source("H:/JAF_functions.R"); source('H:/JAF_output.R'); source('H:/JAF_KEC.R'); source('H:/JAF_Compendium.R'); source('H:/JAF_Country_Compendium.R'); source('H:/JAF_Main_Indicators.R'); source('H:/JAF_PAs.R'); source('H:/JAF_Country_Profiles.R')}

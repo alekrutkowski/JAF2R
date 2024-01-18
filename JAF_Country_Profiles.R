@@ -48,42 +48,49 @@ paCountryChart <- function(pa_code, geo_code, level_or_change) {
     .[, fill. := ifelse(score[geo==geo_code]>=0,'white','red'), by=JAF_KEY] %>% 
     .[, hjust. := ifelse(score[geo==geo_code]>=0,-.3,1.3), by=JAF_KEY]
   chart <-
-    if (nrow(dta[!is.na(score)])>0)
-      dta %>% {
-        ggplot2::ggplot(., aes(x = Indicator, y = 0)) +
-          geom_crossbar(aes(ymin=min., ymax=max.),
-                        width = 0.8, fill = "grey90", linetype=0) +
-          geom_crossbar(aes(ymin = p25, ymax = p75),
-                        width = 0.65, fill = "grey75", linetype=0) +
-          geom_crossbar(aes(ymin=0, ymax=score),
-                        width=0.4, fill=.$fill., linetype=0) +
-          geom_text(aes(label = score %>% 
-                          sprintf('%01.1f',.) %>% sub('-','\u2212',.,fixed=TRUE),
-                        y=score),
-                    hjust=.$hjust.) +
-          theme_minimal() +
-          expand_limits(y = .$score %>%
-                          {1.1*c(min(.,na.rm=TRUE),max(.,na.rm=TRUE))}) + # to avoid truncating the labels
-          scale_y_continuous(labels=\(x) sub('-','\u2212',x),
-                             sec.axis = dup_axis()) +
-          theme(axis.title.x=element_blank(),
-                axis.title.y=element_blank(),
-                axis.text.x=element_text(color="black"),
-                axis.text.y=element_text(color="black"),
-                text = element_text(size=13) # ,
-                # aspect.ratio=length(.$JAF_KEY)/8
-          ) +
-          geom_hline(aes(yintercept = 0)) +
-          coord_flip() +
-          ggtitle(EU_Members_geo_names[geo==geo_code,geo_labels],
-                  subtitle =
-                    paste0('[',pa_code,'] ',
-                           PolicyAreaLabels[paste0('PA',PolicyArea)==pa_code,`POLICY AREA`],
-                           '\u00A0\u00A0\u25AA\u00A0\u00A0',
-                           ifelse(level_or_change=='change','CHANGES','LEVELS')  
-                    ) %>% strwrap(50) %>% paste(collapse='\n')
-          )
-      }
+    if (nrow(dta)>0)
+      copy(dta) %>%
+    .[, Indicator :=
+        factor(Indicator,
+               levels=unique(.[,.(JAF_KEY,Indicator)]) %>% 
+                 order_by_JAF_KEY() %>% 
+                 .$Indicator %>% 
+                 rev())] %>% # rev() needed to have indicators sorted from the top down
+    {
+      ggplot2::ggplot(., aes(x = Indicator, y = 0)) +
+        geom_crossbar(aes(ymin=min., ymax=max.),
+                      width = 0.8, fill = "grey90", linetype=0) +
+        geom_crossbar(aes(ymin = p25, ymax = p75),
+                      width = 0.65, fill = "grey75", linetype=0) +
+        geom_crossbar(aes(ymin=0, ymax=score),
+                      width=0.4, fill=.$fill., linetype=0) +
+        geom_text(aes(label = score %>% 
+                        sprintf('%01.1f',.) %>% sub('-','\u2212',.,fixed=TRUE),
+                      y=score),
+                  hjust=.$hjust.) +
+        theme_minimal() +
+        expand_limits(y = .$score %>%
+                        {1.1*c(min(.,na.rm=TRUE),max(.,na.rm=TRUE))}) + # to avoid truncating the labels
+        scale_y_continuous(labels=\(x) sub('-','\u2212',x),
+                           sec.axis = dup_axis()) +
+        theme(axis.title.x=element_blank(),
+              axis.title.y=element_blank(),
+              axis.text.x=element_text(color="black"),
+              axis.text.y=element_text(color="black"),
+              text = element_text(size=13) # ,
+              # aspect.ratio=length(.$JAF_KEY)/8
+        ) +
+        geom_hline(aes(yintercept = 0)) +
+        coord_flip() +
+        ggtitle(EU_Members_geo_names[geo==geo_code,geo_labels],
+                subtitle =
+                  paste0('[',pa_code,'] ',
+                         PolicyAreaLabels[paste0('PA',PolicyArea)==pa_code,`POLICY AREA`],
+                         '\u00A0\u00A0\u25AA\u00A0\u00A0',
+                         ifelse(level_or_change=='change','CHANGES','LEVELS')  
+                  ) %>% strwrap(50) %>% paste(collapse='\n')
+        )
+    }
   list(nrows=nrow(dta), chart=chart)
 }
 
@@ -102,43 +109,55 @@ standardiseFontSize <- function(default_size, lower_bound, higher_bound, denomin
   max(lower_bound) %>% 
   min(higher_bound)
 
+dbg.tmp <- NULL
+
+# try__order_by_JAF_KEY <- function(dt)
+#   tryCatch(order_by_JAF_KEY(dt),
+#            error = function(e) {message(""); str(dt); dbg.tmp <<- dt; stop(e)})
+
 paCountryMSOfficeChart <- function(pa_code, geo_code, level_or_change) {
   dta <-
     memo_paCountryData(pa_code) %>% 
     .[[level_or_change]] %>% 
     .[geo==geo_code] %>%
-    .[, c('pos_score','neg_score') := list(ifelse(score>=0,score,NA_real_),
-                                           ifelse(score<0,score,NA_real_))] %>% 
-    .[, num_of_indics := length(unique(Indicator))] %>% 
-    .[, Indicator :=
-        Indicator %>% 
-        gsub('\n',' ',.,fixed=TRUE) %>% 
-        strwrap(ifelse(num_of_indics>20,10,15)) %>% 
-        paste(collapse="\n")
-      , by=Indicator] %>% 
-    .[, id := as.factor(Indicator) %>% as.integer()] %>% 
-    .[, ind_pos := 0] %>% 
-    melt(id.vars=c('id','Indicator'),
-         measure=c('max.','min.','p25','p75','pos_score','neg_score','ind_pos')) %>% 
-    .[, value := 
-        value %>% 
-        # ifelse(is.infinite(.),NA_real_,.) %>% # due to earlier calculations of max. or min. when all NAs (with na.rm=TRUE)
-        ifelse(variable=='ind_pos',extendedScale(.,'min',id),.)] %>% 
-    .[, value. := 
-        kit::nif(grepl('score',variable),
-                 value %>% 
-                   sprintf("%01.1f",.) %>% 
-                   sub('-','\u2212',.,fixed=TRUE) %>% 
-                   paste0('           ',.),
-                 variable=='ind_pos',
-                 Indicator,
-                 default="")] # %>% 
+    {`if`(nrow(.>0),
+          .[, c('pos_score','neg_score') := list(ifelse(score>=0,score,NA_real_),
+                                                 ifelse(score<0,score,NA_real_))] %>% 
+            .[, num_of_indics := length(unique(Indicator))] %>% 
+            .[, Indicator :=
+                Indicator %>% 
+                gsub('\n',' ',.,fixed=TRUE) %>% 
+                strwrap(ifelse(num_of_indics>20,10,15)) %>% 
+                paste(collapse="\n")
+              , by=Indicator] %>% 
+            .[, id := 
+                factor(Indicator,
+                       levels=unique(.[,.(JAF_KEY,Indicator)]) %>% 
+                         order_by_JAF_KEY() %>% 
+                         .$Indicator) %>%
+                as.integer()] %>% 
+            .[, ind_pos := 0] %>% 
+            melt(id.vars=c('id','Indicator'),
+                 measure=c('max.','min.','p25','p75','pos_score','neg_score','ind_pos')) %>% 
+            .[, value := 
+                value %>% 
+                # ifelse(is.infinite(.),NA_real_,.) %>% # due to earlier calculations of max. or min. when all NAs (with na.rm=TRUE)
+                ifelse(variable=='ind_pos',extendedScale(.,'min',id),.)] %>% 
+            .[, value. := 
+                kit::nif(grepl('score',variable),
+                         value %>% 
+                           sprintf("%01.1f",.) %>% 
+                           sub('-','\u2212',.,fixed=TRUE) %>% 
+                           paste0('           ',.),
+                         variable=='ind_pos',
+                         Indicator,
+                         default="")])} # %>% 
   # .[id %not in% # where original score is missing, e.g. no change calculated:
   #     intersect(.[is.na(value) & variable=='pos_score',id],
   #               .[is.na(value) & variable=='neg_score',id])] # %>% 
   # .[,id := frank(id,ties.method='dense')]
   chart <-
-    if (nrow(dta)>0)
+    if (!is.null(dta))
       ms_scatterchart(dta, x="id", y="value", group="variable", labels="value.") %>%
     chart_data_labels(position='b') %>% 
     chart_data_fill(values = 
@@ -159,6 +178,7 @@ paCountryMSOfficeChart <- function(pa_code, geo_code, level_or_change) {
                         p25=16, p75=16,
                         neg_score=12, pos_score=12)) %>% 
     chart_labels_text(list(ind_pos=fp_text(font.size=standardiseFontSize(10,5,10,length(unique(dta$id))),
+                                           font.family='Arial Narrow',
                                            shading.color='white',bold=TRUE),
                            pos_score=fp_text(color="#b6d4f2",
                                              font.size=standardiseFontSize(14,6,14,length(unique(dta$id))),
@@ -211,7 +231,7 @@ message('All PNG files have been saved.')
 # The following product used to be a huge Excel file with embedded png charts (a worksheet per country).
 # Now it is a PowerPoint slide deck for each country with native Office charts.
 message('\nPreparing Country_profile PowerPoint files...')
-for (geo_code in EU_Members_geo_codes                 %>% .[.=='BE']) {
+for (geo_code in EU_Members_geo_codes) {
   message('Starting ',geo_code,'...')
   pptx0 <- # needed here, not outside the first loop, because ph_... functions appear to modify contents in place
     read_pptx("Blank_16x9.pptx") # 16:9 proportion and Arial
@@ -222,7 +242,7 @@ for (geo_code in EU_Members_geo_codes                 %>% .[.=='BE']) {
             location=ph_location_type(type="ctrTitle")) %>%
     ph_with(value=paste0('European Commission, DG EMPL\n',Sys.Date()),
             location=ph_location_type(type="subTitle"))
-  for (pa_code in names(Selected_PAs_Codes)         %>% .[. %in% c('PA3','PA4.1','PA4.2','PA6a','PA6b','PA8.1','PA9.2')]) {
+  for (pa_code in names(Selected_PAs_Codes)) {
     cat(paste0(" ",pa_code,': '))
     for (indic_type in c('latest_value','change')) {
       cat(ifelse(indic_type=='change','changes','levels'),"")
