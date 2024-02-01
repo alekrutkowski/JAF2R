@@ -168,7 +168,7 @@ toJSON. <- function(x, filename)
 
 `JAF_KEY->PA_string` <- function(JAF_KEY)
   sub("PA(.*?)\\.(C|O|S).*",'\\1',JAF_KEY) # e.g. PA11c.S1.T -> 11c ; PA7.2.S2.F -> 7.2
-  
+
 `JAF_KEY->C_O_S_part` <- function(JAF_KEY)
   sub("PA(.*?)\\.(C|O|S)(.+?)\\..*",'\\2\\3',JAF_KEY) # e.g. PA11c.S1.T -> S1 ; PA1.O1. -> O1
 
@@ -295,7 +295,8 @@ JAF_GRAND_TABLE <-
   JAF_INDICATORS %>% 
   names() %>% 
   lapply(function(x)
-    JAF_INDICATORS[[x]]$value %>% 
+    if (grepl('_health$',x)) data.table() else # drop JAF-health indicators
+      JAF_INDICATORS[[x]]$value %>% 
       .[, JAF_KEY:=x] %>% 
       .[, high_is_good := JAF_INDICATORS[[x]]$high_is_good] %>% 
       setcolorder(c('JAF_KEY','high_is_good'))
