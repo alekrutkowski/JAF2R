@@ -62,24 +62,40 @@ processCatalog <- function(catalog_dt, comment="")
   catalog_dt %>% 
   .[,lapply(.SD,as.character)] %>% 
   .[, c(id_cols,NumberedCatalogColumnNames), with=FALSE] %>%  
-  {`if`(comment=="",
-        .[!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl(table_names_without_cond_or_factor,table)] %T>% 
-          {message(Number_of_defined_indics_message <<- paste(nrow(.)+Number_of_redefined_commented_out_indics_in_Codelines,'defined indicators.'))},
-        .[!(!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl(table_names_without_cond_or_factor,table))] %T>% 
-          {message(Number_of_undefined_indics_message <<- paste(nrow(.)-Number_of_redefined_commented_out_indics_in_Codelines,'mis-defined indicators.'))
-            Undefined_indics <<- unique(.$JAF_KEY)})} %>% 
+  # {`if`(comment=="",
+  #       .[!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl(table_names_without_cond_or_factor,table)] %T>% 
+  #         {message(Number_of_defined_indics_message <<- paste(nrow(.)+Number_of_redefined_commented_out_indics_in_Codelines,'defined indicators.'))},
+  #       .[!(!is.na(table) & (!is.na(cond1) | !is.na(formula)) | grepl(table_names_without_cond_or_factor,table))] %T>% 
+  #         {message(Number_of_undefined_indics_message <<- paste(nrow(.)-Number_of_redefined_commented_out_indics_in_Codelines,'mis-defined indicators.'))
+  #           Undefined_indics <<- unique(.$JAF_KEY)})} %>% 
   melt(measure.vars=NumberedCatalogColumnNames,
        variable.name="factor_or_cond",
        value.name="definitions",
        variable.factor=FALSE,
-       na.rm=FALSE) %>%     
-  `if`(comment=="",
-       .[!is.na(definitions) | grepl(table_names_without_cond_or_factor,table)] %>% 
-         .[grepl(table_names_without_cond_or_factor,table) & factor_or_cond=='cond1' | !grepl(table_names_without_cond_or_factor,table)],
-       .) %>% 
-  `if`(comment!="",
-       .[!is.na(definitions) | factor_or_cond=='cond1'],
-       .) %>% 
+       na.rm=FALSE) %>%   #  
+  .[!( grepl('cond',factor_or_cond) & !is.na(formula) & is.na(table) | # drop conds for formulas -- irrelevant
+         grepl('factor',factor_or_cond) & is.na(formula) & !is.na(table)  )] %>%  # drop factors for non-formula -- irrelevant
+  {`if`(comment=="", 
+        # good ones:
+        .[grepl(table_names_without_cond_or_factor, table) |
+            !grepl(table_names_without_cond_or_factor, table) & 
+            !is.na(table)  & grepl('cond',factor_or_cond) & !is.na(definitions) |
+            !is.na(formula) & grepl('factor',factor_or_cond) & !is.na(definitions)],
+        # bad ones:
+        {
+          bad_dt <-
+            .[.SD[,grepl('cond',factor_or_cond) & (is.na(table) | all(is.na(definitions)) & !grepl(table_names_without_cond_or_factor, table)) |
+                    grepl('factor',factor_or_cond) & (is.na(formula) | all(is.na(definitions)))
+                  ,by=JAF_KEY][[2]]]
+          if (ncol(bad_dt)==0)
+            .[(FALSE)] else bad_dt
+        })} %>% 
+  # `if`(comment!="", # bad ones
+  #      .[is.na(definitions) & factor_or_cond=='cond1'],
+  #      .) %>% 
+  .[, definitions := sub('age class','age',definitions,fixed=TRUE)] %>% 
+  .[, table := trimws(table)] %>% 
+  .[, UNITLONG := UNITLONG %>% ifelse(is.na(.),"",.)] %>% 
   .[, sep :=
       factor_or_cond %>% 
       sub("(\\D+)(\\d{1}$)", "\\10\\2", .) %>% # add leading zeros e.g. factor5 => factor05 for correct sort/max
@@ -97,11 +113,13 @@ processCatalog <- function(catalog_dt, comment="")
                numToLetter() %>% 
                paste(comment,.,'=',
                      parseFactor(definitions, comment)))] %>% 
-  .[, definitions := paste0(definitions,sep)]  %>%     
+  .[, definitions := paste0(definitions,sep)] %>%     
   .[, .(definitions =
           definitions %>% 
           paste(collapse="")),
     by=id_cols] %>% 
+  .[, table := table %>% ifelse(is.na(.),"",.)] %>% # needed, otherwise ifelse below transforms definitions to NA
+  .[, ] %>% 
   .[, definitions := definitions %>% 
       ifelse(table=='ilc_lvhl11n',
              sub('unit="PC_Y_LT65"','unit="PC"',.,fixed=TRUE),
@@ -110,6 +128,13 @@ processCatalog <- function(catalog_dt, comment="")
       ifelse(table=='ilc_caindformal',
              sub('age="CSA-Y12"','age="CSA1-Y12"',.,fixed=TRUE),
              .)] %>% 
+  .[, definitions := definitions %>% 
+      ifelse(table=='ILC_PNP13',
+             sub('unit="Average"','unit="AVG"',.,fixed=TRUE),
+             .)] %>% 
+  .[, definitions := definitions %>% gsub('ISCED=',"isced11=",.,fixed=TRUE)] %>% 
+  .[, definitions := definitions %>% gsub('unit="YEAR"','unit="YR"',.,fixed=TRUE)] %>% 
+  .[, definitions := definitions %>% gsub('isced11="ED3-4"','isced11="ED3_4"',.,fixed=TRUE)] %>% 
   .[, func :=
       SOURCE %>% 
       {kit::nif(grepl('^lfse_',table) & !grepl('^edat_lfse_',table), 'fromLFSspecialFile',
@@ -119,7 +144,8 @@ processCatalog <- function(catalog_dt, comment="")
                   .=='DG CONNECT' |
                   table %in% c('earn_nt_unemtrp','earn_nt_taxwedge','ilc_mdsd07',
                                'hlth_hlye','hlth_cd_acdr2','hlth_cd_apyll',
-                               'hlth_cd_apr','hlth_silc_08','demo_mlexpec') |
+                               'hlth_cd_apr','hlth_silc_08','demo_mlexpec','ILC_PNP13',
+                               'demo_mlexpecedu') |
                   grepl('tps00...',table),
                 'fromEurostatDataset',
                 grepl("^OECD, Pisa",.), 'fromEurostatDataset',
@@ -205,7 +231,7 @@ order_by_JAF_KEY <- function(dt)
           merge(dt, by='JAF_KEY') %>% 
           setorder(.ordering.) %>% 
           .[, .ordering. := NULL])}
-             
+
 
 # Actions -----------------------------------------------------------------
 
@@ -226,7 +252,7 @@ ensureNoDuplicateJAF_KEY <- function(dt)
 Catalog <-
   openxlsx2::read_xlsx(paste0(path_to_folder_with_source_definitions,
                               source_of_definitions[1]),
-                       sheet='well defined only') %>% 
+                       sheet='well defined only') %>% str
   as.data.table() %>%  
   ensureNoDuplicateJAF_KEY() %>% 
   .[,lapply(.SD,standardiseCol)] %>% 
@@ -243,11 +269,11 @@ Catalog <-
   #   # .[, JAF_KEY := paste0(JAF_KEY,'_health')],
   #   ,fill=TRUE
   # ) %>% 
-  # {message(nrow(.),' rows'); .} %>% 
-  # .[!duplicated(.[, !"catalogue", with = FALSE])] %>% # remove duplicates of identical definitions across the two catalogues
-  # {message(nrow(.),' rows'); .} %>% 
-  # .[duplicated(JAF_KEY), JAF_KEY := paste0(JAF_KEY,"_health")] %>% # only if the two catalogues had difference definitons/specifications, add a suffix
-  .[, row_num := .I] %>% 
+# {message(nrow(.),' rows'); .} %>% 
+# .[!duplicated(.[, !"catalogue", with = FALSE])] %>% # remove duplicates of identical definitions across the two catalogues
+# {message(nrow(.),' rows'); .} %>% 
+# .[duplicated(JAF_KEY), JAF_KEY := paste0(JAF_KEY,"_health")] %>% # only if the two catalogues had difference definitons/specifications, add a suffix
+.[, row_num := .I] %>% 
   .[, formula := ifelse(!is.na(table),
                         NA_character_,
                         formula)] %>% 

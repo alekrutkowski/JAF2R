@@ -5,7 +5,7 @@
 ### 619 defined indicators.
 ### 40 mis-defined indicators.
 ### Plus indicators deleted based on Paul's info at "To be DELETED..." sheet at https://eceuropaeu-my.sharepoint.com/:x:/g/personal/aleksander_rutkowski_ec_europa_eu/EagVluaFNzdHiub1LM0zpO8B_7oOnIimVbr9hTIxKsx9Fw?e=QE60IC
-### Plus indicators added based on Paul's info at "To be DELETED..." sheet at https://eceuropaeu-my.sharepoint.com/:x:/g/personal/aleksander_rutkowski_ec_europa_eu/EagVluaFNzdHiub1LM0zpO8B_7oOnIimVbr9hTIxKsx9Fw?e=QE60IC
+### Plus indicators added based on Paul's info at "To be ADDED" sheet at https://eceuropaeu-my.sharepoint.com/:x:/g/personal/aleksander_rutkowski_ec_europa_eu/EagVluaFNzdHiub1LM0zpO8B_7oOnIimVbr9hTIxKsx9Fw?e=QE60IC
 ###                                and corrected/suplemented -> "well defined only" sheet at New PA11 indicators catalogue.xlsx
 
 inside(JAF_INDICATORS, indicator_named = "PA1.O1.") = 

@@ -284,14 +284,15 @@ fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0
     `if`(isError(.) && grepl('HTTP error 400',.),
          stop('\nIn',
               cmd_line,
-              '\n`with_filters()` contains invalid filter name(s):\n',
+              '\n`with_filters()` contains invalid filter value(s) (=...) or filter name(s) (...=)\n',
               estatDatasetDimNames(EurostatDatasetCode) %>% 
                 suggestedWords(names(with_filters) %without% .,
                                .) %>% 
                 paste0('\nSee also\n',
                        'https://ec.europa.eu/eurostat/databrowser/view/',
                        EurostatDatasetCode
-                       ,'/default/table?lang=en')),
+                       ,'/default/table?lang=en'),
+              call.=FALSE),
          .) %>% 
     `if`(nrow(.)==0,
          stop(cmd_line,
