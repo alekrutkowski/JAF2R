@@ -4,11 +4,13 @@ library(rmarkdown)
 
 JAF_SCORES_for_Main_Indicators <- 
   JAF_SCORES %>% 
+  .[!grepl('CONTEXT',indicator_groups,ignore.case=TRUE)] %>% 
   .[, .(geo, JAF_KEY, name, time, flags_,
         score_latest_value, score_change,
         reference_time_latest_value, reference_time_change)] %>% 
   .[geo %in% EU_Members_geo_codes] %>% 
-  merge(Selected_Main_Indicators_Codes, by='JAF_KEY') %>% 
+  # merge(Selected_Main_Indicators_Codes, by='JAF_KEY') %>% 
+  .[JAF_KEY %in% Selected_PAs_Codes %>% unlist() %>% unique()] %>% 
   {sapply(
     c('change','latest_value'),
     simplify = FALSE,

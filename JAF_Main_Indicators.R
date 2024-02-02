@@ -3,7 +3,8 @@
 
 Selected_Main_Indicators_Codes <-
   JAF_NAMES_DESCRIPTIONS %>%
-  .[(for_Main), JAF_KEY] %>%
+  .[for_Main & !grepl('SUBINDICATOR',indicator_groups,ignore.case=TRUE),
+    JAF_KEY] %>%
   sort_JAF_KEY() %>%
   data.table(JAF_KEY=.,
              Main_Indicators_order = seq_along(.))
