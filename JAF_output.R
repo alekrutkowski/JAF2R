@@ -231,6 +231,12 @@ if (exists('DEVMODE') && DEVMODE) { # development mode -- restoring pre-calculat
     saveRDS('JAF_INDICATORS.Rds')
 }
 
+JAF_INDICATORS <-
+  JAF_INDICATORS %>% 
+  set_names(trimws(names(.))) %>% 
+  .[names(.) %>%
+      grep('_health$',.,value=TRUE,invert=TRUE)] # drop JAF-health indicators
+
 POP_WEIGHTS <-
   rbind(
     retry(memoised_importData(
@@ -293,10 +299,9 @@ JAF_KEY__reference_name <-
 message('\nPreparing JAF_GRAND_TABLE...')
 JAF_GRAND_TABLE <-
   JAF_INDICATORS %>% 
-  names() %>% 
+  names() %>%
   lapply(function(x)
-    if (grepl('_health$',x)) data.table() else # drop JAF-health indicators
-      JAF_INDICATORS[[x]]$value %>% 
+    JAF_INDICATORS[[x]]$value %>% 
       .[, JAF_KEY:=x] %>% 
       .[, high_is_good := JAF_INDICATORS[[x]]$high_is_good] %>% 
       setcolorder(c('JAF_KEY','high_is_good'))

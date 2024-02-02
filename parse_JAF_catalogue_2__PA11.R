@@ -177,7 +177,9 @@ processCatalog <- function(catalog_dt, comment="")
                     paste0(comment,'unit_of_change = ',quoteAndEscapeQuotes(UNITCHANGE),',\n'),""),
              comment,'indicator_groups = ',quoteAndEscapeQuotes(
                paste..(IFMAIN,INPUTOUTPUT,OS_CODE,IFCOMPEDIUM,
-                       ifelse(!is.na(IFCOMPEDIUM) & IFCOMPEDIUM!="",COMPENDIUMID,""),
+                       ifelse(!is.na(IFCOMPEDIUM) & IFCOMPEDIUM!="",COMPENDIUMID %>% 
+                              ifelse(is.na(.),8,.)
+                              ,""),
                        IFCOUNTRY) %>% 
                  gsub("\\s+", " ", .) %>% toupper() %>% trimws()),',\n', #new
              comment,'source = ',quoteAndEscapeQuotes(paste.( #modified
@@ -252,7 +254,7 @@ ensureNoDuplicateJAF_KEY <- function(dt)
 Catalog <-
   openxlsx2::read_xlsx(paste0(path_to_folder_with_source_definitions,
                               source_of_definitions[1]),
-                       sheet='well defined only') %>% str
+                       sheet='well defined only') %>% 
   as.data.table() %>%  
   ensureNoDuplicateJAF_KEY() %>% 
   .[,lapply(.SD,standardiseCol)] %>% 

@@ -6,7 +6,7 @@ library(officer)
 
 paCountryData <- function(pa_code)
   JAF_SCORES %>% 
-  .[!grepl('CONTEXT',indicator_groups,ignore.case=TRUE)] %>% 
+  .[!(JAF_KEY %>% `JAF_KEY->C_O_S_part` %>% grepl('C',.))] %>% 
   .[, .(geo, JAF_KEY, name, time, flags_,
         score_latest_value, score_change,
         reference_time_latest_value, reference_time_change)] %>% 

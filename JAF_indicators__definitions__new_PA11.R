@@ -1,9 +1,5 @@
 ### Compiled automatically by rutkoal
-### from `New PA11 indicators catalogue.xlsx`, worksheet `IndicatorsTable`
-### and from `NA`
-### on 2024-02-01 18:56:46.679293
-### 
-### 
+### on 2024-02-02 16:52:53
 
 inside(JAF_INDICATORS, indicator_named = "PA11.S20.") = 
 specification(
@@ -412,7 +408,7 @@ indicator_groups = "OVERALL COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 value = fromEurostatDataset("ILC_PEPS04N",
-   with_filters(sex="T", unit="PC", isced11="ED0-2", age="Y_GE18"))
+   with_filters(age="Y_GE18", sex="T", isced11="ED0-2", unit="PC"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11f3.S1.") = 
@@ -423,7 +419,34 @@ indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 value = fromEurostatDataset("ILC_LI07",
-   with_filters(sex="T", unit="PC", isced11="ED0-2", age="Y_GE18", indic_il="LI_R_MD60"))
+   with_filters(age="Y_GE18", sex="T", isced11="ED0-2", unit="PC", indic_il="LI_R_MD60"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11f3.S3.") = 
+specification(
+name = "Share of low-skilled people (aged 18-64) living in (quasi-)jobless households - total",
+unit_of_level = "",
+indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ILC_LVHL14N",
+   with_filters(age="Y18-64", sex="T", isced11="ED0-2", unit="PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11f3.S5.") = 
+specification(
+name = "Employment gap of low-skilled",
+unit_of_level = "",
+indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
+source = "Eurostat, EU Labour Force Survey",
+high_is_good = FALSE,
+value = fromFormula(a-b,
+where = variables(
+ a = fromEurostatDataset('lfsi_emp_a',
+  with_filters(age="Y15-64", indic_em="EMP_LFS", sex="T", unit="PC_POP")),
+ b = fromEurostatDataset('lfsi_educ_a',
+  with_filters(age="Y15-64", isced11="ED0-2", sex="T", unit="PC_POP"))
+))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11f4.O1.") = 
@@ -448,16 +471,16 @@ value = fromEurostatDataset("ilc_peps01n",
    with_filters(age="Y18-24", sex="T", unit="PC"))
 )
 
-# inside(JAF_INDICATORS, indicator_named = "PA11f5.S1.") = 
-# specification(
-# name = "At-risk-of poverty rate (60% of median income) for young people (18- 24) - total",
-# unit_of_level = "",
-# indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
-# source = "Eurostat, EU Statistics on Income and Living Conditions",
-# high_is_good = FALSE,
-# value = fromEurostatDataset("ilc_li02",
-#    with_filters(age="Y18-24", sex="T", unit="PC"))
-# )
+inside(JAF_INDICATORS, indicator_named = "PA11f5.S1.") = 
+specification(
+name = "At-risk-of poverty rate (60% of median income) for young people (18- 24) - total",
+unit_of_level = "",
+indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_li02",
+   with_filters(age="Y18-24", sex="T", unit="PC", indic_il="LI_R_MD60"))
+)
 
 inside(JAF_INDICATORS, indicator_named = "PA11f5.S2.") = 
 specification(
@@ -524,17 +547,9 @@ inside(JAF_INDICATORS, indicator_named = "PA11f5.S7.") =
 specification(
 name = "Youth unemployment ratio (15-29)",
 unit_of_level = "",
-indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
+indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
 value = fromEurostatDataset("une_rt_a",
    with_filters(age="Y15-29", sex="T", unit="PC_POP"))
 )
-
-
-### Mis-specified indicators are commented-out below -- but some valid indicators below too,
-### the valid ones are those with significantly modified definitions compared to the catalogue
-
-
-
-
