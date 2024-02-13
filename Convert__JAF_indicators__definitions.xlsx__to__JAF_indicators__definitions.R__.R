@@ -12,7 +12,7 @@ JAF_definitions <-
             sheet=1,
             start_row=2,
             cols=1:10) %>% 
-  as.data.table() %>% str
+  as.data.table() %>% 
   .[, def := 
       paste0('inside(JAF_INDICATORS, indicator_named = "',JAF_KEY,'") = 
 specification(
@@ -35,7 +35,8 @@ ifelse(reference_in_scores!=EU_geo_code,
     paste('### on',format(Sys.time(),"%Y-%m-%d %H:%M:%S")),
     paste('### from `JAF_indicators__definitions.xlsx`, worksheet',
           wb_load('JAF_indicators__definitions.xlsx',sheet=1) %>% 
-            wb_get_sheet_names()),
+            wb_get_sheet_names() %>% 
+            paste0('"',.,'"')),
     "",
     .) %>% 
   cat(file='JAF_indicators__definitions.R',sep='\n')
