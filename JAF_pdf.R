@@ -42,7 +42,9 @@ JAF_SCORES_for_Main_Indicators <-
                               levels=
                                 unique(.[,.(Indicator,Main_Indicators_order)]) %>% 
                                 setorder(Main_Indicators_order) %>% 
-                                .$Indicator)] %>% 
+                                .$Indicator %>% 
+                                rev,
+                              ordered=TRUE)] %>% 
       .[, c('time','flags_','reference_time','Flag','name') := NULL] %>% 
       .[!is.na(score)] %>% 
       .[, max. := max(score), by=JAF_KEY] %>% 
@@ -172,7 +174,8 @@ for (geo_code in EU_Members_geo_codes) {
       {ggsave(paste0(OUTPUT_FOLDER,'/Main/charts/Main_Indicators_',geo_code,
                      '_',Indic_Type,'.png'),
               .$chart, bg="white",
-              width=1300, height=410*(.$nrows/8)+20, units='px', dpi=120)}
+              width=1300, height=410*(.$nrows/8)+20, units='px', dpi=120,
+              limitsize = FALSE)}
   }
 }
 message('\nAll PNG files have been saved.')

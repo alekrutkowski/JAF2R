@@ -110,7 +110,7 @@ selected_PAs_Indicators_Contents <- function(JAF_KEY_codes)
 createFolder(paste0(OUTPUT_FOLDER,'/Policy Areas'))
 message('\nCreating PA Excel files...')
 for (pa_code in names(Selected_PAs_Codes)) {
-  message('Starting ',pa_code)
+  message('Starting ',pa_code,'...')
   wb_PA_Indic <-
     openxlsx2::wb_workbook()
   for (indic_type in c('latest_value','change')) {

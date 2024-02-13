@@ -136,6 +136,12 @@ set_zoom <- function(x, sheet_views) # from https://stackoverflow.com/a/74239871
   gsub('(?<=zoomScale=")[0-9]+', x,
        sheet_views, perl=TRUE)
 
+plainInlineXLString <- function(txt)
+  paste0('<r><t xml:space="preserve">',txt,'</t></r>')
+
+boldInlineXLString <- function(txt)
+  paste0('<r><rPr><b/></rPr><t xml:space="preserve">',txt,'</t></r>')
+
 
 # Actions -----------------------------------------------------------------
 
@@ -145,6 +151,27 @@ createFolder(paste0(OUTPUT_FOLDER,'/KEC'))
 
 KEC_wb <-
   openxlsx2::wb_workbook()
+KEC_wb$add_worksheet('Info')
+KEC_wb$add_data(sheet='Info',
+                x=paste0(plainInlineXLString('Classification used in the '),
+                         boldInlineXLString('Employment/Social challenges'),
+                         plainInlineXLString(' column&#10;in '), # &#10; = line break
+                         boldInlineXLString('..._add'),
+                         plainInlineXLString(' worksheets:')), 
+                inline_strings=TRUE)
+KEC_wb$add_cell_style(sheet='Info', wrap_text=TRUE,)
+KEC_wb$add_data(sheet='Info',
+                start_row=2,
+                x=QuantAssessmentLabels %>% 
+                  .[,.(`Quantitative assessment`,QuantAssessmentGood)] %>% 
+                  .[, `Good or bad?` := ifelse(QuantAssessmentGood,'+ Good','\u2212 Bad')] %>% 
+                  .[,.(`Quantitative assessment`,`Good or bad?`)])
+KEC_wb$set_col_widths(sheet='Info',
+                      cols=1:2,
+                      widths='auto')
+KEC_wb$add_fill(sheet='Info',
+                color=wb_color(hex='#FFFF00'),
+                dims=paste0('A2:B',2+nrow(QuantAssessmentLabels)))
 
 for (geo_code in EU_Members_geo_codes) {
   cat(geo_code,"")
@@ -186,7 +213,7 @@ for (geo_code in EU_Members_geo_codes) {
                             widths=50)
   }
 }
-for (ws in KEC_wb$worksheets)
+for (ws in KEC_wb$worksheets %>% tail(-1))
   ws$sheetViews <- set_zoom(75, ws$sheetViews)
-wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/KEC.xlsx'))
+wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/Key Employment Challenges and Good Outcomes.xlsx'))
 message('\nDone.')

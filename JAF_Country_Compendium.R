@@ -44,7 +44,7 @@ setZoomInAllSheets <- function(wb, zoom_level) {
 
 # Actions -----------------------------------------------------------------
 
-message('\nCreating Country Compendium files...')
+message('\nCreating Country Compendium Excel files...')
 createFolder(paste0(OUTPUT_FOLDER,'/Country Compendium'))
 for (geo_code in c(EU_geo_code,EA_geo_code,EU_Members_geo_codes)) {
   cat(geo_code,"")
@@ -81,4 +81,4 @@ for (geo_code in c(EU_geo_code,EA_geo_code,EU_Members_geo_codes)) {
     wb_save(paste0(OUTPUT_FOLDER,
                    '/Country Compendium/',geo_code,'.xlsx'))
 }
-message('Done.')
+message('\nDone.')
