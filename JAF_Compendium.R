@@ -16,13 +16,15 @@ JAF_Compendium_Index_raw <-
   JAF_NAMES_DESCRIPTIONS %>%
   .[(for_Compendium), .(Compendium_Number,JAF_KEY)] %>%
   setnames('Compendium_Number','CompendiumNum') %>% 
-  split(by='CompendiumNum') %>% 
-  lapply(order_by_JAF_KEY) %>% 
-  rbindlist()
+  # split(by='CompendiumNum') %>% 
+  # lapply(order_by_JAF_KEY) %>%  
+  # rbindlist()
+  order_by_JAF_KEY()
 
 JAF_Compendium_Index <-
   JAF_Compendium_Index_raw %>% 
   merge(JAF_NAMES_DESCRIPTIONS, by='JAF_KEY') %>% 
+  
   .[, `Policy Area` := sub("^([^\\.]+)\\..*$", "\\1", JAF_KEY)] %>% 
   .[, Indicator := name] %>% 
   .[, name := NULL] %>% 
@@ -33,9 +35,10 @@ JAF_Compendium_Index <-
              dq("Compendium - ",CompendiumNum),
              ")")] %>% 
   sanitizeForExcel() %>% 
-  split(by='CompendiumNum') %>% 
-  lapply(order_by_JAF_KEY) %>% 
-  rbindlist() %>% 
+  # split(by='CompendiumNum') %>% 
+  # lapply(order_by_JAF_KEY) %>% 
+  # rbindlist() %>% 
+  order_by_JAF_KEY() %>% 
   .[, .(JAF_KEY,`Policy Area`,Indicator,Compendium)]
 
 indicTablesForCompendium <- function(JAF_KEY.) {
