@@ -1,6 +1,25 @@
 ### Compiled automatically by rutkoal
-### on 2024-02-13 17:35:12
-### from `JAF_indicators__definitions.xlsx`, worksheet compiled on 2024-02-13 17.03.18
+### on 2024-02-14 15:24:06
+### from `JAF_indicators__definitions.xlsx`, worksheet "compiled on 2024-02-13 17.03.18"
+### With subsequent modifications:
+### function (dt) 
+### dt %>% .[, `:=`(calculate_score_change_with_break_in_series, 
+###     !(JAF_KEY %in% c("PA4.1.O1.", "PA4.2.S1.", "PA11.O1.", "PA11.S1.", 
+###         "PA11.S4.", "PA11.S5.", "PA11.S6.", "PA11.S8.", "PA11.S9.", 
+###         "PA11.S10.", "PA11.S11.", "PA11.S12.", "PA11.S13.", "PA11.S14.", 
+###         "PA11.C1.", "PA11.C2.", "PA11.C6.", "PA11.C7.", "PA11a.O1.", 
+###         "PA11a.S1.", "PA11a.S4.", "PA11a.S5.", "PA11a.S6.", "PA11a.S7.", 
+###         "PA11a.S9.", "PA11a.S10.", "PA11a.C1.ATWORK", "PA11a.C1.NOTWORK", 
+###         "PA11b.O1.", "PA11b.S1.T", "PA11b.S1.M", "PA11b.S1.F", 
+###         "PA11b.S5.T", "PA11b.S5.M", "PA11b.S5.F", "PA11b.S6.", 
+###         "PA11b.S7.", "PA11b.S8.", "PA11b.S9.", "PA11b.S10.", 
+###         "PA11c.O1.", "PA11c.S1.T", "PA11c.S1.M", "PA11c.S1.F", 
+###         "PA11c.S3.", "PA11c.S4.", "PA11c.S5.", "PA11c.S6.", "PA11c.S7.", 
+###         "PA11c.C1.", "PA11c.C2.")))] %>% .[, `:=`(calculate_score_change, 
+###     !(JAF_KEY %in% c("PA3.S3.", "PA6a.O1.", "PA6a.S1.M", "PA6a.S1.F", 
+###         "PA6a.S2.AGRI", "PA6a.S2.IND", "PA6a.S2.CONSTR", "PA6a.S2.SERV", 
+###         "PA6a.S3.", "PA6a.S4.", "PA6b.S4.", "PA8.1.S4.", "PA10.O1.", 
+###         "PA10.S1.", "PA10.S2.")))]
 
 inside(JAF_INDICATORS, indicator_named = "PA1.O1.") = 
 specification(
@@ -2949,7 +2968,7 @@ unit_of_change = "NA",
 indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 4 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li04", 
     with_filters(sex = "T", wstatus = "UNE", indic_il = "LI_R_MD60", age = "Y_GE18"))
 )
@@ -3118,7 +3137,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 4 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_iw01", 
     with_filters(sex = "T", wstatus = "EMP", age = "Y18-64"))
 )
@@ -5328,7 +5347,7 @@ unit_of_change = "NA",
 indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_peps01n", 
     with_filters(sex = "T", unit = "PC", age = "TOTAL"))
 )
@@ -5341,7 +5360,6 @@ unit_of_change = "NA",
 indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_peps01n", 
     with_filters(sex = "T", unit = "PC", age = "TOTAL"))
 )
@@ -5354,7 +5372,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT OVERALL COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_peps01n", 
     with_filters(sex = "F", unit = "PC", age = "TOTAL"))
 )
@@ -5367,7 +5384,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT OVERALL COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_peps01n", 
     with_filters(sex = "M", unit = "PC", age = "TOTAL"))
 )
@@ -5380,7 +5396,7 @@ unit_of_change = "NA",
 indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "T", unit = "PC", indic_il = "LI_R_MD60", age = "TOTAL"))
 )
@@ -5393,7 +5409,6 @@ unit_of_change = "NA",
 indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "T", unit = "PC", indic_il = "LI_R_MD60", age = "TOTAL"))
 )
@@ -5406,7 +5421,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "F", unit = "PC", indic_il = "LI_R_MD60", age = "TOTAL"))
 )
@@ -5419,7 +5433,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "M", unit = "PC", indic_il = "LI_R_MD60", age = "TOTAL"))
 )
@@ -5552,7 +5565,7 @@ unit_of_change = "NA",
 indicator_groups = "MAIN INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal — namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li10", 
@@ -5569,7 +5582,6 @@ unit_of_change = "NA",
 indicator_groups = "MAIN INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal â€” namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li10", 
@@ -5586,7 +5598,7 @@ unit_of_change = "NA",
 indicator_groups = "MAIN INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal — namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li09", 
@@ -5603,7 +5615,6 @@ unit_of_change = "NA",
 indicator_groups = "MAIN INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal â€” namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li09", 
@@ -5620,7 +5631,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li06", 
     with_filters(sex = "T", workint = "WI0-02", indic_il = "LI_R_MD60", age = "Y_LT65", hhtyp = "TOTAL"))
 )
@@ -5633,7 +5644,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li06", 
     with_filters(sex = "T", workint = "WI02-045", indic_il = "LI_R_MD60", age = "Y18-64", hhtyp = "TOTAL"))
 )
@@ -5646,7 +5656,7 @@ unit_of_change = "NA",
 indicator_groups = "MAIN INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li11", 
     with_filters(sex = "T", indic_il = "LI_GAP_MD60", age = "TOTAL"))
 )
@@ -5659,7 +5669,6 @@ unit_of_change = "NA",
 indicator_groups = "MAIN INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li11", 
     with_filters(sex = "T", indic_il = "LI_GAP_MD60", age = "TOTAL"))
 )
@@ -5672,7 +5681,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li21", 
     with_filters(sex = "T", indic_il = "LIP_MD60", age = "TOTAL"))
 )
@@ -5685,7 +5694,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li21", 
     with_filters(sex = "T", indic_il = "LIP_MD60", age = "TOTAL"))
 )
@@ -5698,7 +5706,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li21", 
     with_filters(sex = "T", indic_il = "LIP_MD60", age = "Y_LT18"))
 )
@@ -5711,7 +5718,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li21", 
     with_filters(sex = "T", indic_il = "LIP_MD60", age = "Y18-64"))
 )
@@ -5724,7 +5730,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li21", 
     with_filters(sex = "T", indic_il = "LIP_MD60", age = "Y_GE65"))
 )
@@ -5737,7 +5742,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_di11", 
     with_filters(sex = "T", age = "TOTAL", unit = "RAT"))
 )
@@ -5750,7 +5755,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_di11", 
     with_filters(sex = "T", unit = "RAT", age = "TOTAL"))
 )
@@ -5763,7 +5767,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_lvho07a", 
     with_filters(sex = "T", incgrp = "TOTAL", unit = "PC", age = "TOTAL"))
 )
@@ -5802,7 +5805,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_lvho07a", 
     with_filters(sex = "T", incgrp = "TOTAL", unit = "PC", age = "TOTAL"))
 )
@@ -5865,7 +5868,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li01", 
     with_filters(indic_il = "LI_C_MD60", hhtyp = "A1", currency = "PPS"))
 )
@@ -6208,7 +6211,7 @@ unit_of_change = "NA",
 indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_peps01n", 
     with_filters(sex = "T", unit = "PC", age = "Y_LT18"))
 )
@@ -6221,7 +6224,6 @@ unit_of_change = "NA",
 indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_peps01n", 
     with_filters(sex = "T", unit = "PC", age = "Y_LT18"))
 )
@@ -6234,7 +6236,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "T", unit = "PC", indic_il = "LI_R_MD60", age = "Y_LT18"))
 )
@@ -6247,7 +6249,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "T", unit = "PC", indic_il = "LI_R_MD60", age = "Y_LT18"))
 )
@@ -6308,7 +6309,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal — namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li10", 
@@ -6325,7 +6326,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal â€” namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li10", 
@@ -6342,7 +6342,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal — namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li09", 
@@ -6359,7 +6359,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal â€” namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li09", 
@@ -6376,7 +6375,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers (excluding pensions) must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal — namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li11", 
     with_filters(sex = "T", indic_il = "LI_GAP_MD60", age = "Y_LT18"))
 )
@@ -6389,7 +6388,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers (excluding pensions) must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal â€” namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li11", 
     with_filters(sex = "T", indic_il = "LI_GAP_MD60", age = "Y_LT18"))
 )
@@ -6402,7 +6400,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_lvho07a", 
     with_filters(sex = "T", incgrp = "TOTAL", unit = "PC", age = "Y_LT18"))
 )
@@ -6415,7 +6413,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_lvho07a", 
     with_filters(sex = "T", incgrp = "TOTAL", unit = "PC", age = "Y_LT18"))
 )
@@ -6456,7 +6453,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromFormula((a * b + c * d)/(b + d),
   where = variables(
   a = fromEurostatDataset("ilc_li06", 
@@ -6477,7 +6473,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromFormula((a * b + c * d)/(b + d),
   where = variables(
   a = fromEurostatDataset("ilc_li06", 
@@ -6510,7 +6505,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li06", 
     with_filters(sex = "T", workint = "WI02-1", indic_il = "LI_R_MD60", age = "Y_LT18", hhtyp = "TOTAL"))
 )
@@ -6523,7 +6518,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li06", 
     with_filters(sex = "T", workint = "WI0-02", indic_il = "LI_R_MD60", age = "Y_LT18", hhtyp = "TOTAL"))
 )
@@ -6620,7 +6615,7 @@ unit_of_change = "NA",
 indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_peps01n", 
     with_filters(sex = "T", unit = "PC", age = "Y18-64"))
 )
@@ -6633,7 +6628,6 @@ unit_of_change = "NA",
 indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_peps01n", 
     with_filters(sex = "T", unit = "PC", age = "Y18-64"))
 )
@@ -6646,7 +6640,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "T", unit = "PC", indic_il = "LI_R_MD60", age = "Y18-64"))
 )
@@ -6659,7 +6653,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "T", unit = "PC", indic_il = "LI_R_MD60", age = "Y18-64"))
 )
@@ -6744,7 +6737,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_iw01", 
     with_filters(sex = "F", wstatus = "EMP", age = "Y18-64"))
 )
@@ -6757,7 +6749,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_iw01", 
     with_filters(sex = "M", wstatus = "EMP", age = "Y18-64"))
 )
@@ -6770,7 +6761,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_iw01", 
     with_filters(sex = "T", wstatus = "EMP", age = "Y18-64"))
 )
@@ -6783,7 +6774,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_iw01", 
     with_filters(sex = "T", wstatus = "EMP", age = "Y18-64"))
 )
@@ -6796,7 +6786,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal — namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li10", 
@@ -6813,7 +6803,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal â€” namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li10", 
@@ -6830,7 +6819,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal — namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li09", 
@@ -6847,7 +6836,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal â€” namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li09", 
@@ -6864,7 +6852,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li06", 
     with_filters(sex = "T", workint = "WI0-02", indic_il = "LI_R_MD60", age = "Y18-64", hhtyp = "TOTAL"))
 )
@@ -6877,7 +6865,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li06", 
     with_filters(sex = "T", workint = "WI0-02", indic_il = "LI_R_MD60", age = "Y18-64", hhtyp = "TOTAL"))
 )
@@ -6890,7 +6877,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li11", 
     with_filters(sex = "T", indic_il = "LI_GAP_MD60", age = "Y18-64"))
 )
@@ -6903,7 +6890,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li11", 
     with_filters(sex = "T", indic_il = "LI_GAP_MD60", age = "Y18-64"))
 )
@@ -6916,7 +6902,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_lvho07a", 
     with_filters(sex = "T", incgrp = "TOTAL", unit = "PC", age = "Y18-64"))
 )
@@ -6929,7 +6915,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_lvho07a", 
     with_filters(sex = "T", incgrp = "TOTAL", unit = "PC", age = "Y18-64"))
 )
@@ -7072,7 +7057,7 @@ unit_of_change = "NA",
 indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_peps01n", 
     with_filters(sex = "T", unit = "PC", age = "Y_GE65"))
 )
@@ -7085,7 +7070,6 @@ unit_of_change = "NA",
 indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_peps01n", 
     with_filters(sex = "T", unit = "PC", age = "Y_GE65"))
 )
@@ -7098,7 +7082,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT OVERALL COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_peps01n", 
     with_filters(sex = "F", unit = "PC", age = "Y_GE65"))
 )
@@ -7111,7 +7094,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT OVERALL COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_peps01n", 
     with_filters(sex = "M", unit = "PC", age = "Y_GE65"))
 )
@@ -7124,7 +7106,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "F", unit = "PC", indic_il = "LI_R_MD60", age = "Y_GE65"))
 )
@@ -7137,7 +7119,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "F", unit = "PC", indic_il = "LI_R_MD60", age = "Y_GE65"))
 )
@@ -7150,7 +7131,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "M", unit = "PC", indic_il = "LI_R_MD60", age = "Y_GE65"))
 )
@@ -7163,7 +7144,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "M", unit = "PC", indic_il = "LI_R_MD60", age = "Y_GE65"))
 )
@@ -7176,7 +7156,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "T", unit = "PC", indic_il = "LI_R_MD60", age = "Y_GE65"))
 )
@@ -7189,7 +7169,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li02", 
     with_filters(sex = "T", unit = "PC", indic_il = "LI_R_MD60", age = "Y_GE65"))
 )
@@ -7274,7 +7253,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal — namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li09", 
@@ -7291,7 +7270,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal â€” namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
 value = fromFormula(100 * ((a - b)/a),
   where = variables(
   a = fromEurostatDataset("ilc_li09", 
@@ -7308,7 +7286,7 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers (excluding pensions) must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal — namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_li11", 
     with_filters(sex = "T", indic_il = "LI_GAP_MD60", age = "Y_GE65"))
 )
@@ -7321,7 +7299,6 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions. The indicator for the poverty risk before social transfers (excluding pensions) must be interpreted with caution for a number of reasons. First, no account is taken of other measures that can have the effect of raising the disposable incomes of households and individuals, namely transfers in kind, tax credits and tax allowances. Second, the pre-transfer poverty risk is compared to the post-transfer risk with all other things being equal â€” namely, assuming unchanged household and labour market structures, thus disregarding any possible behavioural changes that the absence of social transfers might entail.",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_li11", 
     with_filters(sex = "T", indic_il = "LI_GAP_MD60", age = "Y_GE65"))
 )
@@ -7334,7 +7311,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_pnp3", 
     with_filters(sex = "T", unit = "PC"))
 )
@@ -7347,7 +7324,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_pnp3", 
     with_filters(sex = "T", unit = "PC"))
 )
@@ -7360,7 +7336,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_pnp2", 
     with_filters(sex = "T", indic_il = "R_GE65_LT65"))
 )
@@ -7373,7 +7349,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_pnp2", 
     with_filters(sex = "T", indic_il = "R_GE65_LT65"))
 )
@@ -7386,7 +7361,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
+calculate_score_change_with_break_in_series = FALSE,
 value = fromEurostatDataset("ilc_lvho07a", 
     with_filters(sex = "T", incgrp = "TOTAL", unit = "PC", age = "Y_GE65"))
 )
@@ -7399,7 +7374,6 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_lvho07a", 
     with_filters(sex = "T", incgrp = "TOTAL", unit = "PC", age = "Y_GE65"))
 )
@@ -8010,7 +7984,6 @@ unit_of_change = "NA",
 indicator_groups = "OVERALL COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_di11", 
     with_filters(sex = "T", age = "TOTAL", unit = "RAT"))
 )
@@ -8023,7 +7996,6 @@ unit_of_change = "NA",
 indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_di11d", 
     with_filters(sex = "T", age = "TOTAL", unit = "RAT"))
 )
@@ -8036,7 +8008,6 @@ unit_of_change = "NA",
 indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_di11e", 
     with_filters(sex = "T", age = "TOTAL", unit = "RAT"))
 )
@@ -8049,7 +8020,6 @@ unit_of_change = "NA",
 indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-calculate_score_change = FALSE,
 value = fromEurostatDataset("ilc_di11f", 
     with_filters(sex = "T", age = "TOTAL", unit = "RAT"))
 )

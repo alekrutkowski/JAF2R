@@ -148,6 +148,7 @@ calculate <- memoise::memoise(
                            source,
                            high_is_good,
                            calculate_score_change=TRUE,
+                           calculate_score_change_with_break_in_series=TRUE,
                            reference_in_scores=EU_geo_code,
                            value) {
       stopifnot(
@@ -163,6 +164,7 @@ calculate <- memoise::memoise(
         is.string.scalar(source),
         is.logical.scalar(high_is_good),
         is.logical.scalar(calculate_score_change),
+        is.logical.scalar(calculate_score_change_with_break_in_series),
         is.string.scalar(reference_in_scores),
         toupper(reference_in_scores) %in% toupper(names(LIST_OF_REFERENCE_POINT_FUNCTIONS)),
         is.data.frame(value),
@@ -181,6 +183,7 @@ calculate <- memoise::memoise(
            source=source,
            high_is_good=high_is_good,
            calculate_score_change=calculate_score_change,
+           calculate_score_change_with_break_in_series=calculate_score_change_with_break_in_series,
            reference_in_scores=reference_in_scores,
            value = value %>% 
              .[, grep('^(geo|time|value_|flags_.*|.)$',

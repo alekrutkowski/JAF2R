@@ -27,7 +27,7 @@ Selected_Main_Indicators_Multiline_Header <-
   .[, reference_latest_value := round(reference_latest_value,1)] %>% 
   .[, reference_change := round(reference_change,1)] %>%
   .[, lapply(., as.character)] %>% 
-  merge(Selected_Main_Indicators_Codes, by='JAF_KEY', all.y=TRUE) %>% 
+  merge(Selected_Main_Indicators_Codes, by='JAF_KEY') %>% 
   .[!duplicated(.)] %>% 
   .[, 'High is: good = [+], bad = [\u2212]' :=
       ifelse(high_is_good,'[+]','[-]') %>% 
