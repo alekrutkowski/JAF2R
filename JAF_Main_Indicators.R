@@ -17,10 +17,17 @@ Selected_Main_Indicators_Multiline_Header <-
         reference_name_latest_value, reference_name_change,
         reference_latest_value, reference_change,
         reference_time_latest_value, reference_time_change)] %>% 
+  .[, grep('^reference_',colnames(.),value=TRUE) := 
+      mget(grep('^reference_',colnames(.),value=TRUE)) %>% 
+      lapply(. %>% .[!is.na(.)] %>% unique() %>% 
+               `if`(length(.)>1,
+                    stop('\nMore than 1 unique values:\n',paste(.,collapse='\n')),
+                    .))
+    , by=JAF_KEY] %>% 
   .[, reference_latest_value := round(reference_latest_value,1)] %>% 
   .[, reference_change := round(reference_change,1)] %>%
-  .[, lapply(., as.character)] %>%
-  merge(Selected_Main_Indicators_Codes, by='JAF_KEY') %>% 
+  .[, lapply(., as.character)] %>% 
+  merge(Selected_Main_Indicators_Codes, by='JAF_KEY', all.y=TRUE) %>% 
   .[!duplicated(.)] %>% 
   .[, 'High is: good = [+], bad = [\u2212]' :=
       ifelse(high_is_good,'[+]','[-]') %>% 
@@ -91,11 +98,11 @@ Selected_Main_Indicators_Contents <-
 
 # Actions -----------------------------------------------------------------
 
-createFolder(paste0(OUTPUT_FOLDER,'/Main'))
+# createFolder(paste0(OUTPUT_FOLDER,'/Main'))
 message('\nCreating Main_Indicators.xlsx file...')
 wb_Main_Indic <-
   openxlsx2::wb_workbook()
-for (indic_type in c('change','latest_value')) {
+for (indic_type in c('latest_value','change')) {
   Indic_Type <-
     ifelse(indic_type=='change','Changes',
            'Levels')
@@ -104,6 +111,9 @@ for (indic_type in c('change','latest_value')) {
     Selected_Main_Indicators_Multiline_Header[[indic_type]]
   vals. <-
     Selected_Main_Indicators_Contents[[indic_type]]
+  if (ncol(head.)+1 != ncol(vals.)) # +1 because head. row names are to be used as the first column
+    stop("\nThe number of header columns (",ncol(head.)+1,
+         ") doesn't equal the number of data columns (",ncol(vals.),")!")
   wb_Main_Indic <-
     wb_Main_Indic %>%
     wb_add_worksheet(Indic_Type) %>%
@@ -128,7 +138,7 @@ for (indic_type in c('change','latest_value')) {
     wb_add_font(dims=paste0('A',7+nrow(vals.)-1,':',int2col(ncol(vals.)),7+nrow(vals.)),
                 bold="bold") %>%
     wb_add_fill(every_nth_row = 2,
-                dims=paste0("A8:",int2col(ncol(vals.)),8+nrow(vals.)),
+                dims=paste0("A8:",int2col(ncol(vals.)),7+nrow(vals.)),
                 color= wb_color(hex="e6f1ff")) %>%
     Reduce(init=.,
            x=seq.int(2,2+ncol(head.)-3,3),
