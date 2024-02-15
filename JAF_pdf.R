@@ -5,7 +5,7 @@ library(rmarkdown)
 JAF_SCORES_for_Main_Indicators <- 
   JAF_SCORES %>% 
   # .[!grepl('CONTEXT',indicator_groups,ignore.case=TRUE)] %>% # insufficient -- some C indicators not classified as CONTEXT
-  .[!(JAF_KEY %>% `JAF_KEY->C_O_S_part` %>% grepl('C',.))] %>% 
+  .[JAF_KEY %>% `JAF_KEY->C_O_S_part` %>% grepl('O',.)] %>% 
   .[, .(geo, JAF_KEY, name, time, flags_,
         score_latest_value, score_change,
         reference_time_latest_value, reference_time_change)] %>% 
@@ -41,16 +41,21 @@ JAF_SCORES_for_Main_Indicators <-
       .[, Indicator := factor(Indicator,
                               levels=
                                 unique(.[,.(Indicator,Main_Indicators_order)]) %>% 
+                                .[,Main_Indicators_order := as.integer(Main_Indicators_order)] %>% 
                                 setorder(Main_Indicators_order) %>% 
                                 .$Indicator %>% 
-                                rev,
+                                rev(),
                               ordered=TRUE)] %>% 
       .[, c('time','flags_','reference_time','Flag','name') := NULL] %>% 
       .[!is.na(score)] %>% 
-      .[, max. := max(score), by=JAF_KEY] %>% 
-      .[, min. := min(score), by=JAF_KEY] %>% 
-      .[, p25 := quantile(score,.25), by=JAF_KEY] %>% 
-      .[, p75 := quantile(score,.75), by=JAF_KEY]
+      merge(unique(JAF_SCORES[,.(JAF_KEY,high_is_good)]) %>% 
+              .[, bar_direction := ifelse(high_is_good,1,-1)],
+            by='JAF_KEY') %>% 
+      .[, score_flipped := bar_direction*score] %>% 
+      .[, max. := max(score_flipped), by=JAF_KEY] %>% 
+      .[, min. := min(score_flipped), by=JAF_KEY] %>% 
+      .[, p25 := quantile(score_flipped,.25), by=JAF_KEY] %>% 
+      .[, p75 := quantile(score_flipped,.75), by=JAF_KEY]
   )}
 
 mainIndicCountryChart <- function(geo_code, level_or_change) {
@@ -59,22 +64,23 @@ mainIndicCountryChart <- function(geo_code, level_or_change) {
     .[[level_or_change]] %>% 
     .[geo==geo_code] %>% 
     .[, fill. := ifelse(score[geo==geo_code]>=0,'white','red'), by=JAF_KEY] %>% 
-    .[, hjust. := ifelse(score[geo==geo_code]>=0,-.3,1.3), by=JAF_KEY]
+    .[, hjust. := ifelse(score_flipped[geo==geo_code]>=0,-.3,1.3), by=JAF_KEY]
   chart <-
-    dta %>% {
+    dta%>% 
+    setorder(Indicator) %>% {
       ggplot2::ggplot(., aes(x = Indicator, y = 0)) +
         geom_crossbar(aes(ymin=min., ymax=max.),
                       width = 0.8, fill = "grey90", linetype=0) +
         geom_crossbar(aes(ymin = p25, ymax = p75),
                       width = 0.65, fill = "grey75", linetype=0) +
-        geom_crossbar(aes(ymin=0, ymax=score),
+        geom_crossbar(aes(ymin=0, ymax=score_flipped),
                       width=0.4, fill=.$fill., linetype=0) +
-        geom_text(aes(label = score %>% 
+        geom_text(aes(label = score_flipped %>% 
                         sprintf('%01.1f',.) %>% sub('-','\u2212',.,fixed=TRUE),
-                      y=score),
+                      y=score_flipped),
                   hjust=.$hjust.) +
         theme_minimal() +
-        expand_limits(y = .$score %>%
+        expand_limits(y = .$score_flipped %>%
                         {1.1*c(min(.,na.rm=TRUE),max(.,na.rm=TRUE))}) + # to avoid truncating the labels
         scale_y_continuous(labels=\(x) sub('-','\u2212',x),
                            sec.axis = dup_axis()) +

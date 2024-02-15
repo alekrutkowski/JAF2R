@@ -40,7 +40,8 @@ ifelse(reference_in_scores!=EU_geo_code,
 'value = ',value,
 '\n)\n')] %>% 
   .$def %>% 
-  c(paste('### Compiled automatically by',Sys.getenv("USERNAME")),
+  c(paste('###',length(.),'indicators'),
+    paste('### compiled automatically by',Sys.getenv("USERNAME")),
     paste('### on',format(Sys.time(),"%Y-%m-%d %H:%M:%S")),
     paste('### from `JAF_indicators__definitions.xlsx`, worksheet',
           wb_load('JAF_indicators__definitions.xlsx',sheet=1) %>% 

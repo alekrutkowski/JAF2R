@@ -3,8 +3,7 @@
 
 Selected_Main_Indicators_Codes <-
   JAF_NAMES_DESCRIPTIONS %>%
-  .[for_Main &
-      (JAF_KEY %>% `JAF_KEY->C_O_S_part` %>% grepl('O',.)),
+  .[JAF_KEY %>% `JAF_KEY->C_O_S_part` %>% grepl('O|S',.),
     JAF_KEY] %>%
   sort_JAF_KEY() %>%
   data.table(JAF_KEY=.,

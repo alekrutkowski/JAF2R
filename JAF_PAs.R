@@ -20,7 +20,11 @@ Selected_PAs_Codes <-
   .[order(PA,sort_JAF_KEY(JAF_KEY))] %>% 
   split(by='PA',keep.by=FALSE) %>%
   lapply(\(dt)dt[[1]]) %>% 
-  .[names(.) %>% sort_PAs()]
+  .[names(.) %>% sort_PAs()] %>% 
+  c(list(PA1_popweighted = 
+           IndicatorsWithPopulationWeigths$JAF_KEY %>% 
+           paste0('_popweighted_score')),
+    .)
 
 selected_PAs_Indicators_Multiline_Header <- function(JAF_KEY_codes)
   JAF_SCORES %>% 

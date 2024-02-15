@@ -377,8 +377,9 @@ JAF_SCORES <-
   .[, score := 
       ifelse(high_is_good,1,-1)*
       10*(value - reference)/std] %>% 
+  .[, is_popweighted := FALSE] %>% 
   rbind(.[JAF_KEY %in% IndicatorsWithPopulationWeigths] %>%  # duplicate the selected indicators to create the population-weighted versions
-          .[, JAF_KEY := paste0(JAF_KEY,'_popweighted_score')] %>% 
+          .[, is_popweighted := TRUE] %>% 
           merge(POP_WEIGHTS, by=c('JAF_KEY','geo','time')) %>% 
           .[, score := score * popweight] %>% 
           .[, popweight := NULL]) %>%
@@ -389,7 +390,7 @@ JAF_SCORES <-
                 . <= 7, '0',
                 . < 13, '+',
                 . >= 13, '++')}] %>% 
-  dcast(JAF_KEY + geo + time + flags_ + high_is_good ~ variable,
+  dcast(JAF_KEY + geo + time + flags_ + high_is_good + popweight ~ variable,
         value.var=c('value','score','score_category',
                     'reference','reference_name', 'reference_time'),
         fun.aggregate=identity,
@@ -408,7 +409,10 @@ JAF_SCORES <-
         by='geo') %>% 
   merge(JAF_NAMES_DESCRIPTIONS,
         by='JAF_KEY') %>% 
-  .[, Description := paste0(name,', ',unit)]
+  .[, Description := paste0(name,', ',unit) %>% 
+      ifelse(is_popweighted, paste0(.,', population-weighted'), .)] %>% 
+  .[, JAF_KEY := ifelse(is_popweighted,paste0(JAF_KEY,'_popweighted_score'),
+                        JAF_KEY)]
 
 createFolder(OUTPUT_FOLDER)
 
