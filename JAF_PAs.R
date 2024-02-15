@@ -29,6 +29,13 @@ selected_PAs_Indicators_Multiline_Header <- function(JAF_KEY_codes)
         reference_name_latest_value, reference_name_change,
         reference_latest_value, reference_change,
         reference_time_latest_value, reference_time_change)] %>% 
+  .[, grep('^reference_',colnames(.),value=TRUE) := 
+      mget(grep('^reference_',colnames(.),value=TRUE)) %>% 
+      lapply(. %>% .[!is.na(.)] %>% unique() %>% 
+               `if`(length(.)>1,
+                    stop('\nMore than 1 unique values:\n',paste(.,collapse='\n')),
+                    .))
+    , by=JAF_KEY] %>% 
   .[, reference_latest_value := round(reference_latest_value,1)] %>% 
   .[, reference_change := round(reference_change,1)] %>%
   .[, lapply(., as.character)] %>%
@@ -126,6 +133,9 @@ for (pa_code in names(Selected_PAs_Codes)) {
       Selected_PAs_Codes[[pa_code]] %>%
       selected_PAs_Indicators_Multiline_Header() %>%
       .[[indic_type]]
+    if (ncol(head.)+1 != ncol(vals.)) # +1 because head. row names are to be used as the first column
+      stop("\nThe number of header columns (",ncol(head.)+1,
+           ") doesn't equal the number of data columns (",ncol(vals.),")!")
     wb_PA_Indic <-
       wb_PA_Indic %>%
       wb_add_worksheet(paste(pa_code,'-',Indic_Type)) %>%
@@ -171,7 +181,7 @@ for (pa_code in names(Selected_PAs_Codes)) {
       wb_add_font(dims=paste0('A',9+nrow(vals.)-1,':',int2col(ncol(vals.)),9+nrow(vals.)),
                   bold="bold") %>%
       wb_add_fill(every_nth_row = 2,
-                  dims=paste0("A10:",int2col(ncol(vals.)+1),10+nrow(vals.)),
+                  dims=paste0("A10:",int2col(ncol(vals.)+1),9+nrow(vals.)),
                   color= wb_color(hex="e6f1ff")) %>%
       Reduce(init=.,
              x=seq.int(3,3+ncol(head.)-3,3),

@@ -279,7 +279,9 @@ JAF_NAMES_DESCRIPTIONS <-
                          indicator_groups=JAF_INDICATORS[[x]]$indicator_groups,
                          calculate_score_change=
                            JAF_INDICATORS[[x]]$calculate_score_change,
-                         reference_in_scores=
+                         calculate_score_change=
+                           JAF_INDICATORS[[x]]$calculate_score_change_with_break_in_series,
+                         calculate_score_change_with_break_in_series=
                            JAF_INDICATORS[[x]]$reference_in_scores)) %>% 
   rbindlist() %>% 
   .[, is_INPUT := grepl('INPUT',indicator_groups)] %>% 
@@ -352,7 +354,10 @@ JAF_SCORES <-
        variable.name="variable", value.name="value",
        na.rm=TRUE) %>%
   .[!(JAF_KEY %in% JAF_NAMES_DESCRIPTIONS[!(calculate_score_change), JAF_KEY] & 
-        variable=='change')] %>% 
+        variable=='change')] %>%
+  .[!(JAF_KEY %in% JAF_NAMES_DESCRIPTIONS[!(calculate_score_change_with_break_in_series), JAF_KEY] & 
+        variable=='change' &
+        grepl('b',flags_))] %>% 
   merge(JAF_KEY__reference_name, by='JAF_KEY') %>% 
   .[, reference_name := 
       reference_name %>% 
