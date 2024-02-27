@@ -1,13 +1,20 @@
 
 # Functions and constants -------------------------------------------------
 
+removeNotNeededPA11. <- function(dt)
+  # Paul's email 20 Feb 2024:
+  # Do not include the gender breakdowns for PA11.O1 or PA11c.O1
+  dt[!grepl('^PA11\\.O1.+\\.(M|F)$',JAF_KEY) &
+       !grepl('^PA11c\\.O1.+\\.(M|F)$',JAF_KEY)]
+
 Selected_Main_Indicators_Codes <-
   JAF_NAMES_DESCRIPTIONS %>%
   .[JAF_KEY %>% `JAF_KEY->C_O_S_part` %>% grepl('O|S',.),
     JAF_KEY] %>%
   sort_JAF_KEY() %>%
   data.table(JAF_KEY=.,
-             Main_Indicators_order = seq_along(.))
+             Main_Indicators_order = seq_along(.)) %>% 
+  removeNotNeededPA11.()
 
 
 Selected_Main_Indicators_Multiline_Header <-
@@ -97,7 +104,7 @@ Selected_Main_Indicators_Contents <-
 
 # Actions -----------------------------------------------------------------
 
-# createFolder(paste0(OUTPUT_FOLDER,'/Main'))
+createFolder(paste0(OUTPUT_FOLDER,'/Main'))
 message('\nCreating Main_Indicators.xlsx file...')
 wb_Main_Indic <-
   openxlsx2::wb_workbook()
@@ -141,30 +148,36 @@ for (indic_type in c('latest_value','change')) {
                 color= wb_color(hex="e6f1ff")) %>%
     Reduce(init=.,
            x=seq.int(2,2+ncol(head.)-3,3),
-           f=\(wb.,x)
-           Reduce(init=wb.,
-                  x=3:5,
-                  f=\(wb..,y)
-                  wb_merge_cells(wb..,
-                                 rows=y,
-                                 cols=seq.int(x,x+2)) %>%
-                    wb_add_cell_style(
-                      dims=paste0(int2col(x),y,':',int2col(x+2),y),
-                      horizontal='center', vertical='center',
-                      wrapText = "1"))) %>%
+           f=\(wb.,x) {
+             if (x%%30==0) cat(' .')
+             Reduce(init=wb.,
+                    x=3:5,
+                    f=\(wb..,y)
+                    wb_merge_cells(wb..,
+                                   rows=y,
+                                   cols=seq.int(x,x+2)) %>%
+                      wb_add_cell_style(
+                        dims=paste0(int2col(x),y,':',int2col(x+2),y),
+                        horizontal='center', vertical='center',
+                        wrapText = "1")
+             )
+           }) %>%
     Reduce(init=.,
            x=seq.int(2,2+ncol(head.)-3,3) %>%
              {paste0(int2col(.),'3:',int2col(.+2),2+nrow(head.)+nrow(vals.)+1)},
-           f=\(wb.,x)
-           wb_add_border(wb.,
-                         dims=x)) %>%
+           f=\(wb.,x) {
+             if (x%%30==0) cat(' .')
+             wb_add_border(wb.,
+                           dims=x)
+           }) %>%
     wb_add_border(dims=paste0('A3:A',2+nrow(head.)+nrow(vals.)+1)) %>%
     wb_set_row_heights(rows=4, heights=60) %>%
     wb_set_col_widths(cols=seq.int(2,2+ncol(head.)-1,3),
                       widths=13.2) %>%
     setZoomInAllSheets(75)
 }
+message('\nSaving...')
 wb_Main_Indic %>%
   wb_save(paste0(OUTPUT_FOLDER,
                  '/Main/Main_Indicators.xlsx'))
-message('\nDone.')
+message('Done.')

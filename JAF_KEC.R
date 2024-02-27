@@ -12,6 +12,7 @@ PolicyAreaLabels <- '
 | 1b         | Improve labour market situation of youth                                                                  |
 | 1c         | Increase employment of older workers                                                                      |
 | 1d         | Increase employment of migrants                                                                           |
+| 1e         | Disability employment gap                                                                                 |
 | 2a         | Combating segmentation                                                                                    |
 | 2b         | Labour market fluidity                                                                                    |
 | 3          | Active labour market policies                                                                             |
@@ -48,6 +49,7 @@ PolicyAreaLabels_General <- '
 | 1b          | Increase labour market participation                                                   |
 | 1c          | Increase labour market participation                                                   |
 | 1d          | Increase labour market participation                                                   |
+| 1e          | Disability employment gap                                                              |
 | 2a          | Enhancing labour market functioning                                                    |
 | 2b          | Enhancing labour market functioning                                                    |
 | 3           | Active labour market policies                                                          |

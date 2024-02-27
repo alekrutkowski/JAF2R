@@ -176,7 +176,9 @@ sort_JAF_KEY <- function(JAF_KEY) {
   pa <-
     JAF_KEY %>% 
     `JAF_KEY->PA_string` %>% 
-    list(as.numeric(gsub('[^0-9.]',"",.)),
+    list(gsub('[^0-9.]',"",.) %>% 
+           as.numeric() %>% 
+           ifelse(.>99,floor(./10),.), # otherwise it becomes e.g. 115 for PA11f5.S2.
          .)
   mid <- 
     JAF_KEY %>% 
@@ -188,19 +190,31 @@ sort_JAF_KEY <- function(JAF_KEY) {
     .[order(pa[[1]],pa[[2]],mid[[1]],mid[[2]],.)]
 }
 
-order_by_JAF_KEY <- function(dt)
+order_by_JAF_KEY <- function(dt) {
+  JAF_KEY_col_position <-
+    which(colnames(dt)=='JAF_KEY')
+  dt_col_names <-
+    colnames(dt)[-JAF_KEY_col_position]
+  dt_tmp <-
+    copy(dt) %>% 
+    # trick needed because merge below doesn't allow duplicated e.g. empty column names in dt:
+    setnames(seq_len(ncol(.))[-JAF_KEY_col_position],
+             paste0('x',seq_len(ncol(.)))[-JAF_KEY_col_position])
   dt$JAF_KEY %>% 
-  sort_JAF_KEY() %>% 
-  data.table(JAF_KEY=.,
-             .ordering.=seq_along(.)) %>% 
-  merge(dt, by='JAF_KEY') %>% 
-  setorder(.ordering.) %>% 
-  .[, .ordering. := NULL]
+    sort_JAF_KEY() %>% 
+    data.table(JAF_KEY=.,
+               .ordering.=seq_along(.)) %>% 
+    merge(dt_tmp, by='JAF_KEY') %>% 
+    setorder(.ordering.) %>% 
+    .[, .ordering. := NULL] %>% 
+    setnames(2:ncol(.),
+             dt_col_names)
+}
 
-IndicatorsWithPopulationWeigths <-
-  '
+IndicatorsWithPopulationWeigths <- '
 | JAF_KEY   | age     | sex  | isced11  | citizen         |
 |-----------|---------|------|----------|-----------------|
+| PA1.O1.   | Y20-64  | T    | TOTAL    | TOTAL           |
 | PA1.S1.M  | Y20-64  | M    | TOTAL    | TOTAL           |
 | PA1.S1.F  | Y20-64  | F    | TOTAL    | TOTAL           |
 | PA1.S2.   | Y55-64  | T    | TOTAL    | TOTAL           |
@@ -279,9 +293,9 @@ JAF_NAMES_DESCRIPTIONS <-
                          indicator_groups=JAF_INDICATORS[[x]]$indicator_groups,
                          calculate_score_change=
                            JAF_INDICATORS[[x]]$calculate_score_change,
-                         calculate_score_change=
-                           JAF_INDICATORS[[x]]$calculate_score_change_with_break_in_series,
                          calculate_score_change_with_break_in_series=
+                           JAF_INDICATORS[[x]]$calculate_score_change_with_break_in_series,
+                         reference_in_scores=
                            JAF_INDICATORS[[x]]$reference_in_scores)) %>% 
   rbindlist() %>% 
   .[, is_INPUT := grepl('INPUT',indicator_groups)] %>% 
@@ -378,7 +392,7 @@ JAF_SCORES <-
       ifelse(high_is_good,1,-1)*
       10*(value - reference)/std] %>% 
   .[, is_popweighted := FALSE] %>% 
-  rbind(.[JAF_KEY %in% IndicatorsWithPopulationWeigths] %>%  # duplicate the selected indicators to create the population-weighted versions
+  rbind(.[JAF_KEY %in% IndicatorsWithPopulationWeigths$JAF_KEY] %>%  # duplicate the selected indicators to create the population-weighted versions
           .[, is_popweighted := TRUE] %>% 
           merge(POP_WEIGHTS, by=c('JAF_KEY','geo','time')) %>% 
           .[, score := score * popweight] %>% 
@@ -390,7 +404,7 @@ JAF_SCORES <-
                 . <= 7, '0',
                 . < 13, '+',
                 . >= 13, '++')}] %>% 
-  dcast(JAF_KEY + geo + time + flags_ + high_is_good + popweight ~ variable,
+  dcast(JAF_KEY + geo + time + flags_ + high_is_good + is_popweighted ~ variable,
         value.var=c('value','score','score_category',
                     'reference','reference_name', 'reference_time'),
         fun.aggregate=identity,

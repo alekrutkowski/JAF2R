@@ -17,14 +17,15 @@ Selected_PAs_Codes <-
   .[(for_KEC), JAF_KEY] %>%
   data.table(JAF_KEY=.,
              PA = paste0('PA',`JAF_KEY->PA_string`(.))) %>% 
-  .[order(PA,sort_JAF_KEY(JAF_KEY))] %>% 
+  # .[order(PA,sort_JAF_KEY(JAF_KEY))] %>% 
   split(by='PA',keep.by=FALSE) %>%
   lapply(\(dt)dt[[1]]) %>% 
   .[names(.) %>% sort_PAs()] %>% 
   c(list(PA1_popweighted = 
            IndicatorsWithPopulationWeigths$JAF_KEY %>% 
            paste0('_popweighted_score')),
-    .)
+    .) %>% 
+  lapply(sort_JAF_KEY)
 
 selected_PAs_Indicators_Multiline_Header <- function(JAF_KEY_codes)
   JAF_SCORES %>% 
@@ -212,9 +213,9 @@ for (pa_code in names(Selected_PAs_Codes)) {
                         widths=13.2) %>%
       setZoomInAllSheets(75)
   }
+  message('\nSaving...')
   wb_PA_Indic %>%
     wb_save(paste0(OUTPUT_FOLDER,
                    paste0('/Policy Areas/',pa_code,'.xlsx')))
-  message()
 }
 message('Done.')

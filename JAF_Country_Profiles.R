@@ -11,6 +11,7 @@ paCountryData <- function(pa_code)
         score_latest_value, score_change,
         reference_time_latest_value, reference_time_change)] %>% 
   .[JAF_KEY %in% Selected_PAs_Codes[[pa_code]]] %>% 
+  removeNotNeededPA11() %>% 
   .[geo %in% EU_Members_geo_codes] %>% 
   {sapply(
     c('change','latest_value'),
@@ -207,6 +208,15 @@ paCountryMSOfficeChart <- function(pa_code, geo_code, level_or_change) {
   chart
 }
 
+removeNotNeededPA11 <- function(dt)
+  # Paul's email 20 Feb 2024 (corrected on 26 Feb):
+  # There are still too many gender breakdowns that are not required.
+  # The only indicators where a gender breakdown is required are PA11.S3 and PA11.S20
+  # Do not include the gender breakdowns for PA11.O1, PA11.S1, PA11.S2, nor for PA11c.O1, PA11c.S1, PA11c.S2
+  dt[!grepl('^PA11\\..+\\.(M|F)$',JAF_KEY) | 
+       grepl('^(PA11\\.S3|PA11\\.S20)',JAF_KEY)] %>% 
+  .[!grepl('^PA11c\\.(O1|S1|S2).+\\.(M|F)$',JAF_KEY)]
+
 
 # Actions -----------------------------------------------------------------
 
@@ -238,7 +248,7 @@ message('All PNG files have been saved.')
 message('\nPreparing Country_profile PowerPoint files...')
 for (geo_code in EU_Members_geo_codes) {
   message('Starting ',geo_code,'...')
-  pptx0 <- # needed here, not outside the first loop, because ph_... functions appear to modify contents in place
+  pptx0 <- # re-reading needed because ph_... functions appear to modify contents in place
     read_pptx("Blank_16x9.pptx") # 16:9 proportion and Arial
   pptx <-
     pptx0 %>%

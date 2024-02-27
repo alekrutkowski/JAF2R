@@ -33,7 +33,7 @@ value = fromEurostatDataset("lfsi_emp_a",
     with_filters(sex = "T", unit = "PC_POP", age = "Y20-64", indic_em = "EMP_LFS"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA1.O2.") = 
+inside(JAF_INDICATORS, indicator_named = "PA1e.O1.") = 
 specification(
 name = "Disability employment gap by level of activity limitation and sex - total",
 unit_of_level = "% (of popn)",
@@ -5785,17 +5785,18 @@ value = fromFormula(100 - a,
     with_filters(age = "TOTAL", n_item = "0", sex = "T", unit = "PC"))))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA11.S13.T") = 
-specification(
-name = "Material and social deprivation - total",
-unit_of_level = "% (of total popn)",
-unit_of_change = "pp",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd07", 
-    with_filters(age = "TOTAL", sex = "T", unit = "PC"))
-)
+# Duplication of PA11.S20.
+# inside(JAF_INDICATORS, indicator_named = "PA11.S13.T") = 
+# specification(
+# name = "Material and social deprivation - total",
+# unit_of_level = "% (of total popn)",
+# unit_of_change = "pp",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
+# source = "Eurostat, EU Statistics on Income and Living Conditions",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("ilc_mdsd07", 
+#     with_filters(age = "TOTAL", sex = "T", unit = "PC"))
+# )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.S14.") = 
 specification(
@@ -6485,17 +6486,18 @@ value = fromFormula((a * b + c * d)/(b + d),
     with_filters(age = "Y_LT18",      hhtyp = "HH_DCH", sex = "T", workint = "WI085-1"))))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA11a.S11.") = 
-specification(
-name = "Material and social deprivation for children (0-17)",
-unit_of_level = "% (of popn 0-17)",
-unit_of_change = "pp",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd07", 
-    with_filters(age = "Y_LT18", sex = "T", unit = "PC"))
-)
+# Duplication of PA11a.S20.
+# inside(JAF_INDICATORS, indicator_named = "PA11a.S11.") = 
+# specification(
+# name = "Material and social deprivation for children (0-17)",
+# unit_of_level = "% (of popn 0-17)",
+# unit_of_change = "pp",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
+# source = "Eurostat, EU Statistics on Income and Living Conditions",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("ilc_mdsd07", 
+#     with_filters(age = "Y_LT18", sex = "T", unit = "PC"))
+# )
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.C1.ATWORK") = 
 specification(
@@ -6959,17 +6961,18 @@ value = fromEurostatDataset("ilc_mdsd07",
     with_filters(sex = "T", unit = "PC", age = "Y18-64"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA11b.S12.T") = 
-specification(
-name = "Material and social deprivation - (18-64) total",
-unit_of_level = "% (of popn 18-64)",
-unit_of_change = "pp",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd07", 
-    with_filters(age = "Y18-64", sex = "T", unit = "PC"))
-)
+# Duplication of PA11b.S12.
+# inside(JAF_INDICATORS, indicator_named = "PA11b.S12.T") = 
+# specification(
+# name = "Material and social deprivation - (18-64) total",
+# unit_of_level = "% (of popn 18-64)",
+# unit_of_change = "pp",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
+# source = "Eurostat, EU Statistics on Income and Living Conditions",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("ilc_mdsd07", 
+#     with_filters(age = "Y18-64", sex = "T", unit = "PC"))
+# )
 
 inside(JAF_INDICATORS, indicator_named = "PA11b.C4.") = 
 specification(
@@ -7799,8 +7802,8 @@ value = fromEurostatDataset("ilc_mdsd07",
 inside(JAF_INDICATORS, indicator_named = "PA11.S20.F") = 
 specification(
 name = "Material and social deprivation rate - women",
-unit_of_level = "NA",
-unit_of_change = "NA",
+unit_of_level = "% (of total popn)",
+unit_of_change = "pp",
 indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
@@ -7916,17 +7919,18 @@ value = fromEurostatDataset("ILC_LI70",
     with_filters(sex = "T", unit = "PC", workint = "WI0-02", yn_rskpov = "YES_ARP"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA11c.S20.") = 
-specification(
-name = "Material and social deprivation rate (65+)",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd07", 
-    with_filters(sex = "T", unit = "PC", age = "Y_GE65"))
-)
+# Duplication of PA11c.S9.T
+# inside(JAF_INDICATORS, indicator_named = "PA11c.S20.") = 
+# specification(
+# name = "Material and social deprivation rate (65+)",
+# unit_of_level = "NA",
+# unit_of_change = "NA",
+# indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
+# source = "Eurostat, EU Statistics on Income and Living Conditions",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("ilc_mdsd07", 
+#    with_filters(sex = "T", unit = "PC", age = "Y_GE65"))
+# )
 
 inside(JAF_INDICATORS, indicator_named = "PA11c.S21.") = 
 specification(

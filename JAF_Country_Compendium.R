@@ -55,7 +55,8 @@ for (geo_code in c(EU_geo_code,EA_geo_code,EU_Members_geo_codes)) {
     setnames(colnames(.),
              colnames(.) %>%
                sub('^value__(.{4})$','\\1',.) %>%
-               sub('^flags__.{4}$',"",.))
+               sub('^flags__.{4}$',"",.)) %>% 
+    order_by_JAF_KEY()
   openxlsx2::wb_workbook() %>%
     wb_add_worksheet(geo_code) %>%
     wb_add_data(x=EU_Members_geo_names[geo==geo_code, geo_labels],

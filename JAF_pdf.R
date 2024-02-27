@@ -11,12 +11,13 @@ JAF_SCORES_for_Main_Indicators <-
         reference_time_latest_value, reference_time_change)] %>% 
   .[geo %in% EU_Members_geo_codes] %>% 
   # merge(Selected_Main_Indicators_Codes, by='JAF_KEY') %>% 
+  removeNotNeededPA11.() %>% 
   .[JAF_KEY %in% (Selected_PAs_Codes %>% unlist() %>% unique())] %>% 
   .[, Main_Indicators_order :=
       factor(JAF_KEY,
-             levels=data.table(JAF_KEY=unique(JAF_KEY)) %>% 
-               order_by_JAF_KEY() %>% 
-               .$JAF_KEY,
+             levels=.$JAF_KEY %>% 
+               unique() %>% 
+               sort_JAF_KEY(),
              ordered=TRUE) %>% 
       as.integer()] %>% 
   {sapply(
