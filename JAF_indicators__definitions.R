@@ -1,25 +1,19 @@
-### Compiled automatically by rutkoal
-### on 2024-02-14 15:24:06
-### from `JAF_indicators__definitions.xlsx`, worksheet "compiled on 2024-02-13 17.03.18"
+### 642 indicators
+### compiled automatically by rutkoal
+### on 2024-02-28 17:03:46
+### from `JAF_indicators__definitions.xlsx`, worksheet "compiled on 2024-02-28 14.21.52"
+### from `JAF_indicators__definitions.xlsx`, worksheet "Comments"
 ### With subsequent modifications:
 ### function (dt) 
-### dt %>% .[, `:=`(calculate_score_change_with_break_in_series, 
-###     !(JAF_KEY %in% c("PA4.1.O1.", "PA4.2.S1.", "PA11.O1.", "PA11.S1.", 
-###         "PA11.S4.", "PA11.S5.", "PA11.S6.", "PA11.S8.", "PA11.S9.", 
-###         "PA11.S10.", "PA11.S11.", "PA11.S12.", "PA11.S13.", "PA11.S14.", 
-###         "PA11.C1.", "PA11.C2.", "PA11.C6.", "PA11.C7.", "PA11a.O1.", 
-###         "PA11a.S1.", "PA11a.S4.", "PA11a.S5.", "PA11a.S6.", "PA11a.S7.", 
-###         "PA11a.S9.", "PA11a.S10.", "PA11a.C1.ATWORK", "PA11a.C1.NOTWORK", 
-###         "PA11b.O1.", "PA11b.S1.T", "PA11b.S1.M", "PA11b.S1.F", 
-###         "PA11b.S5.T", "PA11b.S5.M", "PA11b.S5.F", "PA11b.S6.", 
-###         "PA11b.S7.", "PA11b.S8.", "PA11b.S9.", "PA11b.S10.", 
-###         "PA11c.O1.", "PA11c.S1.T", "PA11c.S1.M", "PA11c.S1.F", 
-###         "PA11c.S3.", "PA11c.S4.", "PA11c.S5.", "PA11c.S6.", "PA11c.S7.", 
-###         "PA11c.C1.", "PA11c.C2.")))] %>% .[, `:=`(calculate_score_change, 
-###     !(JAF_KEY %in% c("PA3.S3.", "PA6a.O1.", "PA6a.S1.M", "PA6a.S1.F", 
-###         "PA6a.S2.AGRI", "PA6a.S2.IND", "PA6a.S2.CONSTR", "PA6a.S2.SERV", 
-###         "PA6a.S3.", "PA6a.S4.", "PA6b.S4.", "PA8.1.S4.", "PA10.O1.", 
-###         "PA10.S1.", "PA10.S2.")))]
+### {
+###     selected_indics <- c("PA5.O1.", "PA5.S1.F", "PA5.S1.INAC", 
+###         "PA5.S1.M", "PA5.S1.PT", "PA5.S2.")
+###     dt %>% .[, `:=`(value, value %>% ifelse(. %in% selected_indics, 
+###         sub("age = \"Y15-64\"", "age = \"Y20-64\"", ., fixed = TRUE), 
+###         .))] %>% .[, `:=`(unit_of_level, unit_of_level %>% ifelse(. %in% 
+###         selected_indics, sub("15-64", "20-64", ., fixed = TRUE), 
+###         .))]
+### }
 
 inside(JAF_INDICATORS, indicator_named = "PA1.O1.") = 
 specification(
@@ -31,18 +25,6 @@ source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
 value = fromEurostatDataset("lfsi_emp_a", 
     with_filters(sex = "T", unit = "PC_POP", age = "Y20-64", indic_em = "EMP_LFS"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA1e.O1.") = 
-specification(
-name = "Disability employment gap by level of activity limitation and sex - total",
-unit_of_level = "% (of popn)",
-unit_of_change = "pp",
-indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 2 COUNTRY",
-source = "Eurostat, EU Labour Force Survey",
-high_is_good = FALSE,
-value = fromEurostatDataset("hlth_dlm200", 
-    with_filters(sex = "T", unit = "PC_PNT", lev_limit = "SM_SEV"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA1.S1.F") = 
@@ -2295,6 +2277,18 @@ value = fromEurostatDataset("lfsa_urgacob",
     with_filters(c_birth = "NEU27_2020_FOR", sex = "T", unit = "PC", age = "Y20-64"))
 )
 
+inside(JAF_INDICATORS, indicator_named = "PA1e.O1.") = 
+specification(
+name = "Disability employment gap by level of activity limitation and sex - total",
+unit_of_level = "% (of popn)",
+unit_of_change = "pp",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 2 COUNTRY",
+source = "Eurostat, EU Labour Force Survey",
+high_is_good = FALSE,
+value = fromEurostatDataset("hlth_dlm200", 
+    with_filters(sex = "T", unit = "PC_PNT", lev_limit = "SM_SEV"))
+)
+
 inside(JAF_INDICATORS, indicator_named = "PA2a.O1.") = 
 specification(
 name = "Involuntary temporary employment as % of total employees 15-64",
@@ -3625,6 +3619,28 @@ value = fromFormula(a - b,
     with_filters(age = "Y15-64", sex = "T", unit = "PC_EMP", wstatus = "EMP_TEMP"), time_period = -3)))
 )
 
+inside(JAF_INDICATORS, indicator_named = "PA6a.S5.") = 
+specification(
+name = "Employment in newly established enterprises ",
+unit_of_level = "% (of current employment in all active enterprises)",
+unit_of_change = "pp",
+indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 5 COUNTRY",
+source = "Eurostat, Structural Business Statistics ",
+high_is_good = TRUE,
+value = fromFormula((a + b + c + d)/e,
+  where = variables(
+  a = fromEurostatDataset("bd_9bd_sz_cl_r2", 
+    with_filters(nace_r2 = "B-S_X_K642", sizeclas = "TOTAL", indic_sb = "V16920")),
+  b = fromEurostatDataset("bd_9bd_sz_cl_r2", 
+    with_filters(nace_r2 = "B-S_X_K642", sizeclas = "TOTAL", indic_sb = "V16941")),
+  c = fromEurostatDataset("bd_9bd_sz_cl_r2", 
+    with_filters(nace_r2 = "B-S_X_K642", sizeclas = "TOTAL", indic_sb = "V16942")),
+  d = fromEurostatDataset("bd_9bd_sz_cl_r2", 
+    with_filters(nace_r2 = "B-S_X_K642", sizeclas = "TOTAL",      indic_sb = "V16943")),
+  e = fromEurostatDataset("bd_9bd_sz_cl_r2", 
+    with_filters(nace_r2 = "B-S_X_K642", sizeclas = "TOTAL", indic_sb = "V16910"))))
+)
+
 inside(JAF_INDICATORS, indicator_named = "PA6a.S6.") = 
 specification(
 name = "Self-employment – Share of self-employed workers among overall employment ",
@@ -4767,6 +4783,34 @@ value = fromEurostatDataset("edat_lfse_03",
     with_filters(isced11 = "ED0-2", sex = "F", unit = "PC", age = "Y45-54"))
 )
 
+inside(JAF_INDICATORS, indicator_named = "PA9.1.S5.") = 
+specification(
+name = "Annual expenditure in primary and secondary education per capita of age group 5-19 relative to GDP per capita",
+unit_of_level = "ratio of ratios (expenditure/young population)/(GDP/total population)",
+unit_of_change = "NA",
+indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 7 COUNTRY",
+source = "Eurostat",
+high_is_good = TRUE,
+value = fromFormula(((a + b + c)/(d + e + f))/(g/h),
+  where = variables(
+  a = fromEurostatDataset("educ_uoe_fine01", 
+    with_filters(unit = "MIO_EUR", sector = "S1", isced11 = "ED1")),
+  b = fromEurostatDataset("educ_uoe_fine01", 
+    with_filters(unit = "MIO_EUR", sector = "S1", isced11 = "ED2")),
+  c = fromEurostatDataset("educ_uoe_fine01", 
+    with_filters(unit = "MIO_EUR", sector = "S1", isced11 = "ED3")),
+  d = fromEurostatDataset("demo_pjangroup", 
+    with_filters(unit = "NR", sex = "T", age = "Y5-9")),
+  e = fromEurostatDataset("demo_pjangroup",      
+    with_filters(unit = "NR", sex = "T", age = "Y10-14")),
+  f = fromEurostatDataset("demo_pjangroup", 
+    with_filters(unit = "NR", sex = "T", age = "Y15-19")),
+  g = fromEurostatDataset("nama_10_gdp", 
+    with_filters(unit = "CP_MEUR", na_item = "B1GQ")),
+  h = fromEurostatDataset("demo_pjangroup", 
+    with_filters(unit = "NR", sex = "T", age = "TOTAL"))))
+)
+
 inside(JAF_INDICATORS, indicator_named = "PA9.1.S6.") = 
 specification(
 name = "Participation in VET for people with secondary educational attainment",
@@ -5053,6 +5097,26 @@ source = "Eurostat, EU labour Force Survey",
 high_is_good = TRUE,
 value = fromEurostatDataset("edat_lfse_03", 
     with_filters(isced11 = "ED5-8", sex = "F", unit = "PC", age = "Y55-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA9.2.S4.") = 
+specification(
+name = "Annual expenditure in tertiary education per capita of age group 20-24 relative to GDP per capita",
+unit_of_level = "ratio of ratios (expenditure/young population)/(GDP/total population)",
+unit_of_change = "NA",
+indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 7 COUNTRY",
+source = "Eurostat",
+high_is_good = TRUE,
+value = fromFormula((a/b)/(c/d),
+  where = variables(
+  a = fromEurostatDataset("educ_uoe_fine01", 
+    with_filters(unit = "MIO_EUR", sector = "S1", isced11 = "ED5-8")),
+  b = fromEurostatDataset("demo_pjangroup", 
+    with_filters(unit = "NR", sex = "T", age = "Y20-24")),
+  c = fromEurostatDataset("nama_10_gdp", 
+    with_filters(unit = "CP_MEUR", na_item = "B1GQ")),
+  d = fromEurostatDataset("demo_pjangroup", 
+    with_filters(unit = "NR", sex = "T", age = "TOTAL"))))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA9.2.S5.") = 
@@ -5785,19 +5849,6 @@ value = fromFormula(100 - a,
     with_filters(age = "TOTAL", n_item = "0", sex = "T", unit = "PC"))))
 )
 
-# Duplication of PA11.S20.
-# inside(JAF_INDICATORS, indicator_named = "PA11.S13.T") = 
-# specification(
-# name = "Material and social deprivation - total",
-# unit_of_level = "% (of total popn)",
-# unit_of_change = "pp",
-# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
-# source = "Eurostat, EU Statistics on Income and Living Conditions",
-# high_is_good = FALSE,
-# value = fromEurostatDataset("ilc_mdsd07", 
-#     with_filters(age = "TOTAL", sex = "T", unit = "PC"))
-# )
-
 inside(JAF_INDICATORS, indicator_named = "PA11.S14.") = 
 specification(
 name = "Housing cost overburden",
@@ -5859,6 +5910,42 @@ value = fromFormula((a + b)/c,
     with_filters(currency = "EUR", indic_il = "SHARE", quantile = "Q2")),
   c = fromEurostatDataset("ilc_di01", 
     with_filters(currency = "EUR", indic_il = "SHARE", quantile = "QU1"))))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S20.") = 
+specification(
+name = "Material and social deprivation rate - total",
+unit_of_level = "% (of total popn)",
+unit_of_change = "NA",
+indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07", 
+    with_filters(sex = "T", unit = "PC", age = "TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S20.F") = 
+specification(
+name = "Material and social deprivation rate - women",
+unit_of_level = "% (of total popn)",
+unit_of_change = "pp",
+indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07", 
+    with_filters(sex = "F", unit = "PC", age = "TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.S20.M") = 
+specification(
+name = "Material and social deprivation rate - men",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07", 
+    with_filters(sex = "M", unit = "PC", age = "TOTAL"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C1.") = 
@@ -6100,6 +6187,18 @@ source = "Eurostat, Demographic Statistics",
 high_is_good = TRUE,
 value = fromEurostatDataset("hlth_hlye", 
     with_filters(sex = "M", indic_he = "LE_0", unit = "YR"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11.C10.") = 
+specification(
+name = "Benefit recipient rate for people (18-64) at risk of poverty in (quasi-) jobless households",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "CONTEXT COMPENDIUM 8 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromEurostatDataset("ILC_LI70", 
+    with_filters(sex = "T", unit = "PC", workint = "WI0-02", yn_rskpov = "YES_ARP"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C11.Q1") = 
@@ -6486,18 +6585,17 @@ value = fromFormula((a * b + c * d)/(b + d),
     with_filters(age = "Y_LT18",      hhtyp = "HH_DCH", sex = "T", workint = "WI085-1"))))
 )
 
-# Duplication of PA11a.S20.
-# inside(JAF_INDICATORS, indicator_named = "PA11a.S11.") = 
-# specification(
-# name = "Material and social deprivation for children (0-17)",
-# unit_of_level = "% (of popn 0-17)",
-# unit_of_change = "pp",
-# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
-# source = "Eurostat, EU Statistics on Income and Living Conditions",
-# high_is_good = FALSE,
-# value = fromEurostatDataset("ilc_mdsd07", 
-#     with_filters(age = "Y_LT18", sex = "T", unit = "PC"))
-# )
+inside(JAF_INDICATORS, indicator_named = "PA11a.S20.") = 
+specification(
+name = "Material and social deprivation rate (0-17)",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07", 
+    with_filters(sex = "T", unit = "PC", age = "Y_LT18"))
+)
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.C1.ATWORK") = 
 specification(
@@ -6961,18 +7059,65 @@ value = fromEurostatDataset("ilc_mdsd07",
     with_filters(sex = "T", unit = "PC", age = "Y18-64"))
 )
 
-# Duplication of PA11b.S12.
-# inside(JAF_INDICATORS, indicator_named = "PA11b.S12.T") = 
-# specification(
-# name = "Material and social deprivation - (18-64) total",
-# unit_of_level = "% (of popn 18-64)",
-# unit_of_change = "pp",
-# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
-# source = "Eurostat, EU Statistics on Income and Living Conditions",
-# high_is_good = FALSE,
-# value = fromEurostatDataset("ilc_mdsd07", 
-#     with_filters(age = "Y18-64", sex = "T", unit = "PC"))
-# )
+inside(JAF_INDICATORS, indicator_named = "PA11b.S12.F") = 
+specification(
+name = "Material and Social Deprivation rate (18-64) - women",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07", 
+    with_filters(sex = "F", unit = "PC", age = "Y18-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S12.M") = 
+specification(
+name = "Material and Social Deprivation rate (18-64) - men",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd07", 
+    with_filters(sex = "M", unit = "PC", age = "Y18-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S13.F") = 
+specification(
+name = "In-work material and social deprivation rate ((18-64), for those in employment) - women",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd01", 
+    with_filters(sex = "F", unit = "PC", age = "Y18-64", wstatus = "EMP"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S13.M") = 
+specification(
+name = "In-work material and social deprivation rate ((18-64), for those in employment) - men",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd01", 
+    with_filters(sex = "M", unit = "PC", age = "Y18-64", wstatus = "EMP"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.S13.T") = 
+specification(
+name = "In-work material and social deprivation rate ((18-64), for those in employment) - total",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_mdsd01", 
+    with_filters(sex = "T", unit = "PC", age = "Y18-64", wstatus = "EMP"))
+)
 
 inside(JAF_INDICATORS, indicator_named = "PA11b.C4.") = 
 specification(
@@ -7050,6 +7195,18 @@ value = fromFormula(100 - a,
   where = variables(
   a = fromEurostatDataset("hlth_silc_08", 
     with_filters(age = "Y16-64", quantile = "TOTAL", reason = "NO_UNMET", sex = "T", unit = "PC"))))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11b.C10.") = 
+specification(
+name = "Benefit recipient rate for people (18-64) at risk of poverty in (quasi-)jobless households",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "CONTEXT COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromEurostatDataset("ILC_LI70", 
+    with_filters(sex = "T", unit = "PC", workint = "WI0-02", yn_rskpov = "YES_ARP"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11c.O1.") = 
@@ -7445,6 +7602,18 @@ value = fromEurostatDataset("ilc_mdsd07",
     with_filters(age = "Y_GE65", sex = "T", unit = "PC"))
 )
 
+inside(JAF_INDICATORS, indicator_named = "PA11c.S21.") = 
+specification(
+name = "Gender Pension Gap (65 or over)",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
+source = "NA",
+high_is_good = FALSE,
+value = fromEurostatDataset("ILC_PNP13", 
+    with_filters(age = "Y_GE65", unit = "AVG"))
+)
+
 inside(JAF_INDICATORS, indicator_named = "PA11c.C6.F") = 
 specification(
 name = "Unmet need for medical care (women 65+)",
@@ -7483,6 +7652,42 @@ source = "Eurostat, Demographic Statistics",
 high_is_good = TRUE,
 value = fromEurostatDataset("demo_mlexpec", 
     with_filters(sex = "T", unit = "YR", age = "Y65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.C8.F") = 
+specification(
+name = "Healthy life years at 65 - women",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "CONTEXT COMPENDIUM 9 COUNTRY",
+source = "NA",
+high_is_good = TRUE,
+value = fromEurostatDataset("hlth_hlye", 
+    with_filters(sex = "F", unit = "YR", indic_he = "HLY_65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.C8.M") = 
+specification(
+name = "Healthy life years at 65 - men",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "CONTEXT COMPENDIUM 9 COUNTRY",
+source = "NA",
+high_is_good = TRUE,
+value = fromEurostatDataset("hlth_hlye", 
+    with_filters(sex = "M", unit = "YR", indic_he = "HLY_65"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11c.C8.T") = 
+specification(
+name = "Healthy life years at 65 - Total",
+unit_of_level = "NA",
+unit_of_change = "NA",
+indicator_groups = "CONTEXT COMPENDIUM 9 COUNTRY",
+source = "NA",
+high_is_good = TRUE,
+value = fromEurostatDataset("hlth_hlye", 
+    with_filters(sex = "T", unit = "YR", indic_he = "HLY_65"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA13.S1.") = 
@@ -7715,269 +7920,6 @@ value = fromFormula(a - b,
     with_filters(age = "Y_GE16", quantile = "QU1", reason = "TOOEFW", sex = "T", unit = "PC")),
   b = fromEurostatDataset("hlth_silc_08", 
     with_filters(age = "Y_GE16", quantile = "QU5", reason = "TOOEFW", sex = "T", unit = "PC"))))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA6a.S5.") = 
-specification(
-name = "Employment in newly established enterprises ",
-unit_of_level = "% (of current employment in all active enterprises)",
-unit_of_change = "pp",
-indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 5 COUNTRY",
-source = "Eurostat, Structural Business Statistics ",
-high_is_good = TRUE,
-value = fromFormula((a + b + c + d)/e,
-  where = variables(
-  a = fromEurostatDataset("bd_9bd_sz_cl_r2", 
-    with_filters(nace_r2 = "B-S_X_K642", sizeclas = "TOTAL", indic_sb = "V16920")),
-  b = fromEurostatDataset("bd_9bd_sz_cl_r2", 
-    with_filters(nace_r2 = "B-S_X_K642", sizeclas = "TOTAL", indic_sb = "V16941")),
-  c = fromEurostatDataset("bd_9bd_sz_cl_r2", 
-    with_filters(nace_r2 = "B-S_X_K642", sizeclas = "TOTAL", indic_sb = "V16942")),
-  d = fromEurostatDataset("bd_9bd_sz_cl_r2", 
-    with_filters(nace_r2 = "B-S_X_K642", sizeclas = "TOTAL",      indic_sb = "V16943")),
-  e = fromEurostatDataset("bd_9bd_sz_cl_r2", 
-    with_filters(nace_r2 = "B-S_X_K642", sizeclas = "TOTAL", indic_sb = "V16910"))))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA9.1.S5.") = 
-specification(
-name = "Annual expenditure in primary and secondary education per capita of age group 5-19 relative to GDP per capita",
-unit_of_level = "ratio of ratios (expenditure/young population)/(GDP/total population)",
-unit_of_change = "NA",
-indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 7 COUNTRY",
-source = "Eurostat",
-high_is_good = TRUE,
-value = fromFormula(((a + b + c)/(d + e + f))/(g/h),
-  where = variables(
-  a = fromEurostatDataset("educ_uoe_fine01", 
-    with_filters(unit = "MIO_EUR", sector = "S1", isced11 = "ED1")),
-  b = fromEurostatDataset("educ_uoe_fine01", 
-    with_filters(unit = "MIO_EUR", sector = "S1", isced11 = "ED2")),
-  c = fromEurostatDataset("educ_uoe_fine01", 
-    with_filters(unit = "MIO_EUR", sector = "S1", isced11 = "ED3")),
-  d = fromEurostatDataset("demo_pjangroup", 
-    with_filters(unit = "NR", sex = "T", age = "Y5-9")),
-  e = fromEurostatDataset("demo_pjangroup",      
-    with_filters(unit = "NR", sex = "T", age = "Y10-14")),
-  f = fromEurostatDataset("demo_pjangroup", 
-    with_filters(unit = "NR", sex = "T", age = "Y15-19")),
-  g = fromEurostatDataset("nama_10_gdp", 
-    with_filters(unit = "CP_MEUR", na_item = "B1GQ")),
-  h = fromEurostatDataset("demo_pjangroup", 
-    with_filters(unit = "NR", sex = "T", age = "TOTAL"))))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA9.2.S4.") = 
-specification(
-name = "Annual expenditure in tertiary education per capita of age group 20-24 relative to GDP per capita",
-unit_of_level = "ratio of ratios (expenditure/young population)/(GDP/total population)",
-unit_of_change = "NA",
-indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 7 COUNTRY",
-source = "Eurostat",
-high_is_good = TRUE,
-value = fromFormula((a/b)/(c/d),
-  where = variables(
-  a = fromEurostatDataset("educ_uoe_fine01", 
-    with_filters(unit = "MIO_EUR", sector = "S1", isced11 = "ED5-8")),
-  b = fromEurostatDataset("demo_pjangroup", 
-    with_filters(unit = "NR", sex = "T", age = "Y20-24")),
-  c = fromEurostatDataset("nama_10_gdp", 
-    with_filters(unit = "CP_MEUR", na_item = "B1GQ")),
-  d = fromEurostatDataset("demo_pjangroup", 
-    with_filters(unit = "NR", sex = "T", age = "TOTAL"))))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11.S20.") = 
-specification(
-name = "Material and social deprivation rate - total",
-unit_of_level = "% (of total popn)",
-unit_of_change = "NA",
-indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd07", 
-    with_filters(sex = "T", unit = "PC", age = "TOTAL"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11.S20.F") = 
-specification(
-name = "Material and social deprivation rate - women",
-unit_of_level = "% (of total popn)",
-unit_of_change = "pp",
-indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd07", 
-    with_filters(sex = "F", unit = "PC", age = "TOTAL"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11.S20.M") = 
-specification(
-name = "Material and social deprivation rate - men",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd07", 
-    with_filters(sex = "M", unit = "PC", age = "TOTAL"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11.C10.") = 
-specification(
-name = "Benefit recipient rate for people (18-64) at risk of poverty in (quasi-) jobless households",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "CONTEXT COMPENDIUM 8 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = TRUE,
-value = fromEurostatDataset("ILC_LI70", 
-    with_filters(sex = "T", unit = "PC", workint = "WI0-02", yn_rskpov = "YES_ARP"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11a.S20.") = 
-specification(
-name = "Material and social deprivation rate (0-17)",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd07", 
-    with_filters(sex = "T", unit = "PC", age = "Y_LT18"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11b.S12.F") = 
-specification(
-name = "Material and Social Deprivation rate (18-64) - women",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd07", 
-    with_filters(sex = "F", unit = "PC", age = "Y18-64"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11b.S12.M") = 
-specification(
-name = "Material and Social Deprivation rate (18-64) - men",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd07", 
-    with_filters(sex = "M", unit = "PC", age = "Y18-64"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11b.S13.F") = 
-specification(
-name = "In-work material and social deprivation rate ((18-64), for those in employment) - women",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd01", 
-    with_filters(sex = "F", unit = "PC", age = "Y18-64", wstatus = "EMP"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11b.S13.M") = 
-specification(
-name = "In-work material and social deprivation rate ((18-64), for those in employment) - men",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd01", 
-    with_filters(sex = "M", unit = "PC", age = "Y18-64", wstatus = "EMP"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11b.S13.T") = 
-specification(
-name = "In-work material and social deprivation rate ((18-64), for those in employment) - total",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_mdsd01", 
-    with_filters(sex = "T", unit = "PC", age = "Y18-64", wstatus = "EMP"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11b.C10.") = 
-specification(
-name = "Benefit recipient rate for people (18-64) at risk of poverty in (quasi-)jobless households",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "CONTEXT COMPENDIUM 9 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = TRUE,
-value = fromEurostatDataset("ILC_LI70", 
-    with_filters(sex = "T", unit = "PC", workint = "WI0-02", yn_rskpov = "YES_ARP"))
-)
-
-# Duplication of PA11c.S9.T
-# inside(JAF_INDICATORS, indicator_named = "PA11c.S20.") = 
-# specification(
-# name = "Material and social deprivation rate (65+)",
-# unit_of_level = "NA",
-# unit_of_change = "NA",
-# indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
-# source = "Eurostat, EU Statistics on Income and Living Conditions",
-# high_is_good = FALSE,
-# value = fromEurostatDataset("ilc_mdsd07", 
-#    with_filters(sex = "T", unit = "PC", age = "Y_GE65"))
-# )
-
-inside(JAF_INDICATORS, indicator_named = "PA11c.S21.") = 
-specification(
-name = "Gender Pension Gap (65 or over)",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "SUBINDICATOR COMPENDIUM 9 COUNTRY",
-source = "NA",
-high_is_good = FALSE,
-value = fromEurostatDataset("ILC_PNP13", 
-    with_filters(age = "Y_GE65", unit = "AVG"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11c.C8.F") = 
-specification(
-name = "Healthy life years at 65 - women",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "CONTEXT COMPENDIUM 9 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("hlth_hlye", 
-    with_filters(sex = "F", unit = "YR", indic_he = "HLY_65"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11c.C8.M") = 
-specification(
-name = "Healthy life years at 65 - men",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "CONTEXT COMPENDIUM 9 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("hlth_hlye", 
-    with_filters(sex = "M", unit = "YR", indic_he = "HLY_65"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11c.C8.T") = 
-specification(
-name = "Healthy life years at 65 - Total",
-unit_of_level = "NA",
-unit_of_change = "NA",
-indicator_groups = "CONTEXT COMPENDIUM 9 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("hlth_hlye", 
-    with_filters(sex = "T", unit = "YR", indic_he = "HLY_65"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11d1.O1.") = 

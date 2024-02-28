@@ -190,26 +190,17 @@ sort_JAF_KEY <- function(JAF_KEY) {
     .[order(pa[[1]],pa[[2]],mid[[1]],mid[[2]],.)]
 }
 
-order_by_JAF_KEY <- function(dt) {
-  JAF_KEY_col_position <-
-    which(colnames(dt)=='JAF_KEY')
-  dt_col_names <-
-    colnames(dt)[-JAF_KEY_col_position]
-  dt_tmp <-
-    copy(dt) %>% 
-    # trick needed because merge below doesn't allow duplicated e.g. empty column names in dt:
-    setnames(seq_len(ncol(.))[-JAF_KEY_col_position],
-             paste0('x',seq_len(ncol(.)))[-JAF_KEY_col_position])
-  dt$JAF_KEY %>% 
-    sort_JAF_KEY() %>% 
-    data.table(JAF_KEY=.,
-               .ordering.=seq_along(.)) %>% 
-    merge(dt_tmp, by='JAF_KEY') %>% 
-    setorder(.ordering.) %>% 
-    .[, .ordering. := NULL] %>% 
-    setnames(2:ncol(.),
-             dt_col_names)
-}
+order_by_JAF_KEY <- function(dt)
+  dt %>% 
+  .[, ._.ordering._. := 
+      JAF_KEY %>% 
+      as.character() %>% 
+      factor(levels=
+               unique(.) %>% 
+               sort_JAF_KEY()) %>% 
+      as.integer()] %>% 
+  setorder(._.ordering._.) %>% 
+  .[, ._.ordering._. := NULL]
 
 IndicatorsWithPopulationWeigths <- '
 | JAF_KEY   | age     | sex  | isced11  | citizen         |

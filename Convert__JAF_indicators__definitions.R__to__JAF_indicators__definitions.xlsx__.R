@@ -52,7 +52,9 @@ sort_JAF_KEY <- function(JAF_KEY) {
   pa <-
     JAF_KEY %>% 
     `JAF_KEY->PA_string` %>% 
-    list(as.numeric(gsub('[^0-9.]',"",.)),
+    list(gsub('[^0-9.]',"",.) %>% 
+           as.numeric() %>% 
+           ifelse(.>99,floor(./10),.), # otherwise it becomes e.g. 115 for PA11f5.S2.
          .)
   mid <- 
     JAF_KEY %>% 
@@ -65,13 +67,16 @@ sort_JAF_KEY <- function(JAF_KEY) {
 }
 
 order_by_JAF_KEY <- function(dt)
-  dt$JAF_KEY %>% 
-  sort_JAF_KEY() %>% 
-  data.table(JAF_KEY=.,
-             .ordering.=seq_along(.)) %>% 
-  merge(dt, by='JAF_KEY') %>% 
-  setorder(.ordering.) %>% 
-  .[, .ordering. := NULL]
+  dt %>% 
+  .[, ._.ordering._. := 
+      JAF_KEY %>% 
+      as.character() %>% 
+      factor(levels=
+               unique(.) %>% 
+               sort_JAF_KEY()) %>% 
+      as.integer()] %>% 
+  setorder(._.ordering._.) %>% 
+  .[, ._.ordering._. := NULL]
 
 JAF_catalogue <-
   JAF_INDICATORS %>%
@@ -161,7 +166,7 @@ wb_workbook() %>%
                 paste0(collapse='\n') %>% 
                 paste0('Compiled by ',Sys.getenv("USERNAME"),
                        ' \nfrom JAF_indicators__definitions.R \n',
-                       'which had the following comments: \n',.))
+                       'which had the following comments: \n',.)) %>% 
   setZoomInAllSheets(50) %>% 
   wb_save('JAF_indicators__definitions.xlsx')
 

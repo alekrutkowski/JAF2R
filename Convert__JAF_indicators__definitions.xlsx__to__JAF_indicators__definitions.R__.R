@@ -14,7 +14,7 @@ JAF_definitions <-
   read_xlsx('JAF_indicators__definitions.xlsx',
             sheet=1,
             start_row=2,
-            cols=1:10) %>% 
+            cols=1:11) %>% 
   as.data.table() %>% 
   `if`(exists('MODIFICATIONS'),
        MODIFICATIONS(.), # injected function to make programmatic modifications if the function `MODIFICATIONS` exists in the environment
