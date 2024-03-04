@@ -86,7 +86,8 @@ JAF_catalogue <-
       as.data.table() %>% 
       .[, JAF_KEY:=JAF_KEY]) %>% 
   rbindlist() %>% 
-  order_by_JAF_KEY()
+  order_by_JAF_KEY() %>% 
+  setcolorder('JAF_KEY')
 
 set_zoom <- function(x, sheet_views) # from https://stackoverflow.com/a/74239871
   gsub('(?<=zoomScale=")[0-9]+', x,
