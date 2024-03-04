@@ -76,12 +76,6 @@ sanitiseFilename <- function(string)
 
 isNotNA <- Negate(is.na)
 
-readMarkDownTable <- function(markdown_string)
-  markdown_string %>% 
-  fread(sep="|", header=TRUE, encoding='UTF-8') %>% 
-  .[-1] %>% 
-  .[, sapply(.,\(col) !is.logical(col)), with=FALSE]
-
 QuantAssessmentTable <-
   # Levels in rows, changes in columns
   '
