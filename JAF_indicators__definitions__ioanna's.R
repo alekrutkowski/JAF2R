@@ -783,14 +783,12 @@ source = "AMECO",
 high_is_good = FALSE,
 value = fromFormula((a/b - 1)*100,
 where = variables(
- a = fromAMECO( 'AMECO7',
-  with_filters(CODE="QLCD")),
- b = fromAMECO( 'AMECO7',
-  with_filters(CODE="QLCD"), time_period=-1)
+ a = fromAMECO('QLCD'),
+ b = fromAMECO('QLCD', time_period = -1)
 ))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA.9.2.C1.25-34") = 
+inside(JAF_INDICATORS, indicator_named = "PA9.2.C1.25-34") = 
 specification(
 name = "Completion of tertiary or equivalent education (aged 25-34) / Population by educational attainment level - tertiary",
 unit_of_level = "",
@@ -798,10 +796,10 @@ indicator_groups = "COMPENDIUM 8",
 source = "Eurostat",
 high_is_good = TRUE,
 value = fromEurostatDataset("edat_lfse_03",
-   with_filters(age="Y25-34", sex="T", unit="PC"))
+   with_filters(age="Y25-34", sex="T", unit="PC")) # needs isced11
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA.9.2.C4") = 
+inside(JAF_INDICATORS, indicator_named = "PA9.2.C4") = 
 specification(
 name = "Graduates in tertiary education, in science, math., computing, engineering, manufacturing, construction, by sex - per 1000 of population aged 20-29",
 unit_of_level = "",
@@ -809,7 +807,7 @@ indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat",
 high_is_good = NA,
 value = fromEurostatDataset("educ_uoe_grad04",
-   with_filters(sex="T", unit="P_THAB"))
+   with_filters(sex="T", unit="P_THAB")) # needs isced11
 )
 
 

@@ -591,24 +591,15 @@ AMECO_Eurostat_country_codes <- '
 | SVK    | SK         | Slovakia        |
 | FIN    | FI         | Finland         |
 | SWE    | SE         | Sweden          |
-' %>% readMarkDownTable %>% x
+' %>% readMarkDownTable
 
 intColnames <- function(dt)
   suppressWarnings(colnames(dt) %>% .[!is.na(as.integer(.))])
 
-fromAMECO <- function(ameco_variable_code) {
-  ## Alternative implementation based on full file download -- slower:
-  # url. <- 
-  #   'https://ec.europa.eu/economy_finance/db_indicators/ameco/documents/ameco0_CSV.zip'
-  # zip_file_path <- tempfile()
-  # download.file(url., zip_file_path, mode = "wb")
-  # extract_dir <- tempdir()
-  # unzip(zip_file_path, exdir = extract_dir)
-  # csv_file_path <- file.path(extract_dir, paste0(ameco_csv_file,'.CSV'))
-  # fread(csv_file_path)
+getAMECO <- function(ameco_variable_code)
   ## Explanations from:
   ## https://economy-finance.ec.europa.eu/document/download/39ecd989-4f52-4f43-b91b-eb9dada2718d_en?filename=ameco_online_data_files_numerical_coding.pdf
-  ## In the url below:
+  ## In the `switch` function below:
   ## TRN: Transformations over time (first numerical code)
   ## 3 = Index numbers (and moving arithmetic mean for time periods)
   ## AGG: Aggregation mode (second numerical code)
@@ -618,11 +609,11 @@ fromAMECO <- function(ameco_variable_code) {
   ## REF: Codes for relative performance (fourth numerical code)
   ## For all other variables simply including a value for the reporting country, the code is 0.
   ameco_variable_code %>% 
-    toupper() %>% 
     switch('QLCD'='3.1.0.0.',
-           'undefined') %>% 
+           stop('The code ',.," doesn't have a defined four digit (X.X.X.X.) prefix code\n",
+                'in the `switch` function inside `getAMECO` function!',call.=FALSE)) %>% 
     paste0('https://webgate.ec.europa.eu/fastop/wq/ameco/online?fullVariable=',.,
-           toupper(ameco_variable_code),'&countries=',
+           ameco_variable_code,'&countries=',
            'AUT,BEL,BGR,CYP,CZE,DEU,DNK,EA20,ESP,EST,EU27,FIN,FRA,GRC,HRV,HUN,IRL,ITA,LTU,LUX,LVA,MLT,',
            'NLD,POL,PRT,ROM,SVK,SVN,SWE&years=',
            seq.int(2000, Sys.Date() %>% substr(1,4) %>% as.integer()) %>% 
@@ -631,28 +622,22 @@ fromAMECO <- function(ameco_variable_code) {
     html_node(xpath='/html/body/table') %>% 
     html_table(convert=FALSE) %>% # wrong colnames = title "European Commission	Economic and Financial Affairs	Tax and Benefits"
     as.data.table() %>% 
-    # TODO: melt
-}
+    .[, c('Country',intColnames(.)), with=FALSE] %>%
+    melt(id.vars = 'Country',
+         measure.vars = intColnames(.),
+         variable.name='time',
+         value.name='value_') %>%
+    merge(AMECO_Eurostat_country_codes, by='Country') %>%
+    .[,value_ := as.numeric(value_)] %>%
+    .[,time := as.integer(as.character(time))] %>%
+    .[,.(geo,time,value_)]
 
-memo_getAMECOcsv <- memoise::memoise(getAMECOcsv)
+memo_getAMECO <- memoise::memoise(getAMECO)
 
-# fromAMECO <- function(ameco_csv_file, with_filters, time_period=0L) {
-#   memo_getAMECOcsv(ameco_csv_file) %>% 
-#     Reduce(\(dt,x) dt[get(x)==with_filters[[x]]],
-#            names(with_filters),
-#            .) %>% 
-#     .[, c('CNTRY',intColnames(.)), with=FALSE] %>% 
-#     melt(id.vars = setdiff(colnames(.),intColnames(.)),
-#          measure.vars = intColnames(.),
-#          variable.name='time',
-#          value.name='value_') %>% 
-#     .[,value_ := as.numeric(value_)] %>% 
-#     .[,time := as.integer(as.character(time))] %>% 
-#     .[,time := time - time_period] %>% 
-#     merge(AMECO_Eurostat_country_codes, by='CNTRY') %>% 
-#     .[,.(geo,time,value_)]
-# }
-
+fromAMECO <- function(ameco_variable_code, time_period=0L)
+  toupper(ameco_variable_code) %>% 
+  memo_getAMECO() %>% 
+  .[,time := time - time_period]
 
 fromSpecialCalculation <- function(indicator, with_filters=NULL)
   tryCatch(get(indicator),
