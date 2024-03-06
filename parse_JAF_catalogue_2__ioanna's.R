@@ -257,7 +257,8 @@ path_to_folder_with_source_definitions <-
   ""
 
 source_of_definitions <-
-  c("Ioanna's modified and added indicators.xlsx")
+  # c("Ioanna's modified and added indicators.xlsx")
+  c("Additional Indicators from Ioanna.xlsx")
 
 ensureNoDuplicateJAF_KEY <- function(dt)
   dt$JAF_KEY %>% 
@@ -397,7 +398,8 @@ CatalogNoFormulaOrCond <-
 
 saveAsUtf8 <- function(contents, file_name) {
   file_conn <-
-    file("JAF_indicators__definitions__ioanna's.R", open="wt", encoding="UTF-8")
+    # file("JAF_indicators__definitions__ioanna's.R", open="wt", encoding="UTF-8")
+    file("Additional Indicators from Ioanna.R", open="wt", encoding="UTF-8")
   on.exit(close(file_conn))
   cat(contents, file=file_conn, sep='\n')
 }

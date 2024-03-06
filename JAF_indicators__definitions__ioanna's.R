@@ -182,8 +182,8 @@ value = fromEurostatDataset("une_rt_a",
 
 inside(JAF_INDICATORS, indicator_named = "PA1b.S3.") = 
 specification(
-name = "Youth unemployment ratio, for population aged 15-24 - total",
-unit_of_level = "% (of popn 15-24)",
+name = "Youth unemployment ratio, for population aged 15-29 - total",
+unit_of_level = "% (of popn 15-29)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
@@ -191,30 +191,30 @@ high_is_good = FALSE,
 value = fromFormula(100 * a/b,
 where = variables(
  a = fromEurostatDataset('lfsa_pganws',
-  with_filters(age="Y15-24", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="UNE")),
+  with_filters(age="Y15-29", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="UNE")),
  b = fromEurostatDataset('lfsa_pganws',
-  with_filters(age="Y15-24", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="POP"))
+  with_filters(age="Y15-29", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="POP"))
 ))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA1b.S4.") = 
 specification(
-name = "Ratio of Youth unemployment ratio (15-24) to Adult unemployment ratio (25-74)",
+name = "Ratio of Youth unemployment ratio (15-29) to Adult unemployment ratio (15-74)",
 unit_of_level = "ratio",
 unit_of_change = "ratio change",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
 value = fromFormula((a/b)/((c - a)/(d - b)),
-where = variables(
- a = fromEurostatDataset('lfsa_pganws',
-  with_filters(age="Y15-24", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="UNE")),
- b = fromEurostatDataset('lfsa_pganws',
-  with_filters(age="Y15-24", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="POP")),
- c = fromEurostatDataset('lfsa_pganws',
-  with_filters(age="Y15-74", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="UNE")),
- d = fromEurostatDataset('lfsa_pganws',
-  with_filters(age="Y15-74", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="POP"))
+  where = variables(
+  a = fromEurostatDataset("lfsa_pganws",
+   with_filters(age="Y15-29", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="UNE")),
+  b = fromEurostatDataset("lfsa_pganws",
+   with_filters(age="Y15-29", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="POP")),
+  c = fromEurostatDataset("lfsa_pganws",
+   with_filters(age="Y15-74", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="UNE")),
+  d = fromEurostatDataset("lfsa_pganws",
+   with_filters(age="Y15-74", citizen="TOTAL", sex="T", unit="THS_PER", wstatus="POP"))
 ))
 )
 
@@ -387,7 +387,7 @@ name = "Unemployment rate (55-64) -men",
 unit_of_level = "% (of active popn 55-64)",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat, EU Labour Force Survey",
-high_is_good = NA,
+high_is_good = FALSE,
 value = fromEurostatDataset("lfsa_urgan",
    with_filters(sex="M", unit="PC", citizen="TOTAL", age="Y55-64"))
 )
@@ -398,7 +398,7 @@ name = "Unemployment rate (55-64) -women",
 unit_of_level = "% (of active popn 55-64)",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat, EU Labour Force Survey",
-high_is_good = NA,
+high_is_good = FALSE,
 value = fromEurostatDataset("lfsa_urgan",
    with_filters(sex="F", unit="PC", citizen="TOTAL", age="Y55-64"))
 )
@@ -644,9 +644,9 @@ inside(JAF_INDICATORS, indicator_named = "PA3.S6.") =
 specification(
 name = "Unemployment rate (15-74 year old)",
 unit_of_level = "% (of active popn 15-74)",
-indicator_groups = "SECONDARY COMPENDIUM 8 COUNTRY",
+indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, LFS",
-high_is_good = NA,
+high_is_good = FALSE,
 value = fromEurostatDataset("lfsa_urgan",
    with_filters(age="Y15-74", sex="T", unit="PC", citizen="Total"))
 )
@@ -680,7 +680,7 @@ name = "Employed ICT specialists - total",
 unit_of_level = "Percentage of total employment",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat",
-high_is_good = NA,
+high_is_good = TRUE,
 value = fromEurostatDataset("isoc_sks_itspt",
    with_filters(unit="PC_EMP"))
 )
@@ -691,7 +691,7 @@ name = "Employed ICT specialists by sex - women",
 unit_of_level = "Percentage",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat",
-high_is_good = NA,
+high_is_good = TRUE,
 value = fromEurostatDataset("isoc_sks_itsps",
    with_filters(unit="PC", sex="F"))
 )
@@ -702,32 +702,20 @@ name = "Enterprises that provided training to develop/upgrade ICT skills of thei
 unit_of_level = "Percentage of enterprises",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat",
-high_is_good = NA,
+high_is_good = TRUE,
 value = fromEurostatDataset("isoc_ske_itts",
    with_filters(unit="PC_ENT", size_emp="GE10", nace_r2="C10-S951_X_K", indic_is="E_ITT2"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA8.2.S4._added") = 
+inside(JAF_INDICATORS, indicator_named = "PA8.2.S4.") = 
 specification(
 name = "General government expenditure by function (COFOG) - education",
 unit_of_level = "Percentage of GDP",
-indicator_groups = "SECONDARY COMPENDIUM 8",
+indicator_groups = "SUBINDICATOR COMPENDIUM 8",
 source = "Eurostat",
-high_is_good = NA,
+high_is_good = TRUE,
 value = fromEurostatDataset("gov_10a_exp",
    with_filters(unit="PC_GDP", sector="S13", cofog99="GF09", na_item="TE"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA8.2.S4._modified") = 
-specification(
-name = "Public spending on human resources – total public expenditure in education as % of GDP ",
-unit_of_level = "% (of GDP)",
-unit_of_change = "pp",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 7 COUNTRY",
-source = "Eurostat, UOE",
-high_is_good = TRUE,
-value = fromEurostatDataset("educ_figdp",
-   with_filters(indic_ed="FP01_1", unit="PC"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA9.1.S1.") = 
@@ -796,7 +784,7 @@ indicator_groups = "COMPENDIUM 8",
 source = "Eurostat",
 high_is_good = TRUE,
 value = fromEurostatDataset("edat_lfse_03",
-   with_filters(age="Y25-34", sex="T", unit="PC")) # needs isced11
+   with_filters(age="Y25-34", sex="T", unit="PC", isced11="ED5-8")) # needs isced11
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA9.2.C4") = 
@@ -805,9 +793,9 @@ name = "Graduates in tertiary education, in science, math., computing, engineeri
 unit_of_level = "",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat",
-high_is_good = NA,
+high_is_good = TRUE,
 value = fromEurostatDataset("educ_uoe_grad04",
-   with_filters(sex="T", unit="P_THAB")) # needs isced11
+   with_filters(sex="T", unit="P_THAB", isced11="ED5-8")) # needs isced11
 )
 
 

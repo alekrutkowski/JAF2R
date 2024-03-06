@@ -213,9 +213,18 @@ removeNotNeededPA11 <- function(dt)
   # There are still too many gender breakdowns that are not required.
   # The only indicators where a gender breakdown is required are PA11.S3 and PA11.S20
   # Do not include the gender breakdowns for PA11.O1, PA11.S1, PA11.S2, nor for PA11c.O1, PA11c.S1, PA11c.S2
-  dt[!grepl('^PA11\\..+\\.(M|F)$',JAF_KEY) | 
-       grepl('^(PA11\\.S3|PA11\\.S20)',JAF_KEY)] %>% 
-  .[!grepl('^PA11c\\.(O1|S1|S2).+\\.(M|F)$',JAF_KEY)]
+  dt %>% 
+  .[!grepl('^PA11\\..+\\.(M|F)$',JAF_KEY) | 
+      grepl('^(PA11\\.S3|PA11\\.S20)',JAF_KEY)] %>% 
+  .[!grepl('^PA11c\\.(O1|S1|S2)\\.(M|F)$',JAF_KEY)] %>% 
+  # Paul's email 5 Mar 2024:
+  # The following items are beyond the core JAF variables and should not appear in the main JAF charts (e.g. the Country Profiles folder PNG charts or the same charts in the pdf folder files) . (They are mainly only needed for the JAF vertical assessment exercise.)
+  # •	Gender breakdowns for PA11.S20 should not appear in the charts
+  # •	Age breakdowns for PA11.S9 should not appear in the charts 
+  # •	PA11.S6.18-64.WI02-045 (At-risk of poverty rate for population living in low work intensity households (18-64)) should not appear in the charts
+  .[!grepl('^PA11\\.S20\\.(M|F)$',JAF_KEY)] %>% 
+  .[!grepl('^PA11\\.S9\\..+$',JAF_KEY)] %>% 
+  .[JAF_KEY!='PA11.S6.18-64.WI02-045']
 
 
 # Actions -----------------------------------------------------------------
