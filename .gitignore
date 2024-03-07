@@ -10,3 +10,4 @@ JAF_mini_catalogue_*.csv
 ~*.xlsx
 JAF_INDICATORS * *.Rds
 tmp.RData
+/tmp

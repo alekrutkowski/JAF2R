@@ -140,6 +140,9 @@ calculate <- memoise::memoise(
   function(indicator_named, unevaluated_specification_list) {
     if (!is.null(JAF_INDICATORS[[indicator_named]]))
       stop('\nIndicator `',indicator_named,'` is already defined!')
+    if (!grepl("^PA\\d+(\\.\\d)?[a-z]?(\\d+)?\\.[OSC]\\d+\\..*",
+               indicator_named))
+      stop('\nIndicator name `',indicator_named,'` is invalid!')
     message(delimiter,'Calculating ',indicator_named)
     retry(do.call(function(name,
                            indicator_groups,

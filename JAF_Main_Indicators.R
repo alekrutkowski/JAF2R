@@ -149,7 +149,7 @@ for (indic_type in c('latest_value','change')) {
     Reduce(init=.,
            x=seq.int(2,2+ncol(head.)-3,3),
            f=\(wb.,x) {
-             if (x%%30==0) cat(' .')
+             if (x%%5==0) cat('.')
              Reduce(init=wb.,
                     x=3:5,
                     f=\(wb..,y)
@@ -166,7 +166,7 @@ for (indic_type in c('latest_value','change')) {
            x=seq.int(2,2+ncol(head.)-3,3) %>%
              {paste0(int2col(.),'3:',int2col(.+2),2+nrow(head.)+nrow(vals.)+1)},
            f=\(wb.,x) {
-             if (x%%30==0) cat(' .')
+             if (col2int(sub("^([A-Z]+).*",'\\1',x))%%10==0) cat('.')
              wb_add_border(wb.,
                            dims=x)
            }) %>%

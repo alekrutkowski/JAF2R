@@ -1,26 +1,27 @@
-### 478 indicators
+### 477 indicators
 ### compiled automatically by rutkoal
-### on 2024-03-04 10:14:08
-### from `JAF_indicators__definitions.xlsx`, worksheet "compiled on 2024-03-04 09.57.07"
+### on 2024-03-06 17:20:18
+### from `JAF_indicators__definitions.xlsx`, worksheet "compiled on 2024-03-04 10.14.19"
 ### from `JAF_indicators__definitions.xlsx`, worksheet "Comments"
 ### With subsequent modifications:
 ### function (dt) 
-### dt %>% .[JAF_KEY %not in% c("PA1.C3.15-74", "PA1.C3.15-74.F", 
-###     "PA1.C3.15-74.M", "PA1.C3.EU27_2020", "PA1.C3.high", "PA1.C3.low", 
-###     "PA1.C3.nonEU27_2020", "PA1.C4.high", "PA1.C4.low", "PA1.C4.nonEU27_2020", 
-###     "PA1b.C2.low.F", "PA1b.C2.low.M", "PA1b.C2.low.T", "PA1b.C2.med-high.F", 
-###     "PA1b.C2.med-high.M", "PA1b.C2.med-high.T", "PA1b.C4.F", 
-###     "PA1b.C4.M", "PA1b.C5.F", "PA1b.C5.M", "PA1b.S2.", "PA1b.S3.", 
-###     "PA1b.S4.", "PA1d.C5.F", "PA1d.C5.M", "PA1d.C5.T", "PA1d.C6.F", 
-###     "PA1d.C6.M", "PA1d.C6.T", "PA2a.S1.Y15-24", "PA2a.S1.Y25-54", 
-###     "PA2a.S6.Y15-24", "PA2b.S2.", "PA2b.S4.Y15_24", "PA2b.S4.Y15_64", 
-###     "PA2b.S4.Y25_54", "PA2b.S4.Y55_64", "PA3.S1.", "PA3.S2.", 
-###     "PA6a.S5.", "PA8.2.S4.", "PA10.C3.", "PA10.C4.", "PA10.C5.", 
-###     "PA10.C6.", "PA9.1 S1.", "PA 9.2 C4", "PA 9.2 C1 25-34", 
-###     "PA1.C20-29.M", "PA1.C20-29.W", "PA1.C4.M", "PA1.C4.W", "PA3.S6.", 
-###     "PA8.1.C6.T", "PA8.1.C6.W", "PA8.1.C7.", "PA8.2.S4.", "PA1c.C11.M", 
-###     "PA1c.C11.W", "PA1c.C15.M", "PA1c.C15.W", "PA1b.C7.15-24.T", 
-###     "PA1b.C7.15-24.W", "PA1b.C7.15-24.M")]
+### dt[JAF_KEY %not in% c("PA1.C2.30-54.F", "PA1.C2.30-54.M", "PA1.C20-29.M", 
+###     "PA1.C20-29.W", "PA1.C3.15-74", "PA1.C3.15-74.F", "PA1.C3.15-74.M", 
+###     "PA1.C3.EU27_2020", "PA1.C3.high", "PA1.C3.low", "PA1.C3.nonEU27_2020", 
+###     "PA1.C4.M", "PA1.C4.W", "PA1.C4.high", "PA1.C4.low", "PA1.C4.nonEU27_2020", 
+###     "PA1.C5.20-64.F", "PA1.C5.20-64.M", "PA1.C6.20-64.F", "PA1.C6.20-64.M", 
+###     "PA1.C6.20-64.T", "PA1.S5.", "PA10.C3.", "PA10.C4.", "PA10.C5.", 
+###     "PA10.C6.", "PA1b.C2.low.F", "PA1b.C2.low.M", "PA1b.C2.low.T", 
+###     "PA1b.C2.med-high.F", "PA1b.C2.med-high.M", "PA1b.C2.med-high.T", 
+###     "PA1b.C4.F", "PA1b.C4.M", "PA1b.C5.F", "PA1b.C5.M", "PA1b.C7.15-24.M", 
+###     "PA1b.C7.15-24.T", "PA1b.C7.15-24.W", "PA1b.S2.", "PA1b.S3.", 
+###     "PA1b.S4.", "PA1c.C11.M", "PA1c.C11.W", "PA1c.C15.M", "PA1c.C15.W", 
+###     "PA1d.C5.F", "PA1d.C5.M", "PA1d.C5.T", "PA1d.C6.F", "PA1d.C6.M", 
+###     "PA1d.C6.T", "PA2a.S1.Y15-24", "PA2a.S1.Y25-54", "PA2a.S6.Y15-24", 
+###     "PA2b.S2.", "PA2b.S4.Y15_24", "PA2b.S4.Y15_64", "PA2b.S4.Y25_54", 
+###     "PA2b.S4.Y55_64", "PA3.S1.", "PA3.S2.", "PA3.S6.", "PA6a.S5.", 
+###     "PA8.1.C6.T", "PA8.1.C6.W", "PA8.1.C7.", "PA8.2.S4.", "PA9.1.S1.", 
+###     "PA9.2.C1.25-34", "PA9.2.C4")]
 
 inside(JAF_INDICATORS, indicator_named = "PA1.O1.") = 
 specification(
@@ -92,18 +93,6 @@ source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
 value = fromEurostatDataset("lfsa_ergaed", 
     with_filters(isced11 = "ED0-2", sex = "T", unit = "PC", age = "Y20-64"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA1.S5.") = 
-specification(
-name = "Employment rate of non-EU nationals aged 20-64 - total",
-unit_of_level = "% (of non-EU national popn 20-64)",
-unit_of_change = "pp",
-indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
-source = "Eurostat, EU Labour Force Survey",
-high_is_good = TRUE,
-value = fromEurostatDataset("lfsa_ergan", 
-    with_filters(sex = "T", unit = "PC", citizen = "NEU27_2020_FOR", age = "Y20-64"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA1.C1.") = 
@@ -4526,7 +4515,7 @@ value = fromEurostatDataset("ilc_mdsd07",
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.C1.ATWORK") = 
 specification(
-name = "At-risk-of poverty rate of children living in household at work (WI>0.2) ",
+name = "At-risk-of poverty rate of children living in household at work (WI>=0.2) ",
 unit_of_level = "% (of popn 0-17)",
 unit_of_change = "NA",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 9 COUNTRY",
@@ -4539,7 +4528,7 @@ value = fromEurostatDataset("ilc_li06",
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.C1.NOTWORK") = 
 specification(
-name = "At-risk-of poverty rate of children living in household not at work (WI=<0.2) ",
+name = "At-risk-of poverty rate of children living in household not at work (WI<0.2) ",
 unit_of_level = "% (of popn 0-17)",
 unit_of_change = "NA",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 9 COUNTRY",
@@ -6398,7 +6387,7 @@ value = fromEurostatDataset("lfsi_emp_a",
    with_filters(sex="F", unit="PC_POP", age="Y20-64", indic_em="ACT"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA1.C20-29.M") = 
+inside(JAF_INDICATORS, indicator_named = "PA1.C7.20-29.M") = 
 specification(
 name = "Employment rate of young people aged 20-29 - men",
 unit_of_level = "% (of popn 20-29)",
@@ -6409,7 +6398,7 @@ value = fromEurostatDataset("lfsa_ergaed",
    with_filters(age="Y20-29", isced11="TOTAL", sex="M", unit="PC"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA1.C20-29.W") = 
+inside(JAF_INDICATORS, indicator_named = "PA1.C7.20-29.W") = 
 specification(
 name = "Employment rate of young people aged 20-29 - women",
 unit_of_level = "% (of popn 20-29)",
@@ -7040,7 +7029,7 @@ value = fromEurostatDataset("edat_lfse_03",
    with_filters(age="Y25-34", sex="T", unit="PC", isced11="ED5-8")) # needs isced11
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA9.2.C4") = 
+inside(JAF_INDICATORS, indicator_named = "PA9.2.C4.") = 
 specification(
 name = "Graduates in tertiary education, in science, math., computing, engineering, manufacturing, construction, by sex - per 1000 of population aged 20-29",
 unit_of_level = "",

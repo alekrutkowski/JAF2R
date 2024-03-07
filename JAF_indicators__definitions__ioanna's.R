@@ -784,7 +784,7 @@ indicator_groups = "COMPENDIUM 8",
 source = "Eurostat",
 high_is_good = TRUE,
 value = fromEurostatDataset("edat_lfse_03",
-   with_filters(age="Y25-34", sex="T", unit="PC", isced11="ED5-8")) # needs isced11
+   with_filters(age="Y25-34", sex="T", unit="PC", isced11="ED5-8"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA9.2.C4") = 
@@ -795,7 +795,7 @@ indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat",
 high_is_good = TRUE,
 value = fromEurostatDataset("educ_uoe_grad04",
-   with_filters(sex="T", unit="P_THAB", isced11="ED5-8")) # needs isced11
+   with_filters(sex="T", unit="P_THAB", isced11="ED5-8"))
 )
 
 
