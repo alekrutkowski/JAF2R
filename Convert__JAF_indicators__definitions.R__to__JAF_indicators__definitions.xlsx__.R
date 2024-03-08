@@ -157,7 +157,7 @@ wb_workbook() %>%
                  start_row=3,
                  start_col=ncol(JAF_catalogue)+length(new_col_suffixes)+1) %>% 
   wb_set_col_widths(cols=1:(ncol(JAF_catalogue)+length(new_col_suffixes)+1),
-                    widths=c(17,50,50,30,15,26,15,23,21,30,
+                    widths=c(17,50,50,30,15,26,15,23,21,15,30,
                              12,12,12,13,18,18,10)) %>%
   wb_freeze_pane(first_active_row=3, first_active_col=2) %>% 
   wb_add_worksheet('Comments') %>% 
