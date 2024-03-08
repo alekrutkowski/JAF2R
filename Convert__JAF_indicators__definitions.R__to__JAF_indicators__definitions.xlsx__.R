@@ -62,7 +62,6 @@ sort_JAF_KEY <- function(JAF_KEY) {
     {list(substr(.,1,1) %>% kit::nswitch('O',1L, 'S',2L, 'C',3L,
                                          default=4L),
           substr(.,2,nchar(.)) %>% as.integer())}
-  print(JAF_KEY[mid[[2]] %>% is.na])
   JAF_KEY %>% 
     .[order(pa[[1]],pa[[2]],mid[[1]],mid[[2]],.)]
 }
