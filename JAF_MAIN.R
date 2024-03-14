@@ -17,6 +17,7 @@ if (interactive() && exists("JAF_INDICATORS"))
   } else init()
 
 # Order matters:
+preCheckInidcators('JAF_indicators__definitions.R')
 runScript('JAF_indicators__definitions.R')
 runScript('JAF_output.R')
 runScript('JAF_KEC.R')

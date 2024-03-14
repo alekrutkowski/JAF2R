@@ -30,6 +30,9 @@ EU_geo_code <-
 EA_geo_code <-
   'EA20'
 
+JAF_KEY__REGEX_PATTERN <-
+  "^PA\\d+(\\.\\d)?[a-z]?(\\d+)?\\.[OSC]\\d+\\..*"
+
 `%without%` <- setdiff
 
 delimiter <-
@@ -53,6 +56,37 @@ memoised_importDataList <-
 
 
 # Functions ---------------------------------------------------------------
+
+preCheckInidcators <- function(path_to_indicators_definitions_r_script) {
+  message('Pre-checking `',path_to_indicators_definitions_r_script,'`...')
+  script <-
+    readLines(path_to_indicators_definitions_r_script) %>% 
+    data.table(`File row number`=seq_along(.),
+               code=.) %>% 
+    .[!grepl('^(\\s*#)',code)] %>% # drop comments
+    .[grepl('.*indicator_named.*=.*[\'"].*[\'"].*',code)] %>% # keep only the lines with JAF_KEYs
+    .[, JAF_KEY := 
+        sub('.*indicator_named.*=.*[\'"](PA.*)[\'"].*','\\1',code)] %>% 
+    .[, not_correct_JAF_KEY :=
+        !grepl(JAF_KEY__REGEX_PATTERN, JAF_KEY)]
+  if (any(script$not_correct_JAF_KEY)) {
+    `if`(length(script$not_correct_JAF_KEY %>% .[.])>1,
+         c('s','are'), c("","is")) %>% 
+      {stop('\nIn `',path_to_indicators_definitions_r_script,'`\n',
+            'the following JAF_KEY',.[1],' ',.[2],' not correct:')}
+    print(script[(not_correct_JAF_KEY),.(`File row number`,JAF_KEY)],
+          row.names=FALSE)
+  }
+  if (script$JAF_KEY %>% {length(.)!=length(unique(.))}) {
+    stop('\nIn `',path_to_indicators_definitions_r_script,'`\n',
+         'the following JAF_KEYs are duplicated:')
+    print(script[,.(`File row number`,JAF_KEY)] %>% 
+            .[, .SD[.N>1], by=JAF_KEY] %>% 
+            .[, Value := NULL],
+          row.names=FALSE)
+  }
+  message('`',path_to_indicators_definitions_r_script,'` pre-checked.')
+}
 
 fromFormula <- function(formula_expression, where) {
   list_of_data_tables <- 
@@ -140,7 +174,7 @@ calculate <- memoise::memoise(
   function(indicator_named, unevaluated_specification_list) {
     if (!is.null(JAF_INDICATORS[[indicator_named]]))
       stop('\nIndicator `',indicator_named,'` is already defined!')
-    if (!grepl("^PA\\d+(\\.\\d)?[a-z]?(\\d+)?\\.[OSC]\\d+\\..*",
+    if (!grepl(JAF_KEY__REGEX_PATTERN,
                indicator_named))
       stop('\nIndicator name `',indicator_named,'` is invalid!')
     message(delimiter,'Calculating ',indicator_named)
