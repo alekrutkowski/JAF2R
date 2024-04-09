@@ -81,7 +81,8 @@ preCheckInidcators <- function(path_to_indicators_definitions_r_script) {
     stop('\nIn `',path_to_indicators_definitions_r_script,'`\n',
          'the following JAF_KEYs are duplicated:')
     print(script[,.(`File row number`,JAF_KEY)] %>% 
-            .[, .SD[.N>1], by=JAF_KEY],
+            .[, .SD[.N>1], by=JAF_KEY] %>% 
+            setorder(`File row number`),
           row.names=FALSE)
   }
   message('`',path_to_indicators_definitions_r_script,'` pre-checked.')
