@@ -4651,29 +4651,29 @@ value = fromEurostatDataset("hlth_dlm200",
     with_filters(sex = "T", unit = "PC_PNT", lev_limit = "SM_SEV"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA1e.O1.F") = 
-specification(
-name = "Disability employment gap by level of activity limitation and sex - total",
-unit_of_level = "% (of popn)",
-unit_of_change = "pp",
-indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 2 COUNTRY",
-source = "Eurostat, EU Labour Force Survey",
-high_is_good = FALSE,
-value = fromEurostatDataset("hlth_dlm200", 
-    with_filters(sex = "F", unit = "PC_PNT", lev_limit = "SM_SEV"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA1e.O1.M") = 
-specification(
-name = "Disability employment gap by level of activity limitation and sex - total",
-unit_of_level = "% (of popn)",
-unit_of_change = "pp",
-indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 2 COUNTRY",
-source = "Eurostat, EU Labour Force Survey",
-high_is_good = FALSE,
-value = fromEurostatDataset("hlth_dlm200", 
-    with_filters(sex = "M", unit = "PC_PNT", lev_limit = "SM_SEV"))
-)
+# inside(JAF_INDICATORS, indicator_named = "PA1e.O1.F") = 
+# specification(
+# name = "Disability employment gap by level of activity limitation and sex - total",
+# unit_of_level = "% (of popn)",
+# unit_of_change = "pp",
+# indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 2 COUNTRY",
+# source = "Eurostat, EU Labour Force Survey",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("hlth_dlm200", 
+#     with_filters(sex = "F", unit = "PC_PNT", lev_limit = "SM_SEV"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA1e.O1.M") = 
+# specification(
+# name = "Disability employment gap by level of activity limitation and sex - total",
+# unit_of_level = "% (of popn)",
+# unit_of_change = "pp",
+# indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 2 COUNTRY",
+# source = "Eurostat, EU Labour Force Survey",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("hlth_dlm200", 
+#     with_filters(sex = "M", unit = "PC_PNT", lev_limit = "SM_SEV"))
+# )
 
 inside(JAF_INDICATORS, indicator_named = "PA2a.C2.REG") = 
 specification(
