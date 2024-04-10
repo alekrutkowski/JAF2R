@@ -58,7 +58,7 @@ memoised_importDataList <-
 # Functions ---------------------------------------------------------------
 
 preCheckInidcators <- function(path_to_indicators_definitions_r_script) {
-  message('Pre-checking `',path_to_indicators_definitions_r_script,'`...')
+  message('\nPre-checking `',path_to_indicators_definitions_r_script,'`...')
   script <-
     readLines(path_to_indicators_definitions_r_script) %>% 
     data.table(`File row number`=seq_along(.),
@@ -72,18 +72,20 @@ preCheckInidcators <- function(path_to_indicators_definitions_r_script) {
   if (any(script$not_correct_JAF_KEY)) {
     `if`(length(script$not_correct_JAF_KEY %>% .[.])>1,
          c('s','are'), c("","is")) %>% 
-      {stop('\nIn `',path_to_indicators_definitions_r_script,'`\n',
-            'the following JAF_KEY',.[1],' ',.[2],' not correct:')}
+      {message('\nIn `',path_to_indicators_definitions_r_script,'`\n',
+               'the following JAF_KEY',.[1],' ',.[2],' not correct:')}
     print(script[(not_correct_JAF_KEY),.(`File row number`,JAF_KEY)],
           row.names=FALSE)
+    stop('Wrong JAF_KEY(s)!')
   }
   if (script$JAF_KEY %>% {length(.)!=length(unique(.))}) {
-    stop('\nIn `',path_to_indicators_definitions_r_script,'`\n',
-         'the following JAF_KEYs are duplicated:')
+    message('\nIn `',path_to_indicators_definitions_r_script,'`\n',
+            'the following JAF_KEYs are duplicated:')
     print(script[,.(`File row number`,JAF_KEY)] %>% 
             .[, .SD[.N>1], by=JAF_KEY] %>% 
             setorder(`File row number`),
           row.names=FALSE)
+    stop('Duplicated JAF_KEY(s)!')
   }
   message('`',path_to_indicators_definitions_r_script,'` pre-checked.')
 }
@@ -645,29 +647,29 @@ getAMECO <- function(ameco_variable_code)
   ## 0 Original units (e.g. national currency, persons, etc.)
   ## REF: Codes for relative performance (fourth numerical code)
   ## For all other variables simply including a value for the reporting country, the code is 0.
-  ameco_variable_code %>% 
-    switch('QLCD'='3.1.0.0.',
-           stop('The code ',.," doesn't have a defined four digit (X.X.X.X.) prefix code\n",
-                'in the `switch` function inside `getAMECO` function!',call.=FALSE)) %>% 
-    paste0('https://webgate.ec.europa.eu/fastop/wq/ameco/online?fullVariable=',.,
-           ameco_variable_code,'&countries=',
-           'AUT,BEL,BGR,CYP,CZE,DEU,DNK,EA20,ESP,EST,EU27,FIN,FRA,GRC,HRV,HUN,IRL,ITA,LTU,LUX,LVA,MLT,',
-           'NLD,POL,PRT,ROM,SVK,SVN,SWE&years=',
-           seq.int(2000, Sys.Date() %>% substr(1,4) %>% as.integer()) %>% 
-             paste(collapse=',')) %>% 
-    read_html() %>% 
-    html_node(xpath='/html/body/table') %>% 
-    html_table(convert=FALSE) %>% # wrong colnames = title "European Commission	Economic and Financial Affairs	Tax and Benefits"
-    as.data.table() %>% 
-    .[, c('Country',intColnames(.)), with=FALSE] %>%
-    melt(id.vars = 'Country',
-         measure.vars = intColnames(.),
-         variable.name='time',
-         value.name='value_') %>%
-    merge(AMECO_Eurostat_country_codes, by='Country') %>%
-    .[,value_ := as.numeric(value_)] %>%
-    .[,time := as.integer(as.character(time))] %>%
-    .[,.(geo,time,value_)]
+ameco_variable_code %>% 
+  switch('QLCD'='3.1.0.0.',
+         stop('The code ',.," doesn't have a defined four digit (X.X.X.X.) prefix code\n",
+              'in the `switch` function inside `getAMECO` function!',call.=FALSE)) %>% 
+  paste0('https://webgate.ec.europa.eu/fastop/wq/ameco/online?fullVariable=',.,
+         ameco_variable_code,'&countries=',
+         'AUT,BEL,BGR,CYP,CZE,DEU,DNK,EA20,ESP,EST,EU27,FIN,FRA,GRC,HRV,HUN,IRL,ITA,LTU,LUX,LVA,MLT,',
+         'NLD,POL,PRT,ROM,SVK,SVN,SWE&years=',
+         seq.int(2000, Sys.Date() %>% substr(1,4) %>% as.integer()) %>% 
+           paste(collapse=',')) %>% 
+  read_html() %>% 
+  html_node(xpath='/html/body/table') %>% 
+  html_table(convert=FALSE) %>% # wrong colnames = title "European Commission	Economic and Financial Affairs	Tax and Benefits"
+  as.data.table() %>% 
+  .[, c('Country',intColnames(.)), with=FALSE] %>%
+  melt(id.vars = 'Country',
+       measure.vars = intColnames(.),
+       variable.name='time',
+       value.name='value_') %>%
+  merge(AMECO_Eurostat_country_codes, by='Country') %>%
+  .[,value_ := as.numeric(value_)] %>%
+  .[,time := as.integer(as.character(time))] %>%
+  .[,.(geo,time,value_)]
 
 memo_getAMECO <- memoise::memoise(getAMECO)
 
