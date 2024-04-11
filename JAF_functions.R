@@ -676,6 +676,7 @@ memo_getAMECO <- memoise::memoise(getAMECO)
 fromAMECO <- function(ameco_variable_code, time_period=0L)
   toupper(ameco_variable_code) %>% 
   memo_getAMECO() %>% 
+  copy() %>% 
   .[,time := time - time_period]
 
 fromSpecialCalculation <- function(indicator, with_filters=NULL)
