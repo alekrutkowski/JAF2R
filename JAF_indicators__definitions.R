@@ -4545,14 +4545,14 @@ value = fromEurostatDataset("lfsa_urgan",
 
 inside(JAF_INDICATORS, indicator_named = "PA1d.C8.nonEU27_2020") = 
 specification(
-name = "Activity rate non-EU27_2020 citizens (15-74)",
+name = "Activity rate non-EU27_2020 citizens (20-64)",
 unit_of_level = "% (of non-EU27_2020)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
 value = fromEurostatDataset("lfsa_argan", 
-    with_filters(sex = "T", unit = "PC", citizen = "NEU27_2020_FOR", age = "Y15-74"))
+    with_filters(sex = "T", unit = "PC", citizen = "NEU27_2020_FOR", age = "Y20-64"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA1d.O1.") = 
@@ -4951,16 +4951,16 @@ value = fromEurostatDataset("lfsa_etgar",
     with_filters(sex = "T", reason = "EDUC_TNG", unit = "PC_SAL_TEMP", age = "Y15-64"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA2a.S6.Y15-24") = 
+inside(JAF_INDICATORS, indicator_named = "PA2a.S6.Y15-29") = 
 specification(
-name = "Share of temporary employees due to education or training (15-24)",
-unit_of_level = "% (of temp employees 15-24) ",
+name = "Share of temporary employees due to education or training (15-29)",
+unit_of_level = "% (of temp employees 15-29) ",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 3 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
 value = fromEurostatDataset("lfsa_etgar", 
-    with_filters(sex = "T", reason = "EDUC_TNG", unit = "PC_SAL_TEMP", age = "Y15-24"))
+    with_filters(sex = "T", reason = "EDUC_TNG", unit = "PC_SAL_TEMP", age = "Y15-29"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA2b.C1.Y15_24") = 
@@ -5053,14 +5053,14 @@ value = fromEurostatDataset("lfsa_enewasn",
 
 inside(JAF_INDICATORS, indicator_named = "PA2b.S2.") = 
 specification(
-name = "Newly employed young (aged 15-24) in %",
-unit_of_level = "% (of young employed 15-24)",
+name = "Newly employed young (aged 15-29) in %",
+unit_of_level = "% (of young employed 15-29)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 3 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
 value = fromEurostatDataset("lfsa_enewasn", 
-    with_filters(unit = "PC", citizen = "TOTAL", wstatus = "EMP", age = "Y15-24"))
+    with_filters(unit = "PC", citizen = "TOTAL", wstatus = "EMP", age = "Y15-29"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA2b.S3.") = 
@@ -5502,7 +5502,7 @@ value = fromLFSspecialFile("lfse_inactpt_lackcare",
 
 inside(JAF_INDICATORS, indicator_named = "PA5.C4.") = 
 specification(
-name = "Employees for whom overtime is given as the main reason for actual hours worked during the reference week being different from the person's usual hous worked",
+name = "Employees for whom overtime is given as the main reason for actual hours worked during the reference week being different from the person's usual hours worked",
 unit_of_level = "% (of employees)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 5 COUNTRY",
@@ -5510,6 +5510,41 @@ source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
 value = fromLFSspecialFile("lfse_overtime", 
     with_filters(sex = "T", age = "Y20-64"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA5.C5.") = 
+specification(
+name = "Part-time employment, Percentage of total employment (total)",
+unit_of_level = "% (of total employment)",
+unit_of_change = "pp",
+indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 5 COUNTRY",
+source = "Eurostat, EU Labour Force Survey",
+high_is_good = FALSE,
+value = fromEurostatDataset("lfsi_pt_a", 
+    with_filters(sex = "T", age="Y15-64", unit="PC_EMP", wstatus="EMP_PT"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA5.C5.F") = 
+specification(
+name = "Part-time employment, Percentage of total employment (women)",
+unit_of_level = "% (of total employment)",
+unit_of_change = "pp",
+indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 5 COUNTRY",
+source = "Eurostat, EU Labour Force Survey",
+high_is_good = FALSE,
+value = fromEurostatDataset("lfsi_pt_a", 
+    with_filters(sex = "F", age="Y15-64", unit="PC_EMP", wstatus="EMP_PT"))
+)
+inside(JAF_INDICATORS, indicator_named = "PA5.C5.M") = 
+specification(
+name = "Part-time employment, Percentage of total employment (men)",
+unit_of_level = "% (of total employment)",
+unit_of_change = "pp",
+indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 5 COUNTRY",
+source = "Eurostat, EU Labour Force Survey",
+high_is_good = FALSE,
+value = fromEurostatDataset("lfsi_pt_a", 
+    with_filters(sex = "M", age="Y15-64", unit="PC_EMP", wstatus="EMP_PT"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA5.O1.") = 
@@ -7171,7 +7206,41 @@ value = fromEurostatDataset("edat_lfse_03",
     with_filters(isced11 = "ED3-8", sex = "T", unit = "PC", age = "Y20-24"))
 )
 
+inside(JAF_INDICATORS, indicator_named = "PA1.C4.20-29.T") = 
+specification(
+name = "Activity rate of population 20-29 - total",
+source = "Eurostat, LFS series-detailed annual survey results",
+high_is_good = TRUE,
+unit_of_level = "%",
+unit_of_change = "p.p.",
+indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
+value = fromEurostatDataset("lfsa_pganws", 
+    with_filters(age = "Y20-29", citizen = "TOTAL", sex = "T", unit = "PC"))
+)
 
+inside(JAF_INDICATORS, indicator_named = "PA1.C4.20-29.F") = 
+specification(
+name = "Activity rate of population 20-29 - women",
+source = "Eurostat, LFS series-detailed annual survey results",
+high_is_good = TRUE,
+unit_of_level = "%",
+unit_of_change = "p.p.",
+indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
+value = fromEurostatDataset("lfsa_pganws", 
+    with_filters(age = "Y20-29", citizen = "TOTAL", sex = "F", unit = "PC"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA1.C4.20-29.M") = 
+specification(
+name = "Activity rate of population 20-29 - men",
+source = "Eurostat, LFS series-detailed annual survey results",
+high_is_good = TRUE,
+unit_of_level = "%",
+unit_of_change = "p.p.",
+indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
+value = fromEurostatDataset("lfsa_pganws", 
+    with_filters(age = "Y20-29", citizen = "TOTAL", sex = "M", unit = "PC"))
+)
 
 inside(JAF_INDICATORS, indicator_named = "PA1.C4.30-54.T") = 
 specification(
