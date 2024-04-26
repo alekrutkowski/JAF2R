@@ -1,5 +1,5 @@
 runScript <- function(file_name) {
-  message('\n\n====== Staring ',file_name,' ======\n')
+  message('\n\n====== Starting ',file_name,' ======\n')
   source(file_name)
 }
 

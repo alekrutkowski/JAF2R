@@ -399,6 +399,7 @@ finaliseOECDdataset <- function(dt)
   .[, geo := countrycode(country,
                          origin='iso3c',
                          destination='eurostat')] %>% 
+  .[geo %in% EU_Members_geo_codes] %>% 
   .[, value_ := as.numeric(value_)] %>% 
   .[, country := NULL]
 
