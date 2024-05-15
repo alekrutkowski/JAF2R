@@ -83,7 +83,9 @@ preCheckInidcators <- function(path_to_indicators_definitions_r_script) {
             'the following JAF_KEYs are duplicated:')
     print(script[,.(`File row number`,JAF_KEY)] %>% 
             .[, .SD[.N>1], by=JAF_KEY] %>% 
-            setorder(`File row number`),
+            .[,.(`File row number`=
+                   paste(`File row number`,collapse=", ")),
+              by=JAF_KEY],
           row.names=FALSE)
     stop('Duplicated JAF_KEY(s)!')
   }

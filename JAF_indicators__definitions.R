@@ -6725,7 +6725,7 @@ value = fromEurostatDataset("isoc_sks_itsps",
     with_filters(unit = "PC", sex = "F"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA8.1.C7.") = 
+inside(JAF_INDICATORS, indicator_named = "PA8.2.C2.") = 
 specification(
 name = "Enterprises that provided training to develop/upgrade ICT skills of their personnel by size class of enterprise",
 unit_of_level = "Percentage of enterprises",
