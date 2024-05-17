@@ -3,7 +3,7 @@ title: $JAF^2_R$ and SPPM VA Technical Manual
 subtitle: DG EMPL’s Joint Assessment Framework (JAF), version 2, migrated to [R](https://www.r-project.org/about.html), and Social Protection Performance Monitor Vertical Assessment (SPPM VA)
 author: Alek
 format: docx
-date: 2024-05-15
+date: 2024-05-16
 ---
 
 <img src="https://github.com/alekrutkowski/JAF2R/blob/main/JAF2R_logo_v3.png?raw=true" alt="JAF2R project logo" width="250"/>
@@ -11,7 +11,9 @@ date: 2024-05-15
 # Inventory of files
 
 All the "input" files (scripts and data files) are located in one folder, no
-subfolders are used for storing these "input" files.
+subfolders are used for storing these "input" files. All the files are available and
+[version-controlled](https://en.wikipedia.org/wiki/Version_control) at
+https://github.com/alekrutkowski/JAF2R.
 
 ### Scripts
 

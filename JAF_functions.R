@@ -695,7 +695,7 @@ vacancy_rate <- function(with_filters=NULL) {
     f('jvs_q_nace2',
       list(indic_em='JOBRATE', s_adj='NSA',
            nace_r2='B-S', sizeclas='TOTAL',
-           geo = EU_Members_geo_codes %without% c('IT','DK','FR','MT') ))
+           geo = c(EU_Members_geo_codes,EU_geo_code,EA_geo_code) %without% c('IT','DK','FR','MT') ))
   dt2 <-
     f('jvs_q_nace2', 
       list(indic_em='JOBRATE', s_adj='NSA',
