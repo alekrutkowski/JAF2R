@@ -571,6 +571,7 @@ fromLFSspecialFile <- function(jaf_lfs_code, with_filters) {
     setnames(colnames(.),
              colnames(.) %>% tolower()) %>% 
     .[, c('quarter','flag','flag_break') := NULL] %>% 
+    .[, country := ifelse(country=='EUR20','EA20',country)] %>% 
     setnames(c('country','year','value'),
              c('geo','time','value_')) %>% 
     .[, time := as.integer(time)] %>% 

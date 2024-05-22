@@ -27,5 +27,6 @@ runScript('JAF_Main_Indicators.R')
 runScript('JAF_PAs.R')
 runScript('JAF_Country_Profiles.R')
 runScript('JAF_pdf.R')
+runScript('JAF_EPM.R')
 
 message('\nAll JAF scripts finished.')

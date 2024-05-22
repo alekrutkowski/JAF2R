@@ -502,8 +502,8 @@ value = fromFormula(100 * ((a/b) - 1),
 
 inside(JAF_INDICATORS, indicator_named = "PA10.C3.") = 
 specification(
-name = "Labour productivity per person employed (EU-27 = 100, based on PPS per employed person)",
-unit_of_level = "NA",
+name = "Labour productivity per person employed",
+unit_of_level = "EU-27 = 100, based on PPS per employed person",
 unit_of_change = "NA",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat, National Accounts",
@@ -514,8 +514,8 @@ value = fromEurostatDataset("tesem160",
 
 inside(JAF_INDICATORS, indicator_named = "PA10.C4.") = 
 specification(
-name = "Labour productivity per hour worked, (EU-27 = 100, based on PPS per hour worked)",
-unit_of_level = "NA",
+name = "Labour productivity per hour worked",
+unit_of_level = "EU-27 = 100, based on PPS per hour worked",
 unit_of_change = "NA",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat, National Accounts",
@@ -526,20 +526,21 @@ value = fromEurostatDataset("tesem160",
 
 inside(JAF_INDICATORS, indicator_named = "PA10.C5.") = 
 specification(
-name = "Nominal unit labour cost growth (% change from previous year)",
-unit_of_level = "NA",
+name = "Nominal unit labour cost growth",
+unit_of_level = "% change from previous year",
 unit_of_change = "NA",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat, National Accounts",
 high_is_good = FALSE,
+calculate_score_change = FALSE,
 value = fromEurostatDataset("NAMA_10_LP_ULC", 
     with_filters(na_item = "NULC_PER", unit = "PCH_PRE"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA10.C6.") = 
 specification(
-name = "Real unit labour cost growth (% change from previous year)",
-unit_of_level = "NA",
+name = "Real unit labour cost growth",
+unit_of_level = "% change from previous year",
 unit_of_change = "NA",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "AMECO",
