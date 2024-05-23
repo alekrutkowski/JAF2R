@@ -360,35 +360,46 @@ fromEurostatDataset <- function(EurostatDatasetCode, with_filters, time_period=0
 }
 
 
-fromOECDdataset <- function(OECDdatasetCode, with_filters) {
-  JAF_old_to_new_OECD_map <-
-    tibble::tribble(
-      ~old_table                , ~old_filter_name, ~old_filter_value, ~new_table      , ~filter_url, ~new_filter_name, ~new_filter_value ,
-      "OECD_STR_EP"             , "indicator"     , "epl_reg"        , "EPL_OV"        , FALSE      , "SERIES"        , "EPRC_V4"         ,
-      "OECD_STR_EP"             , "indicator"     , "epl_temp"       , "EPL_T"         , FALSE      , "SERIES"        , "EPT_V4"          ,
-      "educ_outc_pisa"          , NA              , NA               , "go to Eurostat", NA         , NA              , NA                ,
-      "consultations_per_capita", "indicator"     , "CONSCOVI"       , "HEALTH_PROC"   , TRUE       , "VAR"           , "CONSCOVI"        ) %>% 
-    as.data.table() %>% 
-    .[old_table==OECDdatasetCode] %>% 
-    `if`(nrow(.)!=1,
-         .[old_filter_name==names(with_filters) & old_filter_value==with_filters[[1]]],
-         .)
-  `if`(nrow(JAF_old_to_new_OECD_map)!=1,
-       stop('\nMultiple or no match in `tribble` for\n',
-            'fromOECDdataset("',OECDdatasetCode,'", with_filters(',
-            deparse(with_filters),'))'))
-  `if`(JAF_old_to_new_OECD_map$new_table=='go to Eurostat',
-       fromEurostatDataset(OECDdatasetCode,with_filters),
-       OECD::get_dataset(JAF_old_to_new_OECD_map$new_table,
-                         `if`(JAF_old_to_new_OECD_map$filter_url,
-                              JAF_old_to_new_OECD_map$new_filter_value)) %>% 
-         as.data.table() %>% 
-         `if`(!is.na(JAF_old_to_new_OECD_map$new_filter_name),
-              .[get(JAF_old_to_new_OECD_map$new_filter_name)==
-                  JAF_old_to_new_OECD_map$new_filter_value],
-              .) %>% 
-         finaliseOECDdataset()
-  )
+fromOECDdataset <- function(OECDdatasetURL, with_filters) {
+  # JAF_old_to_new_OECD_map <-
+  #   tibble::tribble(
+  #     ~old_table                , ~old_filter_name, ~old_filter_value, ~new_table      , ~filter_url, ~new_filter_name, ~new_filter_value ,
+  #     "OECD_STR_EP"             , "indicator"     , "epl_reg"        , "EPL_OV"        , FALSE      , "SERIES"        , "EPRC_V4"         ,
+  #     "OECD_STR_EP"             , "indicator"     , "epl_temp"       , "EPL_T"         , FALSE      , "SERIES"        , "EPT_V4"          ,
+  #     "educ_outc_pisa"          , NA              , NA               , "go to Eurostat", NA         , NA              , NA                ,
+  #     "consultations_per_capita", "indicator"     , "CONSCOVI"       , "HEALTH_PROC"   , TRUE       , "VAR"           , "CONSCOVI"        ) %>% 
+  #   as.data.table() %>% 
+  #   .[old_table==OECDdatasetCode] %>% 
+  #   `if`(nrow(.)!=1,
+  #        .[old_filter_name==names(with_filters) & old_filter_value==with_filters[[1]]],
+  #        .)
+  # `if`(nrow(JAF_old_to_new_OECD_map)!=1,
+  #      stop('\nMultiple or no match in `tribble` for\n',
+  #           'fromOECDdataset("',OECDdatasetCode,'", with_filters(',
+  #           deparse(with_filters),'))'))
+  # `if`(JAF_old_to_new_OECD_map$new_table=='go to Eurostat',
+  #      fromEurostatDataset(OECDdatasetCode,with_filters),
+  #      OECD::get_dataset(JAF_old_to_new_OECD_map$new_table,
+  #                        `if`(JAF_old_to_new_OECD_map$filter_url,
+  #                             JAF_old_to_new_OECD_map$new_filter_value)) %>% 
+  #        as.data.table() %>% 
+  #        `if`(!is.na(JAF_old_to_new_OECD_map$new_filter_name),
+  #             .[get(JAF_old_to_new_OECD_map$new_filter_name)==
+  #                 JAF_old_to_new_OECD_map$new_filter_value],
+  #             .) %>% 
+  #        finaliseOECDdataset()
+  # )
+  OECDdatasetURL %>% 
+    fread() %>% 
+    setnames(c('TIME_PERIOD','OBS_VALUE','REF_AREA','OBS_STATUS'),
+             c('time','value_','country','flags_'),
+             skip_absent=TRUE) %>% 
+    .[, geo := countrycode(country,
+                           origin='iso3c',
+                           destination='eurostat')] %>% 
+    .[geo %in% EU_Members_geo_codes] %>% 
+    .[, value_ := as.numeric(value_)] %>% 
+    .[, country := NULL]
 }
 
 

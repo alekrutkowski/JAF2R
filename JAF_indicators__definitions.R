@@ -727,8 +727,8 @@ unit_of_change = "NA",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "OECD, Health Statistics",
 high_is_good = NA,
-value = fromOECDdataset("consultations_per_capita", 
-    with_filters(indicator = "CONSCOVI"))
+value = fromOECDdataset("https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_HEALTH_PROC@DF_CONSULT,1.0/....OC221............._T?startPeriod=2010&dimensionAtObservation=AllDimensions&format=csvfilewithlabels", 
+    with_filters(NA))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C4.F") = 
@@ -4792,8 +4792,8 @@ unit_of_change = "scr",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 3 COUNTRY",
 source = "OECD, EPL",
 high_is_good = FALSE,
-value = fromOECDdataset("OECD_STR_EP", 
-    with_filters(indicator = "epl_reg"))
+value = fromOECDdataset("https://sdmx.oecd.org/public/rest/data/OECD.ELS.JAI,DSD_EPL@DF_EPL,/A..EPL_R..VERSION4?startPeriod=2000&dimensionAtObservation=AllDimensions&format=csvfilewithlabels", 
+    with_filters(indicator = NA))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA2a.C3.TEMP") = 
@@ -4804,8 +4804,8 @@ unit_of_change = "scr",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 3 COUNTRY",
 source = "OECD, EPL",
 high_is_good = TRUE,
-value = fromOECDdataset("OECD_STR_EP", 
-    with_filters(indicator = "epl_temp"))
+value = fromOECDdataset("https://sdmx.oecd.org/public/rest/data/OECD.ELS.JAI,DSD_EPL@DF_EPL,/A..EPL_T..VERSION4?startPeriod=2000&dimensionAtObservation=AllDimensions&format=csvfilewithlabels", 
+    with_filters(indicator = NA))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA2a.C4.F") = 
@@ -6323,8 +6323,8 @@ unit_of_change = "scr",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 5 COUNTRY",
 source = "OECD, EPL",
 high_is_good = FALSE,
-value = fromOECDdataset("OECD_STR_EP", 
-    with_filters(indicator = "epl_reg"))
+value = fromOECDdataset("https://sdmx.oecd.org/public/rest/data/OECD.ELS.JAI,DSD_EPL@DF_EPL,/A..EPL_R..VERSION4?startPeriod=2000&dimensionAtObservation=AllDimensions&format=csvfilewithlabels", 
+    with_filters(indicator = NA))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA6b.S4.") = 
