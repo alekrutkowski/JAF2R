@@ -548,6 +548,7 @@ fromBenefitsAndWages <- function(table_code, with_filters) {
     .[, geo := countrycode(Country,
                            origin='country.name',
                            destination='eurostat')] %>% 
+    .[, geo := ifelse(grepl('European Union',country),EU_geo_code,geo)] %>% 
     .[, Country := NULL]
 }
 
