@@ -507,7 +507,9 @@ fromBenefitsAndWages <- function(table_code, with_filters) {
     'https://europa.eu/economy_finance/db_indicators/tab/wq/details_all_webquery.php?url='
   url_geos <-
     EU_Members_geo_codes %>% 
+    c(EU_geo_code,.) %>% 
     sub('EL','GR',.,fixed=TRUE) %>% 
+    sub(EU_geo_code,'EUBr',.,fixed=TRUE) %>% 
     paste(collapse=',')
   url_years <-
     2000:as.integer(format(Sys.Date(),"%Y")) %>% 
