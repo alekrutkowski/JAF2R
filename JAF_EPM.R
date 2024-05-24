@@ -17,9 +17,11 @@ countryTableForEPMpartII <- function(geo_code)
   .[geo==as.character(geo_code)] %>% 
   .[, geo := NULL] %>% 
   .[!is.na(value_)] %>% 
-  .[as.integer(time) >= current_year-6L] %>% 
+  .[as.integer(time) >= current_year-6L &
+      as.integer(time) < current_year] %>% 
   .[JAF_KEY %in% JAF_KEYs__for_EPM_PartII] %>% 
   .[, flags_ := flags_ %>% ifelse(.==':',"",.)] %>% 
+  .[, flags_ := flags_ %>% ifelse(is.na(.),"",.)] %>% 
   dcast(JAF_KEY + Description ~ time,
         fun.aggregate=identity,
         fill=NA,
@@ -49,8 +51,9 @@ for (geo_code in EU_Members_geo_codes) {
     sanitizeForExcel() %>%
     setnames(colnames(.),
              colnames(.) %>%
-               sub('^value__(.{4})$','\\1',.) %>%
-               sub('^flags__.{4}$',"",.))
+               sub('^value__(.{4})..$','\\1',.) %>%
+               sub('^flags__.{4}..$',"",.)) %>% 
+    set_names(substr(colnames(.),1,4))
   WB <-
     WB %>%
     wb_add_worksheet(geo_code) %>%
@@ -58,8 +61,10 @@ for (geo_code in EU_Members_geo_codes) {
                 dims='B2') %>%
     wb_add_data(x=EU_Members_geo_names[geo==geo_code, geo_labels],
                 dims='C4') %>%
+    wb_add_data(x=EU_geo_code,
+                dims='P4') %>%
     wb_add_data(x=dta,
-                dims='B5') %>%
+                dims='A5') %>%
     wb_add_data(x='National Targets',
                 dims='O4') %>%
     wb_add_data(x='EU Targets',
@@ -69,15 +74,18 @@ for (geo_code in EU_Members_geo_codes) {
                                rep.int(times=2, # one for country, another one for EU
                                        x=c(rep.int(times=6, # LATEST 6 YEARS
                                                    x=c(6,3)),
-                                           7) # the Targets column
+                                           9) # the Targets column
                                ))) %>%
     wb_freeze_pane(firstActiveRow=5) %>%
     # wb_add_filter(rows=2, cols=1:4) %>%
     wb_add_font(dims='A1:AB5',
                 bold="bold") %>%
-    wb_add_font(dims='B2', size=18) %>%
-    wb_add_font(dims='C4', size=18) %>%
-    wb_add_font(dims='P4', size=18) %>%
+    wb_add_font(dims='B2', size=22) %>%
+    wb_add_font(dims='C4', size=22) %>%
+    wb_add_font(dims='P4', size=22) %>%
+    wb_add_cell_style(
+      dims='C5:AB5',
+      horizontal='center') %>% 
     wb_add_cell_style(
       dims='O4',
       horizontal='center', vertical='center',
