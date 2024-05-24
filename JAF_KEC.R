@@ -81,8 +81,8 @@ PolicyAreaLabels_General <- '
 
 IndicsSelectedForKEC <- 
   JAF_NAMES_DESCRIPTIONS %>%
-  .[(for_KEC), JAF_KEY] %>%
   .[!(JAF_KEY %>% `JAF_KEY->C_O_S_part` %>% grepl('C',.))] %>% 
+  .[(for_KEC), JAF_KEY] %>%
   sort_JAF_KEY() %>% 
   data.table(`#`=seq_along(.), JAF_KEY=.)
 
