@@ -8,6 +8,40 @@ JAF_KEYs__for_EPM_PartII <-
 # Life long learning - percentage of adult population (aged 25-64) participating in education and training - total
 # Adult population (aged 25-64) participating in education and training in the last 12 months, without guided-on-the-job training
 
+NationalTargets <- '
+| JAF_KEY  | geo        | 2030  |
+|----------|------------|-------|
+| PA1.O1.  | BE         | 80    |
+| PA1.O1.  | BG         | 79    |
+| PA1.O1.  | CZ         | 82.2  |
+| PA1.O1.  | DK         | 80    |
+| PA1.O1.  | DE         | 83    |
+| PA1.O1.  | EE         | 81.3  |
+| PA1.O1.  | IE         | 78.2  |
+| PA1.O1.  | EL         | 71.1  |
+| PA1.O1.  | ES         | 76    |
+| PA1.O1.  | FR         | 78    |
+| PA1.O1.  | HR         | 75    |
+| PA1.O1.  | IT         | 73    |
+| PA1.O1.  | CY         | 80    |
+| PA1.O1.  | LV         | 80    |
+| PA1.O1.  | LT         | 80.7  |
+| PA1.O1.  | LU         | 77.6  |
+| PA1.O1.  | HU         | 85    |
+| PA1.O1.  | MT         | 84.6  |
+| PA1.O1.  | NL         | 82.5  |
+| PA1.O1.  | AT         | 79.9  |
+| PA1.O1.  | PL         | 78.3  |
+| PA1.O1.  | PT         | 80    |
+| PA1.O1.  | RO         | 74.7  |
+| PA1.O1.  | SI         | 79.5  |
+| PA1.O1.  | SK         | 76.5  |
+| PA1.O1.  | FI         | 80    |
+| PA1.O1.  | SE         | 82    |
+| PA1.O1.  | EU27_2020  | 78    |
+' %>% 
+  readMarkDownTable() %>% 
+  .[,`2030` := as.character(`2030`)]
 
 current_year <-
   Sys.Date() %>% substr(1,4) %>% as.integer()
@@ -27,7 +61,8 @@ countryTableForEPMpartII <- function(geo_code)
         fill=NA,
         value.var=c('value_','flags_')) %>% 
   reorderValFlagCols() %>% 
-  .[, `2030` := ""]
+  merge(NationalTargets[geo==geo_code],
+        by=c('JAF_KEY'), all.x=TRUE)
 
 countryTableForEPMpartII__EU <- 
   countryTableForEPMpartII(EU_geo_code)
