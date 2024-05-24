@@ -5388,7 +5388,7 @@ unit_of_change = "NA",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 4 COUNTRY",
 source = "European Commission, Labour Market Policy",
 high_is_good = TRUE,
-calculate_score_change = FALSE,
+calculate_score_change = TRUE,
 value = fromLMPdataset("lmp_expenditure", 
     with_filters(lmp_type = "TOT11_7", exptype = "XTOT", unit = "PPS_PWW"))
 )
