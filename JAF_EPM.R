@@ -41,7 +41,7 @@ NationalTargets <- '
 | PA1.O1.  | EU27_2020  | 78    |
 ' %>% 
   readMarkDownTable() %>% 
-  .[,`2030` := as.character(`2030`)]
+  .[, `2030` := as.numeric(`2030`)]
 
 current_year <-
   Sys.Date() %>% substr(1,4) %>% as.integer()
@@ -61,7 +61,9 @@ countryTableForEPMpartII <- function(geo_code)
         fill=NA,
         value.var=c('value_','flags_')) %>% 
   reorderValFlagCols() %>% 
-  merge(NationalTargets[geo==geo_code],
+  merge(NationalTargets %>% 
+          .[geo==geo_code] %>% 
+          .[, geo := NULL],
         by=c('JAF_KEY'), all.x=TRUE)
 
 countryTableForEPMpartII__EU <- 
@@ -88,7 +90,7 @@ for (geo_code in EU_Members_geo_codes) {
              colnames(.) %>%
                sub('^value__(.{4})..$','\\1',.) %>%
                sub('^flags__.{4}..$',"",.)) %>% 
-    set_names(substr(colnames(.),1,4))
+    set_names(sub('2030..','2030',colnames(.)))
   WB <-
     WB %>%
     wb_add_worksheet(geo_code) %>%
