@@ -4,46 +4,86 @@ JAF_KEYs__for_EPM_PartII <-
     "PA1.S6.","PA1.C1.","PA10.C3.","PA10.C4.","PA10.C5.","PA10.C6.","PA1b.C7.15-24.T",
     "PA1b.O1.n.","PA2a.O1.","PA2a.S3.","PA2b.O1.","PA3.O1.","PA4.1.O1.","PA1.C3.15-74.T",
     "PA4.2.O1.","PA5.C5.","PA5.O1.","PA6b.O1.","PA7.1.O1.","PA7.2.O1.","PA8.1.O1.",
-    "PA9.1.O1.","PA9.2.O1.") # 2 codes to be added for:
-# Life long learning - percentage of adult population (aged 25-64) participating in education and training - total
-# Adult population (aged 25-64) participating in education and training in the last 12 months, without guided-on-the-job training
+    "PA9.1.O1.","PA9.2.O1.","PA20.O1.")
 
 NationalTargets <- '
-| JAF_KEY  | geo        | 2030  |
-|----------|------------|-------|
-| PA1.O1.  | BE         | 80    |
-| PA1.O1.  | BG         | 79    |
-| PA1.O1.  | CZ         | 82.2  |
-| PA1.O1.  | DK         | 80    |
-| PA1.O1.  | DE         | 83    |
-| PA1.O1.  | EE         | 81.3  |
-| PA1.O1.  | IE         | 78.2  |
-| PA1.O1.  | EL         | 71.1  |
-| PA1.O1.  | ES         | 76    |
-| PA1.O1.  | FR         | 78    |
-| PA1.O1.  | HR         | 75    |
-| PA1.O1.  | IT         | 73    |
-| PA1.O1.  | CY         | 80    |
-| PA1.O1.  | LV         | 80    |
-| PA1.O1.  | LT         | 80.7  |
-| PA1.O1.  | LU         | 77.6  |
-| PA1.O1.  | HU         | 85    |
-| PA1.O1.  | MT         | 84.6  |
-| PA1.O1.  | NL         | 82.5  |
-| PA1.O1.  | AT         | 79.9  |
-| PA1.O1.  | PL         | 78.3  |
-| PA1.O1.  | PT         | 80    |
-| PA1.O1.  | RO         | 74.7  |
-| PA1.O1.  | SI         | 79.5  |
-| PA1.O1.  | SK         | 76.5  |
-| PA1.O1.  | FI         | 80    |
-| PA1.O1.  | SE         | 82    |
-| PA1.O1.  | EU27_2020  | 78    |
+| JAF_KEY   | geo        | 2030  |
+|-----------|------------|-------|
+| PA1.O1.   | BE         | 80    |
+| PA1.O1.   | BG         | 79    |
+| PA1.O1.   | CZ         | 82.2  |
+| PA1.O1.   | DK         | 80    |
+| PA1.O1.   | DE         | 83    |
+| PA1.O1.   | EE         | 81.3  |
+| PA1.O1.   | IE         | 78.2  |
+| PA1.O1.   | EL         | 71.1  |
+| PA1.O1.   | ES         | 76    |
+| PA1.O1.   | FR         | 78    |
+| PA1.O1.   | HR         | 75    |
+| PA1.O1.   | IT         | 73    |
+| PA1.O1.   | CY         | 80    |
+| PA1.O1.   | LV         | 80    |
+| PA1.O1.   | LT         | 80.7  |
+| PA1.O1.   | LU         | 77.6  |
+| PA1.O1.   | HU         | 85    |
+| PA1.O1.   | MT         | 84.6  |
+| PA1.O1.   | NL         | 82.5  |
+| PA1.O1.   | AT         | 79.9  |
+| PA1.O1.   | PL         | 78.3  |
+| PA1.O1.   | PT         | 80    |
+| PA1.O1.   | RO         | 74.7  |
+| PA1.O1.   | SI         | 79.5  |
+| PA1.O1.   | SK         | 76.5  |
+| PA1.O1.   | FI         | 80    |
+| PA1.O1.   | SE         | 82    |
+| PA1.O1.   | EU27_2020  | 78    |
+| PA20.O1.  | BE         | 60.9  |
+| PA20.O1.  | BG         | 35.4  |
+| PA20.O1.  | CZ         | 40    |
+| PA20.O1.  | DK         | 60    |
+| PA20.O1.  | DE         | 65    |
+| PA20.O1.  | EE         | 52.3  |
+| PA20.O1.  | IE         | 64.2  |
+| PA20.O1.  | EL         | 40    |
+| PA20.O1.  | ES         | 60    |
+| PA20.O1.  | FR         | 65    |
+| PA20.O1.  | HR         | 55    |
+| PA20.O1.  | IT         | 55    |
+| PA20.O1.  | CY         | 61    |
+| PA20.O1.  | LV         | 60    |
+| PA20.O1.  | LT         | 53.7  |
+| PA20.O1.  | LU         | 62.5  |
+| PA20.O1.  | HU         | 60    |
+| PA20.O1.  | MT         | 57.6  |
+| PA20.O1.  | NL         | 62    |
+| PA20.O1.  | AT         | 62    |
+| PA20.O1.  | PL         | 51.7  |
+| PA20.O1.  | PT         | 60    |
+| PA20.O1.  | RO         | 17.4  |
+| PA20.O1.  | SI         | 60    |
+| PA20.O1.  | SK         | 60    |
+| PA20.O1.  | FI         | 50    |
+| PA20.O1.  | SE         | 60    |
+| PA20.O1.  | EU27_2020  | 60    |
 ' %>% 
   readMarkDownTable() %>% 
   .[, `2030` := as.numeric(`2030`)]
 
-current_year <-
+PA20.O1.__dt <-
+  'Participation in education and training (excluding guided on the job training) 2016-2022.xlsx' %>% # from https://circabc.europa.eu/ui/group/d14c857a-601d-438a-b878-4b4cebd0e10f/library/c5a8b987-1e37-44d7-a20e-2c50d6101d27/details
+  read_xlsx(sheet='SEX - 2022', rows=5:33, cols=c(1,5)) %>% 
+  as.data.table() %>% 
+  set_names(c('country','value_')) %>% 
+  .[, JAF_KEY := 'PA20.O1.'] %>% 
+  .[, geo := countrycode::countrycode(country,
+                                      origin='country.name',
+                                      destination='eurostat')] %>% 
+  .[, geo := ifelse(country=='EU-27','EU27_2020',geo)] %>% 
+  .[, country := NULL] %>% 
+  .[, time := 2022L] %>%
+  .[, Description := 'Adult population (aged 25-64) participating in education and training in the last 12 months, without guided-on-the-job training']
+  
+  current_year <-
   Sys.Date() %>% substr(1,4) %>% as.integer()
 
 countryTableForEPMpartII <- function(geo_code)
@@ -54,6 +94,7 @@ countryTableForEPMpartII <- function(geo_code)
   .[as.integer(time) >= current_year-6L &
       as.integer(time) < current_year] %>% 
   .[JAF_KEY %in% JAF_KEYs__for_EPM_PartII] %>% 
+  rbind(PA20.O1.__dt, fill=TRUE) %>% 
   .[, flags_ := flags_ %>% ifelse(.==':',"",.)] %>% 
   .[, flags_ := flags_ %>% ifelse(is.na(.),"",.)] %>% 
   dcast(JAF_KEY + Description ~ time,

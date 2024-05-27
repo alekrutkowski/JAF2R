@@ -87,7 +87,7 @@ where = variables(
 
 inside(JAF_INDICATORS, indicator_named = "PA11.S6.18-64.WI0-02") = 
 specification(
-name = "At-risk of poverty rate for population living in low work intensity households (18-64)",
+name = "At-risk of poverty rate for population living in very low work intensity households (18-64)",
 unit_of_level = "% (of total popn)",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
@@ -353,8 +353,8 @@ unit_of_change = "pp",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-value = fromEurostatDataset("ilc_lvhl11",
-   with_filters(sex="T", unit="PC_Y_LT60", age="Y_LT18"))
+value = fromEurostatDataset("ilc_lvhl11n",
+   with_filters(sex="T", unit="PC", age="Y_LT18"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.S4.") = 
@@ -1102,17 +1102,17 @@ value = fromEurostatDataset("ilc_li06",
     with_filters(sex = "T", workint = "WI0-02", indic_il = "LI_R_MD60", age = "Y_LT65", hhtyp = "TOTAL"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA11.S6.18-64") = 
-specification(
-name = "At-risk of poverty rate for population living in low work intensity households (18-64)",
-unit_of_level = "% (of total popn)",
-unit_of_change = "NA",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-value = fromEurostatDataset("ilc_li06", 
-    with_filters(sex = "T", workint = "WI0-02", indic_il = "LI_R_MD60", age = "Y18-64", hhtyp = "TOTAL"))
-)
+# inside(JAF_INDICATORS, indicator_named = "PA11.S6.18-64") = 
+# specification(
+# name = "At-risk of poverty rate for population living in low work intensity households (18-64)",
+# unit_of_level = "% (of total popn)",
+# unit_of_change = "NA",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
+# source = "Eurostat, EU Statistics on Income and Living Conditions",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("ilc_li06", 
+#     with_filters(sex = "T", workint = "WI0-02", indic_il = "LI_R_MD60", age = "Y18-64", hhtyp = "TOTAL"))
+# )
 
 
 

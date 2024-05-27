@@ -97,18 +97,18 @@ QuantAssessmentTable <-
 
 QuantAssessmentLabels <-
   '
-| Quantitative assessment                                                    | Challenge  | Positive Outcome  |
-|----------------------------------------------------------------------------|------------|-------------------|
-| 1. Indicator significantly worse than EU average                           | X          |                   |
-| 2. Indicator worse than EU average                                         | X          |                   |
-| 3. Indicator significantly better than EU average                          |            | X                 |
-| 4. Indicator worse than EU average & some positive development             | X          |                   |
-| 5. Indicator worse than EU average & significantly positive development    | X          |                   |
-| 6. Indicator better than EU average & significantly negative development   | X          |                   |
-| 7. Indicator above EU average & some positive development                  |            | X                 |
-| 8. Indicator above EU average & significantly positive development         |            | X                 |
-| 9. Indicator around EU average & some negative development                 | X          |                   |
-| 10. Indicator around EU average & significantly negative development       | X          |                   |
+| Quantitative assessment                                                              | Challenge  | Positive Outcome  |
+|--------------------------------------------------------------------------------------|------------|-------------------|
+| 1. Indicator significantly worse than the EU average                                 | X          |                   |
+| 2. Indicator worse than the EU average                                               | X          |                   |
+| 3. Indicator significantly better than the EU average                                |            | X                 |
+| 4. Indicator worse than the EU average & some positive development                   | X          |                   |
+| 5. Indicator worse than the EU average & significantly positive development          | X          |                   |
+| 6. Indicator better than the EU average & significantly negative development         | X          |                   |
+| 7. Indicator better than the EU average & some positive development                  |            | X                 |
+| 8. Indicator better than the EU average & significantly positive development         |            | X                 |
+| 9. Indicator around the EU average & some negative development                       | X          |                   |
+| 10. Indicator around the EU average & significantly negative development             | X          |                   |
 ' %>% 
   readMarkDownTable() %>% 
   .[, QuantAssessmentNum := .I] %>% 
