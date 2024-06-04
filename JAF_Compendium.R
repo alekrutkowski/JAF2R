@@ -296,8 +296,8 @@ for (CompendiumNum. in unique(JAF_Compendium_Index_raw$CompendiumNum)) {
     ws$sheetViews <- set_zoom(65, ws$sheetViews)
   message('\nSaving...')
   wb %>%
-    wb_set_sheet_names(wb_get_sheet_names(.),
-                       wb_get_sheet_names(.) %>% escapeSpecialXmlChars()) %>%
+    # wb_set_sheet_names(wb_get_sheet_names(.),
+    #                    wb_get_sheet_names(.) %>% escapeSpecialXmlChars()) %>%
     wb_save(paste0(OUTPUT_FOLDER,
                    '/JAF Compendium/Compendium-',CompendiumNum.,'.xlsx'))
   message('Compendium-',CompendiumNum.,'.xlsx saved.')
