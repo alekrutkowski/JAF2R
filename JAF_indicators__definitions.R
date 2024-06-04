@@ -5796,7 +5796,7 @@ value = fromLFSspecialFile("lfse_inactpt_lackcare",
     with_filters(age = "Y20-64", sex = "T", indicator = "INACTPT_LACKCARE_ONFAMPERCARE"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA5.S3.<30") = 
+inside(JAF_INDICATORS, indicator_named = "PA5.S3.LT30") = 
 specification(
 name = "Child care – Children cared for (by formal arrangements other than by the family) less than 30h a usual week as a proportion of all children in the same age group (age 3 to mandatory school age) ",
 unit_of_level = "% (of children of 3 years to mandatory school age)",
@@ -5808,7 +5808,7 @@ value = fromEurostatDataset("ilc_caindformal",
     with_filters(age = "Y3-CSA", duration = "H1-29"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA5.S3.>30") = 
+inside(JAF_INDICATORS, indicator_named = "PA5.S3.GT30") = 
 specification(
 name = "Child care – Children cared for (by formal arrangements other than by the family) 30h or more a usual week as a proportion of all children in the same age group (age 3 to mandatory school age) ",
 unit_of_level = "% (of children of 3 years to mandatory school age)",
@@ -5836,7 +5836,7 @@ value = fromFormula(a + b,
     with_filters(age = "Y3-CSA", duration = "H_GE30"))))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA5.S4.<30") = 
+inside(JAF_INDICATORS, indicator_named = "PA5.S4.LT30") = 
 specification(
 name = "Child care – Children cared for (by formal arrangements other than by the family) less than 30h a usual week as a proportion of all children in the same age group (age 0 to 3) ",
 unit_of_level = "% (of children of 3 years to mandatory school age)",
@@ -5848,7 +5848,7 @@ value = fromEurostatDataset("ilc_caindformal",
     with_filters(age = "Y_LT3", duration = "H1-29"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA5.S4.>30") = 
+inside(JAF_INDICATORS, indicator_named = "PA5.S4.GT30") = 
 specification(
 name = "Child care – Children cared for (by formal arrangements other than by the family) 30h or more a usual week as a proportion of all children in the same age group (age 0 to 3) ",
 unit_of_level = "% (of children of 3 years to mandatory school age)",
