@@ -82,8 +82,8 @@ PA20.O1.__dt <-
   .[, country := NULL] %>% 
   .[, time := 2022L] %>%
   .[, Description := 'Adult population (aged 25-64) participating in education and training in the last 12 months, without guided-on-the-job training']
-  
-  current_year <-
+
+current_year <-
   Sys.Date() %>% substr(1,4) %>% as.integer()
 
 countryTableForEPMpartII <- function(geo_code)
@@ -94,7 +94,10 @@ countryTableForEPMpartII <- function(geo_code)
   .[as.integer(time) >= current_year-6L &
       as.integer(time) < current_year] %>% 
   .[JAF_KEY %in% JAF_KEYs__for_EPM_PartII] %>% 
-  rbind(PA20.O1.__dt, fill=TRUE) %>% 
+  rbind(PA20.O1.__dt %>% 
+          .[geo==geo_code] %>% 
+          .[, geo := NULL], 
+        fill=TRUE) %>% 
   .[, flags_ := flags_ %>% ifelse(.==':',"",.)] %>% 
   .[, flags_ := flags_ %>% ifelse(is.na(.),"",.)] %>% 
   dcast(JAF_KEY + Description ~ time,
