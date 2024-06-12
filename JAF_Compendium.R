@@ -164,11 +164,12 @@ barChartXml <- function(JAF_KEY.,
 
 escapeSpecialXmlChars <- function(charvec)
   charvec %>% 
+  sub('&','&amp;',.,fixed=TRUE) %>%
   sub('"','&quot;',.,fixed=TRUE) %>% 
   sub("'",'&apos;',.,fixed=TRUE) %>% 
   sub('<','&lt;',.,fixed=TRUE) %>% 
-  sub('>','&gt;',.,fixed=TRUE) %>% 
-  sub('&','&amp;',.,fixed=TRUE)
+  sub('>','&gt;',.,fixed=TRUE)
+  
 
 
 # Actions -----------------------------------------------------------------

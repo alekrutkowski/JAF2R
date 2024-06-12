@@ -360,7 +360,7 @@ JAF_SCORES <-
   merge(JAF_KEY__reference_name, by='JAF_KEY') %>% 
   .[, reference_name := 
       reference_name %>% 
-      ifelse(.==EU_geo_code & length(value[geo==EU_geo_code])==0, # EU wanted but not available
+      ifelse(.==EU_geo_code & length(value[geo==EU_geo_code & time==max(time)])==0, # EU wanted but not available for the latest year
              names(LIST_OF_REFERENCE_POINT_FUNCTIONS)[2], # fall-back option (currently 'SIMPLE AVERAGE')
              .)
     , by=.(JAF_KEY, variable)] %>% 

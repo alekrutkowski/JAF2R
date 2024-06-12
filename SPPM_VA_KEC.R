@@ -110,7 +110,15 @@ countrySheet <- function(geo_code)
               Change = round(.$value_change,2),
               `Score level` = round(.$score_latest_value,1),
               `Score change` = round(.$score_change,1),
-              Year = .$time)} %>% 
+              `Reference for score level` = {
+                dt <- (.)
+                dt$reference_name_latest_value %>% 
+                  ifelse(.==EU_geo_code,
+                         paste0(.,' (',dt$reference_time_latest_value,')'),
+                         .)
+              },
+              `Reference for score change` = .$reference_name_change,
+              Years = .$comment %>% gsub('_'," ",.,fixed=TRUE))} %>% 
   setorder(row_order) %>% 
   .[,row_order := NULL] %>% 
   .[, `POLICY AREA` := `POLICY AREA` %>% 
@@ -135,7 +143,15 @@ countrySheet_add <- function(geo_code)
               Change = round(.$value_change,2),
               `Score level` = round(.$score_latest_value,1),
               `Score change` = round(.$score_change,1),
-              Year = .$time)} %>% 
+              `Reference for score level` = {
+                dt <- (.)
+                dt$reference_name_latest_value %>% 
+                  ifelse(.==EU_geo_code,
+                         paste0(.,' (',dt$reference_time_latest_value,')'),
+                         .)
+              },
+              `Reference for score change` = .$reference_name_change,
+              Years = .$comment %>% gsub('_'," ",.,fixed=TRUE))} %>% 
   setorder(row_order) %>% 
   .[,row_order := NULL] %>% 
   .[, `POLICY AREA` := `POLICY AREA` %>% 
