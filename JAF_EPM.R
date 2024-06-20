@@ -71,7 +71,7 @@ NationalTargets <- '
 
 PA20.O1.__dt <-
   'Participation in education and training (excluding guided on the job training) 2016-2022.xlsx' %>% # from https://circabc.europa.eu/ui/group/d14c857a-601d-438a-b878-4b4cebd0e10f/library/c5a8b987-1e37-44d7-a20e-2c50d6101d27/details
-  read_xlsx(sheet='SEX - 2022', rows=5:33, cols=c(1,5)) %>% 
+  openxlsx2::read_xlsx(sheet='SEX - 2022', rows=5:33, cols=c(1,5)) %>% 
   as.data.table() %>% 
   set_names(c('country','value_')) %>% 
   .[, JAF_KEY := 'PA20.O1.'] %>% 
