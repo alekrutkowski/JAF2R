@@ -3,6 +3,7 @@ library(magrittr)
 library(eurodata)
 library(collapse)
 library(stringr)
+library(openxlsx2)
 library(jsonlite) # to generate files for JAF2R_shinylive
 
 
@@ -209,6 +210,91 @@ IndicatorsWithPopulationWeigths <- '
 ' %>% 
   readMarkDownTable()
 
+volatility <- function(x,y) {
+  lowess. <- lowess(x,y,1)
+  vol <- 1 - cor(y,lowess.$y)
+  y_deviations <- abs(y - lowess.$y)
+  outl <- y_deviations > 1.5*median(y_deviations)
+  # plot(x,y)
+  # lines(lowess.)
+  list(vol, outl)
+}
+
+checkFlags <- function(dt, flag)
+  dt[, mget(grep('flags_',colnames(dt),value=TRUE))] %>% 
+  Reduce(x = .,
+         init = logical(nrow(dt)),
+         f = function(i,x) i | grepl(flag,x))
+
+MIN_NUMBER_OF_COUNTRIES <- 18L
+
+CURRENT_YEAR <-
+  Sys.Date() %>% 
+  substr(1,4) %>% 
+  as.integer()
+
+QUALITY_CHECKS_FUNCTIONS <-
+  list(
+    \(dt) dt[, paste0('Latest year considered (for which the number of available Member States ≥ ',
+                      MIN_NUMBER_OF_COUNTRIES,')') := max(time)
+             , by=JAF_KEY],
+    \(dt) dt[, `Old data` := max(time) < CURRENT_YEAR - 3
+             , by=.(JAF_KEY,geo)],
+    \(dt) dt[, `Very old data` := max(time) < CURRENT_YEAR - 5
+             , by=.(JAF_KEY,geo)],
+    \(dt) dt[, `One time point only` := length(unique(time))==1
+             , by=.(JAF_KEY,geo)],
+    \(dt) dt[, `Two time points only` := length(unique(time))==2
+             , by=.(JAF_KEY,geo)],
+    \(dt) dt[, `Three time points only` := length(unique(time))==3
+             , by=.(JAF_KEY,geo)],
+    \(dt) dt[, `5 or more countries missing across all years` := 
+               length(unique(geo)) <= length(EU_Members_geo_codes)-5
+             , by=JAF_KEY],
+    \(dt) dt[, `All large countries missing across all years` :=
+               length(large_EU_Members_geo_codes %without% geo) == length(large_EU_Members_geo_codes)
+             , by=JAF_KEY],
+    \(dt) dt[, `One or more large countries missing across all years` :=
+               length(large_EU_Members_geo_codes %without% geo) > 0
+             , by=JAF_KEY],
+    \(dt) dt[, `5 or more countries missing in the latest year considered` := 
+               length( geo[time==max(time)] ) <= length(EU_Members_geo_codes)-5
+             , by=JAF_KEY],
+    \(dt) dt[, `All large countries missing in the latest year considered` :=
+               length(large_EU_Members_geo_codes %without% geo[time==max(time)]) == length(large_EU_Members_geo_codes)
+             , by=JAF_KEY],
+    \(dt) dt[, `One or more large countries missing in the latest year considered` :=
+               length(large_EU_Members_geo_codes %without% geo[time==max(time)]) > 0
+             , by=JAF_KEY],
+    \(dt) dt[, `No EU aggregate` := EU_geo_code %not in% geo
+             , by=JAF_KEY],
+    \(dt) dt[, `No EU aggregate for the last time point` := EU_geo_code %not in% geo[time==max(time)]
+             , by=JAF_KEY],
+    \(dt) dt[, c('Volatility of time series (the higher, the more volatile)','Is an outlier') :=
+               volatility(time, value_)
+             , by=.(JAF_KEY,geo)],
+    \(dt) dt[, `Break in time series (flag 'b')` := checkFlags(dt,'b')],
+    \(dt) dt[, `Unreliable (flag 'u')` := checkFlags(dt,'u')],
+    \(dt) dt[, `Not significant (flag 'n')` := checkFlags(dt,'n')]
+  )
+
+qualityChecksTable <- function(JAF_GRAND_TABLE)
+  JAF_GRAND_TABLE %>% 
+  copy() %>% 
+  .[, time := as.integer(time)] %>% 
+  .[!is.na(value_)] %>% 
+  .[geo %in% c(EU_geo_code,EU_Members_geo_codes)] %>% 
+  .[CURRENT_YEAR - 10 <= time] %>% 
+  .[length(value_)>=MIN_NUMBER_OF_COUNTRIES,
+    by=.(JAF_KEY,time)] %>% 
+  Reduce(init = .,
+         f = function(dt,x) x(dt),
+         x = QUALITY_CHECKS_FUNCTIONS
+  ) %>% 
+  .[, c('JAF_KEY','geo','time','value_',
+        colnames(.) %without% colnames(JAF_GRAND_TABLE))
+    , with=FALSE]
+
 
 # Actions -----------------------------------------------------------------
 
@@ -329,7 +415,7 @@ JAF_SCORES <-
   .[geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)] %>% 
   .[, sufficiently_many_countries :=
       value_[geo %in% EU_Members_geo_codes] %>% 
-      {length(.)>=18}
+      {length(.)>=MIN_NUMBER_OF_COUNTRIES}
     , by=.(JAF_KEY,time)] %>% 
   .[, latest_year_overall :=
       suppressWarnings(max(time[sufficiently_many_countries])) %>% # suppressed warning if time[sufficiently_many_countries] is empty i.e. -> max = -Inf
@@ -414,6 +500,19 @@ JAF_SCORES <-
                         JAF_KEY)]
 
 createFolder(OUTPUT_FOLDER)
+
+message('\nGenerating `Quality Checks.xlsx`...')
+QCT <- qualityChecksTable(JAF_GRAND_TABLE)
+wb_workbook() %>% 
+  wb_add_worksheet("JAF quality checks", zoom=75) %>%
+  wb_add_data(x=QCT) %>% 
+  wb_add_font(dims=paste0('A1:',int2col(ncol(QCT)),'1'), bold="bold") %>% 
+  wb_add_cell_style(dims=paste0('A1:',int2col(ncol(QCT)),'1'), wrap_text=TRUE) %>% 
+  wb_set_col_widths(cols=1:ncol(QCT), widths=12) %>%
+  wb_set_row_heights(rows=1, heights=107) %>% 
+  wb_freeze_pane(first_row=TRUE) %>% 
+  wb_add_filter(rows=1, cols=1:ncol(QCT)) %>% 
+  wb_save(paste0(OUTPUT_FOLDER,'/Quality Checks.xlsx'))
 
 message('\nPreparing the data.Rds file for the Shiny/Shinylive app...')
 if (!dir.exists('../JAF2R_shinylive')) createFolder('../JAF2R_shinylive')

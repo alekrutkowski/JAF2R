@@ -19,6 +19,7 @@
 ###         "PA9.1.C1.06SAME", "PA9.1.C1.07OTHEREU27_2020", "PA9.1.C1.08OUTEU27_2020")), 
 ###     all.x = TRUE, by = "JAF_KEY") %>% .[, `:=`(JAF_KEY, ifelse(is.na(newJAF_KEY), 
 ###     JAF_KEY, newJAF_KEY))] %>% .[, `:=`(newJAF_KEY, NULL)]
+### Modified by PAul, 25-6-2024
 
 inside(JAF_INDICATORS, indicator_named = "PA1.C1.") = 
 specification(
@@ -1532,74 +1533,110 @@ value = fromEurostatDataset("ilc_li06",
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.C2.1") = 
 specification(
-name = "Childcare (under 3 yrs, 0-29 hrs)",
+name = "Childcare (under 3 yrs, 0 hrs)",
 unit_of_level = "% (of popn <3yrs)",
 unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = TRUE,
-value = fromEurostatDataset("ilc_caindformal", 
-    with_filters(age = "Y_LT3", duration = "H1-29"))
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_caindform25", 
+    with_filters(unit="PC", age = "Y_LT3", duration = "H0", yn_arope = "TOTAL"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.C2.2") = 
 specification(
-name = "Childcare (under 3 yrs, 30+ hrs)",
+name = "Childcare (under 3 yrs, 1-24 hrs)",
 unit_of_level = "% (of popn <3yrs)",
 unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
-value = fromEurostatDataset("ilc_caindformal", 
-    with_filters(age = "Y_LT3", duration = "H_GE30"))
+value = fromEurostatDataset("ilc_caindform25", 
+    with_filters(unit="PC", age = "Y_LT3", duration = "H1-24", yn_arope = "TOTAL"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.C2.3") = 
 specification(
-name = "Childcare (3 yrs to min CSA, 0-29 hrs)",
-unit_of_level = "% (of popn 3yrs to CSA)",
+name = "Childcare (under 3 yrs, 25+ hrs)",
+unit_of_level = "% (of popn <3yrs)",
 unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
-value = fromEurostatDataset("ilc_caindformal", 
-    with_filters(age = "Y3-CSA", duration = "H1-29"))
+value = fromEurostatDataset("ilc_caindform25", 
+    with_filters(unit="PC", age = "Y_LT3", duration = "H_GE25", yn_arope = "TOTAL"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.C2.4") = 
 specification(
-name = "Childcare (3 yrs to min CSA, 30+ hrs)",
+name = "Childcare (3 yrs to min CSA, 0 hrs)",
+unit_of_level = "% (of popn 3yrs to CSA)",
+unit_of_change = "pp",
+indicator_groups = "INPUT CONTEXT COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_caindform25", 
+    with_filters(unit="PC", age = "Y3-CSA", duration = "H0", yn_arope = "TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.C2.5") = 
+specification(
+name = "Childcare (3 yrs to min CSA, 1-24 hrs)",
 unit_of_level = "% (of popn 3yrs to CSA)",
 unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
-value = fromEurostatDataset("ilc_caindformal", 
-    with_filters(age = "Y3-CSA", duration = "H_GE30"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11a.C2.5") = 
-specification(
-name = "Childcare (min CSA to 12 yrs, 0-29 hrs)",
-unit_of_level = "% (of popn min CSA to 12 yrs)",
-unit_of_change = "pp",
-indicator_groups = "INPUT CONTEXT COMPENDIUM 9 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = TRUE,
-value = fromEurostatDataset("ilc_caindformal", 
-    with_filters(age = "CSA1-Y12", duration = "H1-29"))
+value = fromEurostatDataset("ilc_caindform25", 
+    with_filters(unit="PC", age = "Y3-CSA", duration = "H1-24", yn_arope = "TOTAL"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.C2.6") = 
 specification(
-name = "Childcare (min CSA to 12 yrs, 30+ hrs)",
+name = "Childcare (3 yrs to min CSA, 25+ hrs)",
+unit_of_level = "% (of popn 3yrs to CSA)",
+unit_of_change = "pp",
+indicator_groups = "INPUT CONTEXT COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromEurostatDataset("ilc_caindform25", 
+    with_filters(unit="PC", age = "Y3-CSA", duration = "H_GE25", yn_arope = "TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.C2.7") = 
+specification(
+name = "Childcare (min CSA to 12 yrs, 0 hrs)",
+unit_of_level = "% (of popn min CSA to 12 yrs)",
+unit_of_change = "pp",
+indicator_groups = "INPUT CONTEXT COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_caindform25", 
+    with_filters(unit="PC", age = "CSA1-Y12", duration = "H0", yn_arope = "TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.C2.8") = 
+specification(
+name = "Childcare (min CSA to 12 yrs, 1-24 hrs)",
 unit_of_level = "% (of popn min CSA to 12 yrs)",
 unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 9 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = TRUE,
-value = fromEurostatDataset("ilc_caindformal", 
-    with_filters(age = "CSA1-Y12", duration = "H_GE30"))
+value = fromEurostatDataset("ilc_caindform25", 
+    with_filters(unit="PC", age = "CSA1-Y12", duration = "H1-24", yn_arope = "TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA11a.C2.9") = 
+specification(
+name = "Childcare (min CSA to 12 yrs, 25+ hrs)",
+unit_of_level = "% (of popn min CSA to 12 yrs)",
+unit_of_change = "pp",
+indicator_groups = "INPUT CONTEXT COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = TRUE,
+value = fromEurostatDataset("ilc_caindform25", 
+    with_filters(unit="PC", age = "CSA1-Y12", duration = "H_GE25", yn_arope = "TOTAL"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.C4.") = 

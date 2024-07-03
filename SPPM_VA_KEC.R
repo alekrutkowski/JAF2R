@@ -118,7 +118,9 @@ countrySheet <- function(geo_code)
                          .)
               },
               `Reference for score change` = .$reference_name_change,
-              Years = .$comment %>% gsub('_'," ",.,fixed=TRUE))} %>% 
+              Years = .$comment %>% gsub('_'," ",.,fixed=TRUE),
+              `Reference value for score level` = round(.$reference_latest_value,2),
+              `Reference value for score change` = round(.$reference_change,2))} %>% 
   setorder(row_order) %>% 
   .[,row_order := NULL] %>% 
   .[, `POLICY AREA` := `POLICY AREA` %>% 
@@ -151,7 +153,9 @@ countrySheet_add <- function(geo_code)
                          .)
               },
               `Reference for score change` = .$reference_name_change,
-              Years = .$comment %>% gsub('_'," ",.,fixed=TRUE))} %>% 
+              Years = .$comment %>% gsub('_'," ",.,fixed=TRUE),
+              `Reference value for score level` = round(.$reference_latest_value,2),
+              `Reference value for score change` = round(.$reference_change,2))} %>% 
   setorder(row_order) %>% 
   .[,row_order := NULL] %>% 
   .[, `POLICY AREA` := `POLICY AREA` %>% 
@@ -184,7 +188,7 @@ KEC_wb$add_data(sheet='Info',
                          boldInlineXLString('..._add'),
                          plainInlineXLString(' worksheets:')), 
                 inline_strings=TRUE)
-KEC_wb$add_cell_style(sheet='Info', wrap_text=TRUE,)
+KEC_wb$add_cell_style(sheet='Info', wrap_text=TRUE)
 KEC_wb$add_data(sheet='Info',
                 start_row=2,
                 x=QuantAssessmentLabels %>% 
