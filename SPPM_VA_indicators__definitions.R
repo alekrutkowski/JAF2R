@@ -980,9 +980,9 @@ unit_of_level = "rate",
 unit_of_change = "rate",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
 source = "",
-high_is_good = TRUE,
+high_is_good = FALSE,
 value = fromEurostatDataset("hlth_cd_acdr2",
-   with_filters(sex="T", age="Y_LT15", icd10="A-R_V-Y"))
+   with_filters(sex="T", age="Y_LT15", icd10="A-R_V-Y", unit="RT"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA13.S12.") = 
