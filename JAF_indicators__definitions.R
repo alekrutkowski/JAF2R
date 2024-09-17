@@ -6948,16 +6948,16 @@ value = fromEurostatDataset("trng_lfs_09",
 #     with_filters(sex = "M", unit = "PC", age = "Y25-64"))
 # )
 
-inside(JAF_INDICATORS, indicator_named = "PA8.2.C1.Y25-64") = 
+inside(JAF_INDICATORS, indicator_named = "PA8.2.C1.Y25-64.M") = 
 specification(
-name = "Percentage of adult population participating in education and training (aged 25-64)",
+name = "Percentage of adult population participating in education and training (aged 25-64) - men",
 unit_of_level = "% (of people 25-64)",
 unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 7 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
 value = fromEurostatDataset("trng_lfs_01", 
-    with_filters(sex = "T", unit = "PC", age = "Y25-64"))
+    with_filters(sex = "M", unit = "PC", age = "Y25-64"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA8.2.C1.Y25-64.F") = 
