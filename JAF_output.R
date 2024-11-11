@@ -534,5 +534,6 @@ list(JAF_INDICATORS=JAF_INDICATORS,
      JAF_NAMES_DESCRIPTIONS=JAF_NAMES_DESCRIPTIONS,
      EU_Members_geo_names=EU_Members_geo_names,
      EU_geo_code=EU_geo_code,
-     EA_geo_code=EA_geo_code) %>% 
-  saveRDS('../JAF2R_shinylive/data/data.Rds')
+     EA_geo_code=EA_geo_code) %T>% 
+  saveRDS('../JAF2R_shinylive/data/data.Rds') %T>% 
+  {toJSON(.) %>% cat(file='DATA.json')} # for the JAF PowerBI dashboard

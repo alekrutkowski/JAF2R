@@ -61,6 +61,42 @@ value = fromEurostatDataset("lfsa_ergaed",
     with_filters(age = "Y30-54", isced11 = "TOTAL", sex = "M", unit = "PC"))
 )
 
+# inside(JAF_INDICATORS, indicator_named = "PA1.C3.15-74.T") = 
+# specification(
+# name = "Unemployment rate in age group 15-74 - total",
+# unit_of_level = "% (of active popn 15-74)",
+# unit_of_change = "pp",
+# indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
+# source = "Eurostat, EU Labour Force Survey",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("lfsa_urgan", 
+#     with_filters(sex = "T", unit = "PC", citizen = "TOTAL", age = "Y15-74"))
+# )
+
+inside(JAF_INDICATORS, indicator_named = "PA1.C3.15-74.F") = 
+specification(
+name = "Unemployment rate in age group 15-74 - women",
+unit_of_level = "% (of population in the labour force, women 15-74)", 
+unit_of_change = "pp",
+indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Labour Force Survey",
+high_is_good = FALSE,
+value = fromEurostatDataset("une_rt_a", 
+    with_filters(sex = "F", unit = "PC_ACT", age = "Y15-74"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA1.C3.15-74.M") = 
+specification(
+name = "Unemployment rate in age group 15-74 - men ",
+unit_of_level = "% (of population in the labour force, men 15-74)", 
+unit_of_change = "pp",
+indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Labour Force Survey",
+high_is_good = FALSE,
+value = fromEurostatDataset("une_rt_a", 
+    with_filters(sex = "M", unit = "PC_ACT", age = "Y15-74"))
+)
+
 inside(JAF_INDICATORS, indicator_named = "PA1.C3.15-74.T") = 
 specification(
 name = "Unemployment rate in age group 15-74 - total",
@@ -69,44 +105,8 @@ unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromEurostatDataset("lfsa_urgan", 
-    with_filters(sex = "T", unit = "PC", citizen = "TOTAL", age = "Y15-74"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA1.C3.15-74.F") = 
-specification(
-name = "Unemployment rate in age group 15-74 - women",
-unit_of_level = "% (of active women 15-74)",
-unit_of_change = "pp",
-indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
-source = "Eurostat, EU Labour Force Survey",
-high_is_good = FALSE,
-value = fromEurostatDataset("lfsa_urgan", 
-    with_filters(sex = "F", unit = "PC", citizen = "TOTAL", age = "Y15-74"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA1.C3.15-74.M") = 
-specification(
-name = "Unemployment rate in age group 15-74 - men ",
-unit_of_level = "% (of active men 15-74)",
-unit_of_change = "pp",
-indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
-source = "Eurostat, EU Labour Force Survey",
-high_is_good = FALSE,
-value = fromEurostatDataset("lfsa_urgan", 
-    with_filters(sex = "M", unit = "PC", citizen = "TOTAL", age = "Y15-74"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA1.C3.30-54.T") = 
-specification(
-name = "Unemployment rate in age group 30-54 - total",
-unit_of_level = "% (of active popn 30-54)",
-unit_of_change = "pp",
-indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
-source = "Eurostat, EU Labour Force Survey",
-high_is_good = FALSE,
-value = fromEurostatDataset("lfsa_urgan", 
-    with_filters(sex = "T", unit = "PC", citizen = "TOTAL", age = "Y30-54"))
+value = fromEurostatDataset("une_rt_a", 
+    with_filters(sex = "T", unit = "PC_ACT", age = "Y15-74"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA1.C3.30-54.F") = 
@@ -767,7 +767,7 @@ high_is_good = TRUE,
 value = fromEurostatDataset("lfsi_emp_a", 
     with_filters(sex = "T", unit = "PC_POP", age = "Y15-64", indic_em = "EMP_LFS"))
 )
-
+### ----------------------------------------------------------
 inside(JAF_INDICATORS, indicator_named = "PA11.C5.1") = 
 specification(
 name = "Social protection expenditure by function (% of GDP) - Social protection benefits",
@@ -911,6 +911,7 @@ high_is_good = TRUE,
 value = fromEurostatDataset("spr_exp_sum", 
     with_filters(unit = "PC_GDP", spdeps = "TOTALNOREROUTE"))
 )
+### ----------------------------------------------------------
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C8.F") = 
 specification(
@@ -3924,8 +3925,8 @@ unit_of_change = "NA",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromEurostatDataset("lfsa_urgan", 
-    with_filters(sex = "M", unit = "PC", citizen = "TOTAL", age = "Y15-24"))
+value = fromEurostatDataset("une_rt_a", 
+    with_filters(sex = "M", unit = "PC_ACT", age = "Y15-24"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA1b.C7.15-24.T") = 
@@ -3936,8 +3937,8 @@ unit_of_change = "NA",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromEurostatDataset("lfsa_urgan", 
-    with_filters(sex = "T", unit = "PC", citizen = "TOTAL", age = "Y15-24"))
+value = fromEurostatDataset("une_rt_a", 
+    with_filters(sex = "T", unit = "PC_ACT", age = "Y15-24"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA1b.C7.15-24.W") = 
@@ -3948,9 +3949,10 @@ unit_of_change = "NA",
 indicator_groups = "CONTEXT COMPENDIUM 8",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromEurostatDataset("lfsa_urgan", 
-    with_filters(sex = "F", unit = "PC", citizen = "TOTAL", age = "Y15-24"))
+value = fromEurostatDataset("une_rt_a", 
+    with_filters(sex = "F", unit = "PC_ACT", age = "Y15-24"))
 )
+
 
 inside(JAF_INDICATORS, indicator_named = "PA1b.O1.n.") = 
 specification(
@@ -5454,6 +5456,17 @@ value = fromLMPdataset("lmp_ind_actsup",
     with_filters(sex = "T", unit = "RT", lmp_type = "TOT2_7", age = "TOTAL"))
 )
 
+# inside(JAF_INDICATORS, indicator_named = "PA3.S6.") = 
+# specification(
+# name = "Unemployment rate (15-74 year old)",
+# unit_of_level = "% (of active popn 15-74)",
+# unit_of_change = "NA",
+# indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
+# source = "Eurostat, LFS",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("lfsa_urgan", 
+#     with_filters(age = "Y15-74", sex = "T", unit = "PC", citizen = "Total"))
+# )
 inside(JAF_INDICATORS, indicator_named = "PA3.S6.") = 
 specification(
 name = "Unemployment rate (15-74 year old)",
@@ -5462,8 +5475,8 @@ unit_of_change = "NA",
 indicator_groups = "SUBINDICATOR COMPENDIUM 8 COUNTRY",
 source = "Eurostat, LFS",
 high_is_good = FALSE,
-value = fromEurostatDataset("lfsa_urgan", 
-    with_filters(age = "Y15-74", sex = "T", unit = "PC", citizen = "Total"))
+value = fromEurostatDataset("une_rt_a", 
+    with_filters(age = "Y15-74", sex = "T", unit = "PC_ACT"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA4.1.C3.") = 
