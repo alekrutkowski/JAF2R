@@ -768,7 +768,7 @@ value = fromEurostatDataset("lfsi_emp_a",
     with_filters(sex = "T", unit = "PC_POP", age = "Y15-64", indic_em = "EMP_LFS"))
 )
 ### ----------------------------------------------------------
-inside(JAF_INDICATORS, indicator_named = "PA11.C5.1") = 
+inside(JAF_INDICATORS, indicator_named = "PA11.C5.1") =
 specification(
 name = "Social protection expenditure by function (% of GDP) - Social protection benefits",
 unit_of_level = "% (of GDP)",
@@ -776,8 +776,8 @@ unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, ESSPROS",
 high_is_good = TRUE,
-value = fromEurostatDataset("spr_exp_sum", 
-    with_filters(unit = "PC_GDP", spdeps = "SPBENEFNOREROUTE"))
+value = fromEurostatDataset("spr_exp_type",
+    with_filters(unit = "PC_GDP", spdeps = "SPR"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C5.10") = 
@@ -788,8 +788,8 @@ unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, ESSPROS",
 high_is_good = TRUE,
-value = fromEurostatDataset("spr_exp_sum", 
-    with_filters(unit = "PC_GDP", spdeps = "HOUSE"))
+value = fromEurostatDataset("spr_exp_func", 
+    with_filters(unit = "PC_GDP", spfunc = "HOU"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C5.11") = 
@@ -800,11 +800,11 @@ unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, ESSPROS",
 high_is_good = TRUE,
-value = fromEurostatDataset("spr_exp_sum", 
-    with_filters(unit = "PC_GDP", spdeps = "EXCLU"))
+value = fromEurostatDataset("spr_exp_func", 
+    with_filters(unit = "PC_GDP", spfunc = "EXCL"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA11.C5.2") = 
+inside(JAF_INDICATORS, indicator_named = "PA11.C5.2") =
 specification(
 name = "Social protection expenditure by function (% of GDP) - Admin costs",
 unit_of_level = "% (of GDP)",
@@ -812,11 +812,11 @@ unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, ESSPROS",
 high_is_good = TRUE,
-value = fromEurostatDataset("spr_exp_sum", 
-    with_filters(unit = "PC_GDP", spdeps = "ADMIN"))
+value = fromEurostatDataset("spr_exp_type",
+    with_filters(unit = "PC_GDP", spdeps = "ADM"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA11.C5.3") = 
+inside(JAF_INDICATORS, indicator_named = "PA11.C5.3") =
 specification(
 name = "Social protection expenditure by function (% of GDP) - Other expenditure",
 unit_of_level = "% (of GDP)",
@@ -824,8 +824,8 @@ unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, ESSPROS",
 high_is_good = TRUE,
-value = fromEurostatDataset("spr_exp_sum", 
-    with_filters(unit = "PC_GDP", spdeps = "OTHER"))
+value = fromEurostatDataset("spr_exp_type",
+    with_filters(unit = "PC_GDP", spdeps = "OTH"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C5.4") = 
@@ -836,8 +836,8 @@ unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, ESSPROS",
 high_is_good = TRUE,
-value = fromEurostatDataset("spr_exp_sum", 
-    with_filters(unit = "PC_GDP", spdeps = "SICK"))
+value = fromEurostatDataset("spr_exp_func", 
+    with_filters(unit = "PC_GDP", spfunc = "SICK"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C5.5") = 
@@ -848,8 +848,8 @@ unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, ESSPROS",
 high_is_good = TRUE,
-value = fromEurostatDataset("spr_exp_sum", 
-    with_filters(unit = "PC_GDP", spdeps = "DISA"))
+value = fromEurostatDataset("spr_exp_func", 
+    with_filters(unit = "PC_GDP", spfunc = "DIS"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C5.6") = 
@@ -860,8 +860,8 @@ unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, ESSPROS",
 high_is_good = TRUE,
-value = fromEurostatDataset("spr_exp_sum", 
-    with_filters(unit = "PC_GDP", spdeps = "OLD"))
+value = fromEurostatDataset("spr_exp_func", 
+    with_filters(unit = "PC_GDP", spfunc = "OLD"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C5.7") = 
@@ -872,8 +872,8 @@ unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, ESSPROS",
 high_is_good = TRUE,
-value = fromEurostatDataset("spr_exp_sum", 
-    with_filters(unit = "PC_GDP", spdeps = "SURVIV"))
+value = fromEurostatDataset("spr_exp_func", 
+    with_filters(unit = "PC_GDP", spfunc = "SRV"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C5.8") = 
@@ -884,8 +884,8 @@ unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, ESSPROS",
 high_is_good = TRUE,
-value = fromEurostatDataset("spr_exp_sum", 
-    with_filters(unit = "PC_GDP", spdeps = "FAM"))
+value = fromEurostatDataset("spr_exp_func", 
+    with_filters(unit = "PC_GDP", spfunc = "FAM"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C5.9") = 
@@ -896,8 +896,8 @@ unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, ESSPROS",
 high_is_good = TRUE,
-value = fromEurostatDataset("spr_exp_sum", 
-    with_filters(unit = "PC_GDP", spdeps = "UNEMPLOY"))
+value = fromEurostatDataset("spr_exp_func", 
+    with_filters(unit = "PC_GDP", spfunc = "UNE"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C5.T") = 
@@ -908,8 +908,8 @@ unit_of_change = "pp",
 indicator_groups = "INPUT CONTEXT COMPENDIUM 8 COUNTRY",
 source = "Eurostat, ESSPROS",
 high_is_good = TRUE,
-value = fromEurostatDataset("spr_exp_sum", 
-    with_filters(unit = "PC_GDP", spdeps = "TOTALNOREROUTE"))
+value = fromEurostatDataset("spr_exp_type", 
+    with_filters(unit = "PC_GDP", spdeps = "TOTAL"))
 )
 ### ----------------------------------------------------------
 
