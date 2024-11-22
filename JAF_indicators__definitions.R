@@ -183,14 +183,14 @@ value = fromEurostatDataset("lfsa_urgaed",
 
 inside(JAF_INDICATORS, indicator_named = "PA1.C4.15-64") = 
 specification(
-name = "Activity rate of population aged 15-64 - total",
+name = "Labour force participation rate of population aged 15-64 - total",
 unit_of_level = "% (of popn 15-64)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = TRUE,
-value = fromEurostatDataset("lfsa_argan", 
-    with_filters(sex = "T", unit = "PC", citizen = "TOTAL", age = "Y15-64"))
+value = fromEurostatDataset("lfsi_emp_a", 
+    with_filters(sex = "T", unit = "PC_POP", age = "Y15-64", indic_em="ACT"))
 )
 
 # inside(JAF_INDICATORS, indicator_named = "PA1.C4.20-29") = 
@@ -231,7 +231,7 @@ value = fromEurostatDataset("lfsa_argan",
 
 inside(JAF_INDICATORS, indicator_named = "PA1.C4.M") =
 specification(
-name = "Activity rate of population 20-64 - men",
+name = "Labour force participation rate of population 20-64 - men",
 unit_of_level = "% (of popn 20-64)",
 unit_of_change = "NA",
 indicator_groups = "CONTEXT COMPENDIUM 8 COUNTRY",
@@ -243,7 +243,7 @@ value = fromEurostatDataset("lfsi_emp_a",
 
 inside(JAF_INDICATORS, indicator_named = "PA1.C4.T") =
 specification(
-name = "Activity rate of population 20-64 - total",
+name = "Labour force participation rate of population 20-64 - total",
 unit_of_level = "% (of popn 20-64)",
 unit_of_change = "pp",
 indicator_groups = "MAIN OUTPUT MAIN COMPENDIUM 1 COUNTRY",
@@ -255,7 +255,7 @@ value = fromEurostatDataset("lfsi_emp_a",
 
 inside(JAF_INDICATORS, indicator_named = "PA1.C4.F") =
 specification(
-name = "Activity rate of population 20-64 - women",
+name = "Labour force participation rate of population 20-64 - women",
 unit_of_level = "% (of popn 20-64)",
 unit_of_change = "NA",
 indicator_groups = "CONTEXT COMPENDIUM 8 COUNTRY",
@@ -767,7 +767,7 @@ high_is_good = TRUE,
 value = fromEurostatDataset("lfsi_emp_a", 
     with_filters(sex = "T", unit = "PC_POP", age = "Y15-64", indic_em = "EMP_LFS"))
 )
-### ----------------------------------------------------------
+
 inside(JAF_INDICATORS, indicator_named = "PA11.C5.1") =
 specification(
 name = "Social protection expenditure by function (% of GDP) - Social protection benefits",
@@ -911,7 +911,6 @@ high_is_good = TRUE,
 value = fromEurostatDataset("spr_exp_type", 
     with_filters(unit = "PC_GDP", spdeps = "TOTAL"))
 )
-### ----------------------------------------------------------
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C8.F") = 
 specification(
@@ -3329,237 +3328,237 @@ value = fromEurostatDataset("une_rt_a",
     with_filters(age = "Y15-29", sex = "T", unit = "PC_POP"))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA13.S1.") = 
-specification(
-name = "Life expectancy at birth (T)",
-unit_of_level = "yrs",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("tps00205", 
-    with_filters(sex = "T", age = "Y_LT1", unit = "YR"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S10.") = 
-specification(
-name = "Healthy life years at 65 (W)",
-unit_of_level = "yrs",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("hlth_hlye", 
-    with_filters(indic_he = "HLY_65", sex = "F", unit = "YR"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S11.") = 
-specification(
-name = "Child mortality, 1-14",
-unit_of_level = "rate",
-unit_of_change = "rate",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("hlth_cd_acdr2", 
-    with_filters(sex = "T", age = "Y_LT15", icd10 = "A-R_V-Y"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S12.") = 
-specification(
-name = "Potential years of life lost (T)",
-unit_of_level = "yrs (per 100 000 inhab)",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = FALSE,
-value = fromEurostatDataset("hlth_cd_apyll", 
-    with_filters(icd10 = "A-R_V-Y", sex = "T", unit = "YR"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S13.") = 
-specification(
-name = "Treatable mortality standardized rate",
-unit_of_level = "st rate",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = FALSE,
-value = fromEurostatDataset("hlth_cd_apr", 
-    with_filters(mortalit = "TRT", sex = "T", unit = "RT", icd10 = "TOTAL"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S14.") = 
-specification(
-name = "Preventable mortality",
-unit_of_level = "st rate",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = FALSE,
-value = fromEurostatDataset("hlth_cd_apr", 
-    with_filters(mortalit = "PRVT", sex = "T", unit = "RT", icd10 = "TOTAL"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S15.") = 
-specification(
-name = "Unmet need med care (costs, waiting or distance)",
-unit_of_level = "%",
-unit_of_change = "pp",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = FALSE,
-value = fromEurostatDataset("hlth_silc_08", 
-    with_filters(age = "Y_GE16", quantile = "TOTAL", reason = "TOOEFW", sex = "T", unit = "PC"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S16.") = 
-specification(
-name = "Unmet need med care - cost",
-unit_of_level = "%",
-unit_of_change = "pp",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = FALSE,
-value = fromEurostatDataset("hlth_silc_08", 
-    with_filters(age = "Y_GE16", quantile = "TOTAL", reason = "TOOEXP", sex = "T", unit = "PC"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S17.") = 
-specification(
-name = "Unmet need med care - waiting",
-unit_of_level = "%",
-unit_of_change = "pp",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = FALSE,
-value = fromEurostatDataset("hlth_silc_08", 
-    with_filters(age = "Y_GE16", quantile = "TOTAL", reason = "WAITING", sex = "T", unit = "PC"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S18.") = 
-specification(
-name = "Unmet need med care - distance",
-unit_of_level = "%",
-unit_of_change = "pp",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = FALSE,
-value = fromEurostatDataset("hlth_silc_08", 
-    with_filters(age = "Y_GE16", quantile = "TOTAL", reason = "TOOFAR", sex = "T", unit = "PC"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S19.") = 
-specification(
-name = "Gap unmet need med care Q1-Q5",
-unit_of_level = "pp",
-unit_of_change = "pp",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = FALSE,
-value = fromFormula(a - b,
-  where = variables(
-  a = fromEurostatDataset("hlth_silc_08", 
-    with_filters(age = "Y_GE16", quantile = "QU1", reason = "TOOEFW", sex = "T", unit = "PC")),
-  b = fromEurostatDataset("hlth_silc_08", 
-    with_filters(age = "Y_GE16", quantile = "QU5", reason = "TOOEFW", sex = "T", unit = "PC"))))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S2.") = 
-specification(
-name = "Life expectancy at birth (M)",
-unit_of_level = "yrs",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("tps00205", 
-    with_filters(sex = "M", age = "Y_LT1", unit = "YR"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S3.") = 
-specification(
-name = "Life expectancy at birth (W)",
-unit_of_level = "yrs",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("tps00205", 
-    with_filters(sex = "F", age = "Y_LT1", unit = "YR"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S4.") = 
-specification(
-name = "Life expectancy at 65 (T)",
-unit_of_level = "yrs",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("demo_mlexpec", 
-    with_filters(sex = "T", age = "Y65", unit = "YR"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S5.") = 
-specification(
-name = "Life expectancy at 65 (M)",
-unit_of_level = "yrs",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("demo_mlexpec", 
-    with_filters(sex = "M", age = "Y65", unit = "YR"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S6.") = 
-specification(
-name = "Life expectancy at 65 (W)",
-unit_of_level = "yrs",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("demo_mlexpec", 
-    with_filters(sex = "F", age = "Y65", unit = "YR"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S7.") = 
-specification(
-name = "Healthy life years at birth (M)",
-unit_of_level = "yrs",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("hlth_hlye", 
-    with_filters(indic_he = "HLY_0", sex = "M", unit = "YR"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S8.") = 
-specification(
-name = "Healthy life years at birth (W)",
-unit_of_level = "yrs",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("hlth_hlye", 
-    with_filters(indic_he = "HLY_0", sex = "F", unit = "YR"))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA13.S9.") = 
-specification(
-name = "Healthy life years at 65 (M)",
-unit_of_level = "yrs",
-unit_of_change = "yrs",
-indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
-source = "NA",
-high_is_good = TRUE,
-value = fromEurostatDataset("hlth_hlye", 
-    with_filters(indic_he = "HLY_65", sex = "M", unit = "YR"))
-)
+# inside(JAF_INDICATORS, indicator_named = "PA13.S1.") = 
+# specification(
+# name = "Life expectancy at birth (T)",
+# unit_of_level = "yrs",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("tps00205", 
+#     with_filters(sex = "T", age = "Y_LT1", unit = "YR"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S10.") = 
+# specification(
+# name = "Healthy life years at 65 (W)",
+# unit_of_level = "yrs",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("hlth_hlye", 
+#     with_filters(indic_he = "HLY_65", sex = "F", unit = "YR"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S11.") = 
+# specification(
+# name = "Child mortality, 1-14",
+# unit_of_level = "rate",
+# unit_of_change = "rate",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("hlth_cd_acdr2", 
+#     with_filters(sex = "T", age = "Y_LT15", icd10 = "A-R_V-Y"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S12.") = 
+# specification(
+# name = "Potential years of life lost (T)",
+# unit_of_level = "yrs (per 100 000 inhab)",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("hlth_cd_apyll", 
+#     with_filters(icd10 = "A-R_V-Y", sex = "T", unit = "YR"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S13.") = 
+# specification(
+# name = "Treatable mortality standardized rate",
+# unit_of_level = "st rate",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("hlth_cd_apr", 
+#     with_filters(mortalit = "TRT", sex = "T", unit = "RT", icd10 = "TOTAL"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S14.") = 
+# specification(
+# name = "Preventable mortality",
+# unit_of_level = "st rate",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("hlth_cd_apr", 
+#     with_filters(mortalit = "PRVT", sex = "T", unit = "RT", icd10 = "TOTAL"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S15.") = 
+# specification(
+# name = "Unmet need med care (costs, waiting or distance)",
+# unit_of_level = "%",
+# unit_of_change = "pp",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("hlth_silc_08", 
+#     with_filters(age = "Y_GE16", quantile = "TOTAL", reason = "TOOEFW", sex = "T", unit = "PC"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S16.") = 
+# specification(
+# name = "Unmet need med care - cost",
+# unit_of_level = "%",
+# unit_of_change = "pp",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("hlth_silc_08", 
+#     with_filters(age = "Y_GE16", quantile = "TOTAL", reason = "TOOEXP", sex = "T", unit = "PC"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S17.") = 
+# specification(
+# name = "Unmet need med care - waiting",
+# unit_of_level = "%",
+# unit_of_change = "pp",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("hlth_silc_08", 
+#     with_filters(age = "Y_GE16", quantile = "TOTAL", reason = "WAITING", sex = "T", unit = "PC"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S18.") = 
+# specification(
+# name = "Unmet need med care - distance",
+# unit_of_level = "%",
+# unit_of_change = "pp",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = FALSE,
+# value = fromEurostatDataset("hlth_silc_08", 
+#     with_filters(age = "Y_GE16", quantile = "TOTAL", reason = "TOOFAR", sex = "T", unit = "PC"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S19.") = 
+# specification(
+# name = "Gap unmet need med care Q1-Q5",
+# unit_of_level = "pp",
+# unit_of_change = "pp",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = FALSE,
+# value = fromFormula(a - b,
+#   where = variables(
+#   a = fromEurostatDataset("hlth_silc_08", 
+#     with_filters(age = "Y_GE16", quantile = "QU1", reason = "TOOEFW", sex = "T", unit = "PC")),
+#   b = fromEurostatDataset("hlth_silc_08", 
+#     with_filters(age = "Y_GE16", quantile = "QU5", reason = "TOOEFW", sex = "T", unit = "PC"))))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S2.") = 
+# specification(
+# name = "Life expectancy at birth (M)",
+# unit_of_level = "yrs",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("tps00205", 
+#     with_filters(sex = "M", age = "Y_LT1", unit = "YR"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S3.") = 
+# specification(
+# name = "Life expectancy at birth (W)",
+# unit_of_level = "yrs",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("tps00205", 
+#     with_filters(sex = "F", age = "Y_LT1", unit = "YR"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S4.") = 
+# specification(
+# name = "Life expectancy at 65 (T)",
+# unit_of_level = "yrs",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("demo_mlexpec", 
+#     with_filters(sex = "T", age = "Y65", unit = "YR"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S5.") = 
+# specification(
+# name = "Life expectancy at 65 (M)",
+# unit_of_level = "yrs",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("demo_mlexpec", 
+#     with_filters(sex = "M", age = "Y65", unit = "YR"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S6.") = 
+# specification(
+# name = "Life expectancy at 65 (W)",
+# unit_of_level = "yrs",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("demo_mlexpec", 
+#     with_filters(sex = "F", age = "Y65", unit = "YR"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S7.") = 
+# specification(
+# name = "Healthy life years at birth (M)",
+# unit_of_level = "yrs",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("hlth_hlye", 
+#     with_filters(indic_he = "HLY_0", sex = "M", unit = "YR"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S8.") = 
+# specification(
+# name = "Healthy life years at birth (W)",
+# unit_of_level = "yrs",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("hlth_hlye", 
+#     with_filters(indic_he = "HLY_0", sex = "F", unit = "YR"))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA13.S9.") = 
+# specification(
+# name = "Healthy life years at 65 (M)",
+# unit_of_level = "yrs",
+# unit_of_change = "yrs",
+# indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 2 COUNTRY",
+# source = "NA",
+# high_is_good = TRUE,
+# value = fromEurostatDataset("hlth_hlye", 
+#     with_filters(indic_he = "HLY_65", sex = "M", unit = "YR"))
+# )
 
 inside(JAF_INDICATORS, indicator_named = "PA1b.C1.Y15-19.F") = 
 specification(
@@ -6398,23 +6397,23 @@ value = fromFormula((a + b + c)/3,
 
 inside(JAF_INDICATORS, indicator_named = "PA7.1.C1.") = 
 specification(
-name = "Unemployment gender gap (20-64) ",
-unit_of_level = "Percentage points (difference in URs 20-49)",
+name = "Unemployment gender gap (20-64)",
+unit_of_level = "Percentage points (difference in URs)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 6 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = NA,
 value = fromFormula(a - b,
   where = variables(
-  a = fromEurostatDataset("lfsa_urgan", 
-    with_filters(age = "Y20-64", citizen = "TOTAL", sex = "F", unit = "PC")),
-  b = fromEurostatDataset("lfsa_urgan", 
-    with_filters(age = "Y20-64", citizen = "TOTAL", sex = "M", unit = "PC"))))
+  a = fromEurostatDataset("une_rt_a", 
+    with_filters(age = "Y20-64", sex = "F", unit = "PC_ACT")),
+  b = fromEurostatDataset("une_rt_a", 
+    with_filters(age = "Y20-64", sex = "M", unit = "PC_ACT"))))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA7.1.C4.") = 
 specification(
-name = "Employment gender gap in fte (20-64) ",
+name = "Employment gender gap in fte (20-64)",
 unit_of_level = "Percentage points (difference in ERs fte 20-49)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 6 COUNTRY",
@@ -7211,14 +7210,14 @@ value = fromEurostatDataset("educ_uoe_enra21",
 
 inside(JAF_INDICATORS, indicator_named = "PA9.1.S2.") = 
 specification(
-name = "NEET rates for age group 15-24 - total",
-unit_of_level = "% (of popn 15-24)",
-unit_of_change = "pp",
+name = "NEET rate for age group 15-24 - total",
+unit_of_level = "% of population",
+unit_of_change = "NA",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 7 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
 high_is_good = FALSE,
-value = fromEurostatDataset("edat_lfse_20", 
-    with_filters(sex = "T", unit = "PC", wstatus = "NEMP", age = "Y15-24", training = "NO_FE_NO_NFE"))
+value = fromEurostatDataset("lfsi_neet_a", 
+    with_filters(sex = "T", unit = "PC_POP", age = "Y15-24"))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA9.1.S3.") = 
