@@ -4,7 +4,7 @@ library(eurodata)
 library(collapse)
 library(stringr)
 library(openxlsx2)
-library(jsonlite) # to generate files for JAF2R_shinylive
+library(jsonlite) # to generate files for JAF PowerBI dashboard
 
 
 # Functions and constants -------------------------------------------------
