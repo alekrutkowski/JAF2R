@@ -1,25 +1,60 @@
-### 549 indicators
-### compiled automatically by rutkoal
-### on 2024-04-09 11:37:48
-### from `JAF_indicators__definitions.xlsx`, worksheet "compiled on 2024-03-14 16.21.41"
-### from `JAF_indicators__definitions.xlsx`, worksheet "Comments"
-### With subsequent modifications:
-### function (dt) 
-### dt %>% merge(data.table(JAF_KEY = c("PA1.S3.", "PA1.S5.", "PA1.S2.", 
-###     "PA1.S4.", "PA1.C7.20-29.M", "PA1.C7.20-29.W", "PA1.C5.20-64.M", 
-###     "PA1.C5.20-64.F", "PA1.C6.20-64.T", "PA1.C6.20-64.M", "PA1.C6.20-64.F", 
-###     "PA1.C3.15-74", "PA1.C4.W", "PA1e.O1.", "PA9.1.C1.M", "PA9.1.C1.F", 
-###     "PA9.1.C1.NAT", "PA9.1.C1.EU27_2020", "PA9.1.C1.NONEU27_2020", 
-###     "PA9.1.C1.SAME", "PA9.1.C1.OTHEREU27_2020", "PA9.1.C1.OUTEU27_2020"), 
-###     newJAF_KEY = c("PA1.S2.", "PA1.S3.", "PA1.S4.", "PA1.S5.", 
-###         "PA1.C2.20-29.M", "PA1.C2.20-29.F", "PA1.C2.low.M", "PA1.C2.low.F", 
-###         "PA1.C2.high.T", "PA1.C2.high.M", "PA1.C2.high.F", "PA1.C3.15-74.T", 
-###         "PA1.C4.F", "PA1.C5.T", "PA9.1.C1.01M", "PA9.1.C1.02F", 
-###         "PA9.1.C1.03NAT", "PA9.1.C1.04EU27_2020", "PA9.1.C1.05NONEU27_2020", 
-###         "PA9.1.C1.06SAME", "PA9.1.C1.07OTHEREU27_2020", "PA9.1.C1.08OUTEU27_2020")), 
-###     all.x = TRUE, by = "JAF_KEY") %>% .[, `:=`(JAF_KEY, ifelse(is.na(newJAF_KEY), 
-###     JAF_KEY, newJAF_KEY))] %>% .[, `:=`(newJAF_KEY, NULL)]
-### Modified by PAul, 25-6-2024
+
+inside(JAF_INDICATORS, indicator_named = "PA11d1.S4.") = 
+specification(name = "Income inequality reducing effect of taxes and social transfers",
+unit_of_level = "Reduction in ratio",
+unit_of_change = "Change in ratio reduction",
+indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU-SILC",
+high_is_good = TRUE,
+value = fromEurostatDataset("ilc_di11i", 
+    with_filters(unit = "RAT")))
+
+
+inside(JAF_INDICATORS, indicator_named = "PA11d1.S5.") = 
+specification(name = "Income inequality reducing effect of taxes",
+unit_of_level = "Reduction in ratio",
+unit_of_change = "Change in ratio reduction",
+indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU-SILC",
+high_is_good = TRUE,
+value = fromEurostatDataset("ilc_di11g", 
+    with_filters(unit = "RAT")))
+
+
+inside(JAF_INDICATORS, indicator_named = "PA11d1.S6.") = 
+specification(name = "Income inequality reducing effect of social transfers",
+unit_of_level = "Reduction in ratio",
+unit_of_change = "Change in ratio reduction",
+indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU-SILC",
+high_is_good = TRUE,
+value = fromEurostatDataset("ilc_di11h", 
+    with_filters(unit = "RAT")))
+
+
+inside(JAF_INDICATORS, indicator_named = "PA11d1.C2.") = 
+specification(
+name = "Gini coefficient of equivalised disposable income for the age group 0-17",
+unit_of_level = "Gini coefficient for children",
+unit_of_change = "Change in coefficient",
+indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU-SILC",
+high_is_good = FALSE,
+value = fromEurostatDataset("ilc_di12", 
+    with_filters(statinfo = "GINI_HND", age = "Y_LT18")))
+
+
+inside(JAF_INDICATORS, indicator_named = "PA11f1.S3.") = 
+specification(name = " Share of people with disabilities (aged 16-65) living in (quasi-)jobless households - total",
+unit_of_level = "% of people with disabilities aged 16-65)",
+unit_of_change = "pp",
+indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 9 COUNTRY",
+source = "Eurostat, EU-SILC",
+high_is_good = FALSE,
+value = fromEurostatDataset("HLTH_DPE040", 
+    with_filters(lev_limit = "SM_SEV", sex = "T", age = "Y_LT65")))
+
+
 
 inside(JAF_INDICATORS, indicator_named = "PA1.C1.") = 
 specification(

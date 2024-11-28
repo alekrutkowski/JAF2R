@@ -536,4 +536,6 @@ list(JAF_INDICATORS=JAF_INDICATORS,
      EU_geo_code=EU_geo_code,
      EA_geo_code=EA_geo_code) %T>% 
   saveRDS('../JAF2R_shinylive/data/data.Rds') %T>% 
-  {toJSON(.) %>% cat(file='DATA.json')} # for the JAF PowerBI dashboard
+  {toJSON(., dataframe='columns',auto_unbox=TRUE) %>% 
+      cat(file='DATA.json')} %>% # for the JAF PowerBI dashboard
+  invisible()
