@@ -501,41 +501,44 @@ JAF_SCORES <-
 
 createFolder(OUTPUT_FOLDER)
 
-message('\nGenerating `Quality Checks.xlsx`...')
-QCT <- qualityChecksTable(JAF_GRAND_TABLE)
-wb_workbook() %>% 
-  wb_add_worksheet("JAF quality checks", zoom=75) %>%
-  wb_add_data(x=QCT) %>% 
-  wb_add_font(dims=paste0('A1:',int2col(ncol(QCT)),'1'), bold="bold") %>% 
-  wb_add_cell_style(dims=paste0('A1:',int2col(ncol(QCT)),'1'), wrap_text=TRUE) %>% 
-  wb_set_col_widths(cols=1:ncol(QCT), widths=12) %>%
-  wb_set_row_heights(rows=1, heights=107) %>% 
-  wb_freeze_pane(first_row=TRUE) %>% 
-  wb_add_filter(rows=1, cols=1:ncol(QCT)) %>% 
-  wb_save(paste0(OUTPUT_FOLDER,'/Quality Checks.xlsx'))
+if (!exists('DEVMODE')) { # slow
+  message('\nGenerating `Quality Checks.xlsx`...')
+  QCT <- qualityChecksTable(JAF_GRAND_TABLE)
+  wb_workbook() %>% 
+    wb_add_worksheet("JAF quality checks", zoom=75) %>%
+    wb_add_data(x=QCT) %>% 
+    wb_add_font(dims=paste0('A1:',int2col(ncol(QCT)),'1'), bold="bold") %>% 
+    wb_add_cell_style(dims=paste0('A1:',int2col(ncol(QCT)),'1'), wrap_text=TRUE) %>% 
+    wb_set_col_widths(cols=1:ncol(QCT), widths=12) %>%
+    wb_set_row_heights(rows=1, heights=107) %>% 
+    wb_freeze_pane(first_row=TRUE) %>% 
+    wb_add_filter(rows=1, cols=1:ncol(QCT)) %>% 
+    wb_save(paste0(OUTPUT_FOLDER,'/Quality Checks.xlsx'))
+} 
 
 message('\nPreparing the data.Rds file for the Shiny/Shinylive app...')
 if (!dir.exists('../JAF2R_shinylive')) createFolder('../JAF2R_shinylive')
-list(JAF_INDICATORS=JAF_INDICATORS,
-     JAF_GRAND_TABLE_reduced = JAF_GRAND_TABLE %>% 
-       .[isNotNA(.$value_) & 
-           .$geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)
-         , c('JAF_KEY','geo','time','value_','high_is_good',
-             grep('flags_',colnames(.),value=TRUE)), with=FALSE] %>% 
-       .[, all_flags := # collapse all flags_ columns into one column
-           do.call(paste0,c(mget(grep('flags_',colnames(.),value=TRUE)))) %>% 
-           gsub('NA',"",.,fixed=TRUE) %>% gsub(':',"",.,fixed=TRUE)] %>% 
-       .[, grep('^flags_.*$',colnames(.),value=TRUE) := NULL] %>% 
-       .[, time := as.integer(time)] %>% 
-       .[, value_change := 
-           if (length(value_)==1) NA_real_ else collapse::D(value_, t=time) 
-         , by=.(JAF_KEY,geo)],
-     JAF_SCORES=JAF_SCORES,
-     JAF_NAMES_DESCRIPTIONS=JAF_NAMES_DESCRIPTIONS,
-     EU_Members_geo_names=EU_Members_geo_names,
-     EU_geo_code=EU_geo_code,
-     EA_geo_code=EA_geo_code) %T>% 
-  saveRDS('../JAF2R_shinylive/data/data.Rds') %T>% 
-  {toJSON(., dataframe='columns',auto_unbox=TRUE) %>% 
+JAF_EXPORTS <-
+  list(JAF_INDICATORS=JAF_INDICATORS,
+       JAF_GRAND_TABLE_reduced = JAF_GRAND_TABLE %>% 
+         .[isNotNA(.$value_) & 
+             .$geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)
+           , c('JAF_KEY','geo','time','value_','high_is_good',
+               grep('flags_',colnames(.),value=TRUE)), with=FALSE] %>% 
+         .[, all_flags := # collapse all flags_ columns into one column
+             do.call(paste0,c(mget(grep('flags_',colnames(.),value=TRUE)))) %>% 
+             gsub('NA',"",.,fixed=TRUE) %>% gsub(':',"",.,fixed=TRUE)] %>% 
+         .[, grep('^flags_.*$',colnames(.),value=TRUE) := NULL] %>% 
+         .[, time := as.integer(time)] %>% 
+         .[, value_change := 
+             if (length(value_)==1) NA_real_ else collapse::D(value_, t=time) 
+           , by=.(JAF_KEY,geo)],
+       JAF_SCORES=JAF_SCORES,
+       JAF_NAMES_DESCRIPTIONS=JAF_NAMES_DESCRIPTIONS,
+       EU_Members_geo_names=EU_Members_geo_names,
+       EU_geo_code=EU_geo_code,
+       EA_geo_code=EA_geo_code) %T>% # {rjson::toJSON(.) %>% cat(file='DATA-rjson.json')} %T>% 
+  saveRDS('../JAF2R_shinylive/data/data.Rds') %T>%
+  {toJSON(., dataframe='columns',auto_unbox=TRUE) %>% # {toJSON(.) %>%
       cat(file='DATA.json')} %>% # for the JAF PowerBI dashboard
   invisible()

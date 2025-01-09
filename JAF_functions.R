@@ -665,7 +665,7 @@ getAMECO <- function(ameco_variable_code)
   ## 0 Original units (e.g. national currency, persons, etc.)
   ## REF: Codes for relative performance (fourth numerical code)
   ## For all other variables simply including a value for the reporting country, the code is 0.
-ameco_variable_code %>% 
+  ameco_variable_code %>% 
   switch('QLCD'='3.1.0.0.',
          stop('The code ',.," doesn't have a defined four digit (X.X.X.X.) prefix code\n",
               'in the `switch` function inside `getAMECO` function!',call.=FALSE)) %>% 
@@ -675,6 +675,7 @@ ameco_variable_code %>%
          'NLD,POL,PRT,ROM,SVK,SVN,SWE&years=',
          seq.int(2000, Sys.Date() %>% substr(1,4) %>% as.integer()) %>% 
            paste(collapse=',')) %>% 
+  {cat('Opening:\n',.); .} %>% 
   read_html() %>% 
   html_node(xpath='/html/body/table') %>% 
   html_table(convert=FALSE) %>% # wrong colnames = title "European Commission	Economic and Financial Affairs	Tax and Benefits"
@@ -736,6 +737,34 @@ vacancy_rate <- function(with_filters=NULL) {
     .[, value_ := frollmean(value_, 3, algo='exact'),
       by=geo] %>% 
     .[!is.na(value_)]
+}
+
+energy_intensive_employ_rate <- function(with_filters=NULL) {
+  numerator_dt <-
+    fread('20241219_R21132_1_20241219_175309_EMPLF3_AA_2.csv') %>% 
+    .[NACE2_2D=="EII_05_06_07_08_09_20_23_24_29"] %>% 
+    .[, flags_1 := paste0(FLAG_RELIAB,OBS_STATUS)] %>% 
+    setnames(c('COUNTRY','YEAR','THS_POP'),
+             c('geo','time','value_1')) %>% 
+    .[,.(geo,time,value_1,flags_1)]
+  stopifnot(!anyDuplicated(numerator_dt[,.(geo,time)]))
+  denominator_dt <-
+    fromEurostatDataset('lfsa_egan2',
+                        list(sex='T',age='Y15-74',unit='THS_PER')) %>% 
+    setnames(c('value_','flags_'),
+             c('value_2','flags_2')) %>% 
+    .[, time := time %>% as.integer] %>% 
+    .[nace_r2=='TOTAL'] %>% 
+    # .[nchar(nace_r2)==1] %>% # remove TOTAL and NRP (no response)
+    # .[,.(value_2 = sum(value_2),
+    #      flags_2 = unique(flags_2) %>% paste(collapse="") %>% sub(': ',"",.,fixed=TRUE))
+    #   , by=.(geo,time)]
+    .[,.(geo,time,value_2,flags_2)]
+  merge(numerator_dt,denominator_dt,
+        by=c('geo','time')) %>% 
+    .[, value_ := 100*value_1/value_2] %>% 
+    .[, flags_ := paste0(flags_1,flags_2)] %>% 
+    .[,.(geo,time,value_,flags_)]
 }
 
 estatDatasetDimNames <- function(EurostatDatasetCode)

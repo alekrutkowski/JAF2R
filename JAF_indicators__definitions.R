@@ -588,6 +588,19 @@ value = fromFormula((a/b - 1) * 100,
   b = fromAMECO("QLCD", time_period = -1)))
 )
 
+######################## New
+inside(JAF_INDICATORS, indicator_named = "PA10.C7.") = 
+specification(
+name = "Employment share of energy-intensive industries",
+unit_of_level = "% (of total number of employed)",
+unit_of_change = "pp",
+indicator_groups = "CONTEXT COMPENDIUM 8",
+source = "Eurostat, including special LFS extraction",
+high_is_good = FALSE,
+value = fromSpecialCalculation("energy_intensive_employ_rate", 
+    with_filters(NA))
+)
+
 inside(JAF_INDICATORS, indicator_named = "PA10.O1.") = 
 specification(
 name = "Nominal unit labour cost - growth over 3 most recent periods ",
