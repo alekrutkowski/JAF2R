@@ -741,7 +741,8 @@ vacancy_rate <- function(with_filters=NULL) {
 
 energy_intensive_employ_rate <- function(with_filters=NULL) {
   numerator_dt <-
-    fread('20241219_R21132_1_20241219_175309_EMPLF3_AA_2.csv') %>% 
+    list.files(pattern='_EMPLF3_AA_2\\.csv$') %>% sort %>% tail(1) %>% 
+    fread() %>% 
     .[NACE2_2D=="EII_05_06_07_08_09_20_23_24_29"] %>% 
     .[, flags_1 := paste0(FLAG_RELIAB,OBS_STATUS)] %>% 
     setnames(c('COUNTRY','YEAR','THS_POP'),
