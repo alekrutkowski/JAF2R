@@ -537,7 +537,12 @@ JAF_EXPORTS <-
        JAF_NAMES_DESCRIPTIONS=JAF_NAMES_DESCRIPTIONS,
        EU_Members_geo_names=EU_Members_geo_names,
        EU_geo_code=EU_geo_code,
-       EA_geo_code=EA_geo_code) %T>% # {rjson::toJSON(.) %>% cat(file='DATA-rjson.json')} %T>% 
+       EA_geo_code=EA_geo_code,
+       DEFINITIONS=parse('JAF_indicators__definitions.R') %>% 
+         as.character() %>% 
+         {data.table(JAF_KEY=sub('.*indicator_named = \\"(.*?)\\".*','\\1',.),
+                     Definition=sub('.*specification\\((.*?)\\)','\\1',.))}
+  ) %T>% # {rjson::toJSON(.) %>% cat(file='DATA-rjson.json')} %T>% 
   saveRDS('../JAF2R_shinylive/data/data.Rds') %T>%
   {toJSON(., dataframe='columns',auto_unbox=TRUE) %>% # {toJSON(.) %>%
       cat(file='DATA.json')} %>% # for the JAF PowerBI dashboard
