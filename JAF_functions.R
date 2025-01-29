@@ -768,6 +768,22 @@ energy_intensive_employ_rate <- function(with_filters=NULL) {
     .[,.(geo,time,value_,flags_)]
 }
 
+emission_intensity <- function(with_filters=NULL) 
+  fromFormula(a/b,
+              where = variables(
+                a = fromEurostatDataset("env_ac_ainah_r2", 
+                                        with_filters(airpol="GHG", unit="THS_T", nace_r2="TOTAL")),
+                b = fromEurostatDataset("nama_10_a64_e", 
+                                        with_filters(na_item="EMP_DC", unit="THS_PER", nace_r2="TOTAL")))) %>% 
+  .[, flags_ := paste0(flags_a,flags_b)] %>% 
+  .[, base_val := value_[time==2022], by=geo] %>% 
+  .[, base_flg := flags_[time==2022], by=geo] %>% 
+  .[, value_ := 100*value_/base_val] %>% 
+  .[, flags_ := paste0(flags_,base_flg) %>% 
+      gsub(':',"",.,fixed=TRUE)] %>% 
+  .[, c('base_val','base_flg') := NULL]
+
+
 estatDatasetDimNames <- function(EurostatDatasetCode)
   EurostatDatasetCode %>% 
   toupper(.) %>% 

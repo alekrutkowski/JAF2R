@@ -588,18 +588,7 @@ value = fromFormula((a/b - 1) * 100,
   b = fromAMECO("QLCD", time_period = -1)))
 )
 
-######################## New
-inside(JAF_INDICATORS, indicator_named = "PA10.C7.") = 
-specification(
-name = "Employment share of energy-intensive industries",
-unit_of_level = "% (of total number of employed)",
-unit_of_change = "pp",
-indicator_groups = "CONTEXT COMPENDIUM 8",
-source = "Eurostat, including special LFS extraction",
-high_is_good = FALSE,
-value = fromSpecialCalculation("energy_intensive_employ_rate", 
-    with_filters(NA))
-)
+
 
 inside(JAF_INDICATORS, indicator_named = "PA10.O1.") = 
 specification(
@@ -6215,6 +6204,45 @@ source = "Eurostat, EGSS data collection",
 high_is_good = TRUE,
 value = fromEurostatDataset("env_ac_egss1", 
     with_filters(unit = "FTE", na_item = "EMP_DC", ceparema = "TOTAL", ty = "TOT_EGSS", nace_r2 = "TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA6a.C6.") = 
+specification(
+name = "Green jobs – employment in the environmental goods and services sector ",
+unit_of_level = "FTE (Full time equivalent)",
+unit_of_change = "pp",
+indicator_groups = "OUTPUT CONTEXT COMPENDIUM 5 COUNTRY",
+source = "Eurostat, EGSS data collection",
+high_is_good = TRUE,
+value = fromEurostatDataset("env_ac_egss1", 
+    with_filters(unit = "FTE", na_item = "EMP_DC", ceparema = "TOTAL", ty = "TOT_EGSS", nace_r2 = "TOTAL"))
+)
+
+######################## New
+inside(JAF_INDICATORS, indicator_named = "PA6a.C7.") = 
+specification(
+name = "Employment share of energy-intensive industries",
+unit_of_level = "% (of total number of employed)",
+unit_of_change = "pp",
+indicator_groups = "OUTPUT CONTEXT COMPENDIUM 5 COUNTRY",
+source = "Eurostat, including special LFS extraction",
+high_is_good = FALSE,
+value = fromSpecialCalculation("energy_intensive_employ_rate", 
+    with_filters(NA))
+)
+
+######################## New
+inside(JAF_INDICATORS, indicator_named = "PA6a.C8.") = 
+specification(
+name = "Emission intensity of the workforce",
+unit_of_level = "index (2022 = 100)",
+unit_of_change = "NA",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 5 COUNTRY",
+source = "Eurostat",
+high_is_good = FALSE,
+calculate_score_change = FALSE,
+value = fromSpecialCalculation("emission_intensity", 
+    with_filters(NA))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA6a.O1.") = 
