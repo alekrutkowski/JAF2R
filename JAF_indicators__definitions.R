@@ -6237,7 +6237,7 @@ specification(
 name = "Emission intensity of the workforce",
 unit_of_level = "index (2022 = 100)",
 unit_of_change = "NA",
-indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 5 COUNTRY",
+indicator_groups = "OUTPUT CONTEX COMPENDIUM 5 COUNTRY",
 source = "Eurostat",
 high_is_good = FALSE,
 calculate_score_change = FALSE,
