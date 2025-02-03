@@ -519,7 +519,9 @@ if (!exists('DEVMODE')) { # slow
 message('\nPreparing the data.Rds file for the Shiny/Shinylive app...')
 if (!dir.exists('../JAF2R_shinylive')) createFolder('../JAF2R_shinylive')
 JAF_EXPORTS <-
-  list(JAF_INDICATORS=JAF_INDICATORS,
+  list(Compilation_Date_Time = OUTPUT_FOLDER %>% 
+         sub('JAF output ',"",.,fixed=TRUE),
+       JAF_INDICATORS=JAF_INDICATORS,
        JAF_GRAND_TABLE_reduced = JAF_GRAND_TABLE %>% 
          .[isNotNA(.$value_) & 
              .$geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)
