@@ -35,9 +35,15 @@ KEC_wb$add_worksheet('One table')
 KEC_wb$add_data(sheet='One table',
                 x=dta,
                 na.strings="")
+KEC_wb$add_font(sheet='One table',
+                dims=paste0('A1:',int2col(ncol(dta)),'1'),
+                bold="bold")
+KEC_wb$add_cell_style(sheet='One table',
+                      dims=paste0('D1:',int2col(ncol(dta)),'1'),
+                      horizontal="right")
 KEC_wb$set_col_widths(sheet='One table',
-                      cols=c(1,3),
-                      widths=70)
+                      cols=c(1,2,3),
+                      widths=c(70,22,70))
 for (ws in KEC_wb$worksheets)
   ws$sheetViews <- set_zoom(75, ws$sheetViews)
 wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/Key Employment Challenges and Good Outcomes - single table.xlsx'))
