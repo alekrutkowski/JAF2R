@@ -21,5 +21,6 @@ preCheckInidcators('SPPM_VA_indicators__definitions.R')
 runScript('SPPM_VA_indicators__definitions.R')
 runScript('JAF_output.R')
 runScript('SPPM_VA_KEC.R')
+runScript('SPPM_VA_KEC_one_table.R')
 
 message('\nAll SPPM VA scripts finished.')
