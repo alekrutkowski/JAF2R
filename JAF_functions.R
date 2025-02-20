@@ -784,6 +784,20 @@ emission_intensity <- function(with_filters=NULL)
   .[, c('base_val','base_flg') := NULL]
 
 
+participation_in_education_and_training_excluding_GOJT <- function(with_filters=NULL)
+  'Participation in education and training (excluding guided on the job training) 2016-2022.xlsx' %>% # from https://circabc.europa.eu/ui/group/d14c857a-601d-438a-b878-4b4cebd0e10f/library/c5a8b987-1e37-44d7-a20e-2c50d6101d27/details
+  openxlsx2::read_xlsx(sheet='SEX - 2022', rows=5:33, cols=c(1,5)) %>% 
+  as.data.table() %>% 
+  set_names(c('country','value_')) %>% 
+  .[, JAF_KEY := 'PA8.2.C3.'] %>% 
+  .[, geo := countrycode::countrycode(country,
+                                      origin='country.name',
+                                      destination='eurostat')] %>% 
+  .[, geo := ifelse(country=='EU-27','EU27_2020',geo)] %>% 
+  .[, country := NULL] %>% 
+  .[, time := 2022L]
+
+
 estatDatasetDimNames <- function(EurostatDatasetCode)
   EurostatDatasetCode %>% 
   toupper(.) %>% 

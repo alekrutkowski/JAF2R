@@ -6863,6 +6863,20 @@ value = fromEurostatDataset("isoc_ske_itts",
     with_filters(unit = "PC_ENT", size_emp = "GE10", nace_r2 = "C10-S951_X_K", indic_is = "E_ITT2"))
 )
 
+# New
+inside(JAF_INDICATORS, indicator_named = "PA8.2.C3.") = 
+specification(
+name = "Participation rate in education and training over the previous 12 months (age bracket 25-64), excluding guided on-the-job training (GOJT)",
+unit_of_level = "% (of people aged 25-64)",
+unit_of_change = "pp",
+indicator_groups = "INPUT CONTEXT COMPENDIUM 7 COUNTRY",
+source = "Eurostat, Adult Education Survey (AES)",
+high_is_good = TRUE,
+value = fromSpecialCalculation("participation_in_education_and_training_excluding_GOJT",
+    with_filters(NA))
+)
+
+
 inside(JAF_INDICATORS, indicator_named = "PA8.1.O1.") = 
 specification(
 name = "Share of adult population (aged 25-64) with upper secondary or tertiary education - total",
