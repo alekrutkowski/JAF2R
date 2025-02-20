@@ -144,11 +144,11 @@ for (geo_code in EU_Members_geo_codes) {
                 dims='C4') %>%
     wb_add_data(x=EU_geo_code,
                 dims='P4') %>%
-    wb_add_data(x=dta,
+    wb_add_data(x=dta, na.strings="",
                 dims='A5') %>%
-    wb_add_data(x='National Targets',
+    wb_add_data(x='National Targets', na.strings="",
                 dims='O4') %>%
-    wb_add_data(x='EU Targets',
+    wb_add_data(x='EU Targets', na.strings="",
                 dims='AB4') %>%
     wb_set_col_widths(cols=1:28,
                       widths=c(16,30, # JAF_KEY and Description columns

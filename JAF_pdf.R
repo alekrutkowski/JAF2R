@@ -1,4 +1,8 @@
 library(rmarkdown)
+Sys.setenv(PATH = paste(Sys.getenv("PATH"), 
+                        "C:/Program Files/MiKTeX/miktex/bin/x64", # path where pdflatex.exe can be found
+                        sep=.Platform$path.sep))
+
 
 # Functions and constants -------------------------------------------------
 
@@ -146,7 +150,6 @@ header-includes:
   - \\usepackage[scaled]{helvet}
   - \\usepackage[T1]{fontenc}
   - \\renewcommand\\familydefault{\\sfdefault}
-  - \\usepackage{fancyhdr}
   - \\pagestyle{fancy}
   - \\fancyhf{}
   - \\fancyfoot[C]{\\thepage}
