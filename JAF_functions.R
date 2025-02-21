@@ -784,18 +784,120 @@ emission_intensity <- function(with_filters=NULL)
   .[, c('base_val','base_flg') := NULL]
 
 
+getParticipation_in_education_and_training <- function() {
+  ### Translated from Python ###
+  # Define the file path
+  file_path <- "Participation in education and training (excluding guided on the job training) 2016-2022.xlsx"
+  # Check if the file exists
+  if (!file.exists(file_path)) {
+    stop(paste0(
+      "The file is not present in the specified directory:\n", file_path,
+      "\nYou can download it from:\n",
+      "https://circabc.europa.eu/ui/group/d14c857a-601d-438a-b878-4b4cebd0e10f/library/c5a8b987-1e37-44d7-a20e-2c50d6101d27/details",
+      "\nor get from Elodie CAYOTTE (ESTAT) <Elodie.CAYOTTE@ec.europa.eu> or Sabine GAGEL (ESTAT) <Sabine.GAGEL@ec.europa.eu>"
+    ))
+  }
+  years <-
+    file_path %>% 
+    wb_load() %>% 
+    wb_get_sheet_names() %>% 
+    gsub("[^0-9]","",.) %>% 
+    unique %>% 
+    .[.!=""] %>% 
+    sort
+  # List of tuples with (sheet_name_prefix, usecols, new_column_names)
+  sheets_and_columns <- list(
+    list('TIME', c(1,12:15), years %>% 
+           expand.grid(c('value_ ','flags_ '),.) %>% do.call(paste0,.) %>% 
+           c('Country',.)),
+    list("SEX", c(1, 6, 7), c("Country", "MEN", "WOMEN")),
+    list("AGE", c(1, 8, 9, 10, 11), c("Country", "Y25-34", "Y35-44", "Y45-54", "Y55-64")),
+    list("ISCED", c(1, 7, 8, 9), c("Country", "ISCED_0-2", "ISCED_3-4", "ISCED_5-8"))
+  )
+  # Initialize an empty list to store data tables
+  datatables <- list()
+  # Loop through each sheet and year to process the data
+  for (sheet_info in sheets_and_columns) {
+    sheet_name_prefix <- sheet_info[[1]]
+    usecols <- sheet_info[[2]]
+    colnames <- sheet_info[[3]]
+    for (year in years) {
+      # Read the relevant rows and columns from the Excel file
+      dt <- read_xlsx(file_path, 
+                      sheet = sheet_name_prefix %>% 
+                        `if`(.=='TIME',.,paste0(.," - ",year)),
+                      rows=6:33, cols=usecols, col_names=FALSE) %>% 
+        setDT() %>% 
+        # .[6:33, ..usecols] %>% 
+        setnames(colnames) %>% 
+        {`if`(sheet_name_prefix!='TIME',
+              .[, time := as.integer(year)] %>% 
+                .[, Country := Country %>% 
+                    gsub('(¹)',"",.,fixed=TRUE) %>% 
+                    gsub('(²)',"",.,fixed=TRUE) %>% 
+                    gsub(' ',"",.,fixed=TRUE)] %>% 
+                melt(id.vars = c("Country", "time"), 
+                     variable.name = "group", 
+                     value.name = "value_") %>% 
+                .[, flags_ := ""],
+              if (year==min(years)) # to avoid multiple imports
+                melt(., id.vars='Country') %>% 
+                .[, c('var.','time') := tstrsplit(variable,split=' ')] %>% 
+                .[, variable := NULL] %>% 
+                dcast(Country + time ~ var., value.var='value',
+                      fun.aggregate=identity) %>% 
+                .[, time := as.integer(time)] %>% 
+                .[, group := 'TOTAL'])}
+      # Append the data.table to the list
+      datatables <- append(datatables, list(dt))
+    }
+  }
+  dts <- rbindlist(datatables, use.names=TRUE)
+  # Define the Eurostat country codes
+  Eurostat_country_codes <- c(
+    "EU-27" = "EU27_2020",
+    "Belgium" = "BE",
+    "Bulgaria" = "BG",
+    "Czechia" = "CZ",
+    "Denmark" = "DK",
+    "Germany" = "DE",
+    "Estonia" = "EE",
+    "Ireland" = "IE",
+    "Greece" = "EL",
+    "Spain" = "ES",
+    "France" = "FR",
+    "Croatia" = "HR",
+    "Italy" = "IT",
+    "Cyprus" = "CY",
+    "Latvia" = "LV",
+    "Lithuania" = "LT",
+    "Luxembourg" = "LU",
+    "Hungary" = "HU",
+    "Malta" = "MT",
+    "Netherlands" = "NL",
+    "Austria" = "AT",
+    "Poland" = "PL",
+    "Portugal" = "PT",
+    "Romania" = "RO",
+    "Slovenia" = "SI",
+    "Slovakia" = "SK",
+    "Finland" = "FI",
+    "Sweden" = "SE"
+  ) %>% 
+    data.table(Country=names(.), geo=.)
+  # Replace the country names in the "Country" column with their Eurostat codes
+  dts %>% 
+    merge(Eurostat_country_codes, by='Country') %>% 
+    .[, Country := NULL] %>% 
+    .[, value_ := as.numeric(value_)] %>% 
+    .[, .(time, geo, group, value_, flags_)]
+}
+
+
 participation_in_education_and_training_excluding_GOJT <- function(with_filters=NULL)
-  'Participation in education and training (excluding guided on the job training) 2016-2022.xlsx' %>% # from https://circabc.europa.eu/ui/group/d14c857a-601d-438a-b878-4b4cebd0e10f/library/c5a8b987-1e37-44d7-a20e-2c50d6101d27/details
-  openxlsx2::read_xlsx(sheet='SEX - 2022', rows=5:33, cols=c(1,5)) %>% 
-  as.data.table() %>% 
-  set_names(c('country','value_')) %>% 
-  .[, JAF_KEY := 'PA8.2.C3.'] %>% 
-  .[, geo := countrycode::countrycode(country,
-                                      origin='country.name',
-                                      destination='eurostat')] %>% 
-  .[, geo := ifelse(country=='EU-27','EU27_2020',geo)] %>% 
-  .[, country := NULL] %>% 
-  .[, time := 2022L]
+  getParticipation_in_education_and_training() %>% 
+  .[group=="TOTAL"] %>% 
+  .[, group := NULL]
 
 
 estatDatasetDimNames <- function(EurostatDatasetCode)

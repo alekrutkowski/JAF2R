@@ -49,7 +49,7 @@ PolicyAreaLabels_General <- '
 | 1b          | Increase labour market participation                                                   |
 | 1c          | Increase labour market participation                                                   |
 | 1d          | Increase labour market participation                                                   |
-| 1e          | Disability employment gap                                                              |
+| 1e          | Increase labour market participation                                                   |
 | 2a          | Enhancing labour market functioning                                                    |
 | 2b          | Enhancing labour market functioning                                                    |
 | 3           | Active labour market policies                                                          |
@@ -148,7 +148,7 @@ boldInlineXLString <- function(txt)
 
 # Actions -----------------------------------------------------------------
 
-message('\nCreating KEC.xlsx...')
+message('\nCreating KEC files...')
 
 createFolder(paste0(OUTPUT_FOLDER,'/KEC'))
 
@@ -195,12 +195,12 @@ for (geo_code in EU_Members_geo_codes) {
                        firstActiveRow=5)
     KEC_wb$add_fill(sheet=sheet_name,
                     dims=paste0('A4:',int2col(ncol(dta)),'4'),
-                    color=wb_color(hex='e7e6e6'))
+                    color=wb_color(hex='#e7e6e6'))
     KEC_wb$add_font(sheet=sheet_name,
                     dims='B1',
                     bold="bold",
                     size=18,
-                    color=wb_color(hex='4472c4'))
+                    color=wb_color(hex='#4472c4'))
     KEC_wb$add_font(sheet=sheet_name,
                     dims=paste0('A4:',int2col(ncol(dta)),'4'),
                     bold="bold")
@@ -219,4 +219,76 @@ for (geo_code in EU_Members_geo_codes) {
 for (ws in KEC_wb$worksheets %>% tail(-1))
   ws$sheetViews <- set_zoom(75, ws$sheetViews)
 wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/Key Employment Challenges and Good Outcomes.xlsx'))
-message('\nDone.')
+message('\nDone `Key Employment Challenges and Good Outcomes.xlsx`')
+
+
+### TO DO – extra KEC file
+# KEC_wb <-
+#   openxlsx2::wb_workbook()
+# KEC_wb$add_worksheet('Info')
+# KEC_wb$add_data(sheet='Info',
+#                 x=paste0(plainInlineXLString('Classification used in the '),
+#                          boldInlineXLString('Employment/Social challenges'),
+#                          plainInlineXLString(' column&#10;in '), # &#10; = line break
+#                          boldInlineXLString('..._add'),
+#                          plainInlineXLString(' worksheets:')), 
+#                 inline_strings=TRUE)
+# KEC_wb$add_cell_style(sheet='Info', wrap_text=TRUE,)
+# KEC_wb$add_data(sheet='Info',
+#                 start_row=2,
+#                 x=QuantAssessmentLabels %>% 
+#                   .[,.(`Quantitative assessment`,QuantAssessmentGood)] %>% 
+#                   .[, `Good or bad?` := ifelse(QuantAssessmentGood,'+ Good','\u2212 Bad')] %>% 
+#                   .[,.(`Quantitative assessment`,`Good or bad?`)])
+# KEC_wb$set_col_widths(sheet='Info',
+#                       cols=1:2,
+#                       widths='auto')
+# KEC_wb$add_fill(sheet='Info',
+#                 color=wb_color(hex='#FFFF00'),
+#                 dims=paste0('A2:B',2+nrow(QuantAssessmentLabels)))
+# 
+# for (geo_code in EU_Members_geo_codes) {
+#   cat(geo_code,"")
+#   for (dim2 in c("",'_add')) {
+#     dta <-
+#       get(paste0('countrySheet',dim2))(geo_code) %>%
+#       .[, lapply(.,. %>% `if`(is.character(.),ifelse(is.na(.),"",.),.))]
+#     sheet_name <-
+#       paste0(geo_code,dim2)
+#     KEC_wb$add_worksheet(sheet_name)
+#     KEC_wb$add_data(sheet=sheet_name,
+#                     dims='B1',
+#                     x=EU_Members_geo_names[geo==geo_code]$geo_labels)
+#     KEC_wb$add_data(sheet=sheet_name,
+#                     start_row=4,
+#                     x=dta)
+#     KEC_wb$freeze_pane(sheet=sheet_name,
+#                        firstActiveRow=5)
+#     KEC_wb$add_fill(sheet=sheet_name,
+#                     dims=paste0('A4:',int2col(ncol(dta)),'4'),
+#                     color=wb_color(hex='#e7e6e6'))
+#     KEC_wb$add_font(sheet=sheet_name,
+#                     dims='B1',
+#                     bold="bold",
+#                     size=18,
+#                     color=wb_color(hex='#4472c4'))
+#     KEC_wb$add_font(sheet=sheet_name,
+#                     dims=paste0('A4:',int2col(ncol(dta)),'4'),
+#                     bold="bold")
+#     KEC_wb$set_col_widths(sheet=sheet_name,
+#                           cols=seq_along(colnames(dta)),
+#                           widths="auto")
+#     KEC_wb$set_col_widths(sheet=sheet_name,
+#                           cols=c(1,3),
+#                           widths=70)
+#     if (dim2=='_add')
+#       KEC_wb$set_col_widths(sheet=sheet_name,
+#                             cols=3:4,
+#                             widths=50)
+#   }
+# }
+# for (ws in KEC_wb$worksheets %>% tail(-1))
+#   ws$sheetViews <- set_zoom(75, ws$sheetViews)
+# wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/Key Employment Challenges and Good Outcomes.xlsx'))
+# message('\nDone `Key Employment Challenges and Good Outcomes.xlsx`')
+

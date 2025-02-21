@@ -225,11 +225,20 @@ for (CompendiumNum. in unique(JAF_Compendium_Index_raw$CompendiumNum)) {
       wb_add_worksheet(JAF_KEY.) %>%
       wb_add_formula(JAF_KEY.,
                      r"{=HYPERLINK("[Index.xlsx]'Index'!A1","Back to index")}") %>%
+      `if`(JAF_KEY.=='PA8.2.C3.',
+           wb_add_data(., JAF_KEY.,
+                       'The 2007 AES was a large sample pilot exercise carried out on a voluntary basis in all Member States, except Ireland and Luxembourg, between 2005 and 2008. On this basis, adjustments were implemented in the next wave. As from 2011, the AES is underpinned by a European legal act and thus carried out in all Member States on a mandatory basis.',
+                       dims='D5'),
+           .) %>% 
       wb_add_data(JAF_KEY.,
                   PA,
                   dims='A3') %>%
       wb_add_data(JAF_KEY.,
-                  PolicyAreaLabels[paste0('PA',PolicyArea)==PA, `POLICY AREA`],
+                  PolicyAreaLabels_General %>% 
+                    copy %>% 
+                    .[,PolicyArea := sub("^(\\d+).*$", "\\1", PolicyArea)] %>% # extract only the integer PA
+                    .[!duplicated(.)] %>% 
+                    .[paste0('PA',PolicyArea)==PA, `POLICY AREA`],
                   dim='B3') %>%
       wb_add_data(JAF_KEY.,
                   JAF_INDICATORS[[JAF_KEY.]]$name %>% stringi::stri_trans_general("Latin-ASCII"),
