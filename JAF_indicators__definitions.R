@@ -669,7 +669,7 @@ value = fromEurostatDataset("ILC_LI70",
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C11.Q1") = 
 specification(
-name = "Unmet need for medical care by income quintile - Q1",
+name = "Unmet need for medical care in lowest income quintile - Q1",
 unit_of_level = "% (of popn in q1)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 8 COUNTRY",
@@ -683,7 +683,7 @@ value = fromFormula(100 - a,
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C11.Q1-Q5.NOTIME") = 
 specification(
-name = "Unmet need for medical care due to waiting time Q1 - Q5",
+name = "Gap in unmet need for medical care due to waiting time Q1 - Q5",
 unit_of_level = "% (of total popn)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
@@ -699,7 +699,7 @@ value = fromFormula(a - b,
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C11.Q1-Q5.TOOEXP") = 
 specification(
-name = "Unmet need for medical care due to cost Q1 - Q5",
+name = "Gap in unmet need for medical care due to cost Q1 - Q5",
 unit_of_level = "% (of total popn)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
@@ -715,7 +715,7 @@ value = fromFormula(a - b,
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C11.Q1-Q5.TOOFAR") = 
 specification(
-name = "Unmet need for medical care due to distance Q1 - Q5",
+name = "Gap in unmet need for medical care due to distance Q1 - Q5",
 unit_of_level = "% (of total popn)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 8 COUNTRY",
@@ -731,7 +731,7 @@ value = fromFormula(a - b,
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C11.Q5") = 
 specification(
-name = "Unmet need for medical care by income quintile - Q5",
+name = "Unmet need for medical care in top income quintile - Q5",
 unit_of_level = "% (of popn in q5)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 8 COUNTRY",
@@ -745,7 +745,7 @@ value = fromFormula(100 - a,
 
 inside(JAF_INDICATORS, indicator_named = "PA11.C11.T") = 
 specification(
-name = "Unmet need for medical care by income quintile - total",
+name = "Unmet need for medical care - total",
 unit_of_level = "% (of total popn)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 8 COUNTRY",
@@ -2032,7 +2032,7 @@ value = fromEurostatDataset("trng_lfs_03",
 
 inside(JAF_INDICATORS, indicator_named = "PA11b.C6.Q1") = 
 specification(
-name = "Unmet need for medical care by income quintile (16-64) - Q1",
+name = "Unmet need for medical care in lowest income quintile (16-64) - Q1",
 unit_of_level = "% (of popn in q1)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 9 COUNTRY",
@@ -2046,7 +2046,7 @@ value = fromFormula(100 - a,
 
 inside(JAF_INDICATORS, indicator_named = "PA11b.C6.Q5") = 
 specification(
-name = "Unmet need for medical care by income quintile (16-64) - Q5",
+name = "Unmet need for medical care in top income quintile (16-64) - Q5",
 unit_of_level = "% (of popn in q5)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 9 COUNTRY",
@@ -2060,7 +2060,7 @@ value = fromFormula(100 - a,
 
 inside(JAF_INDICATORS, indicator_named = "PA11b.C6.T") = 
 specification(
-name = "Unmet need for medical care by income quintile (16-64) - total",
+name = "Unmet need for medical care (16-64) - total",
 unit_of_level = "% (of total popn)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 9 COUNTRY",
