@@ -86,12 +86,13 @@ IndicsSelectedForKEC <-
   sort_JAF_KEY() %>% 
   data.table(`#`=seq_along(.), JAF_KEY=.)
 
-countrySheet <- function(geo_code)
+countrySheet <- function(geo_code, all_geos=FALSE)
   JAF_SCORES %>% 
-  .[geo==geo_code] %>% 
+  .[geo %in% geo_code] %>% 
   merge(IndicsSelectedForKEC, by='JAF_KEY') %>% 
   merge(PolicyAreaLabels, by='PolicyArea') %>% 
   {data.table(row_order = .$`#`,
+              Country = if (all_geos) .$geo,
               `POLICY AREA` = .$`POLICY AREA`,
               Indicator = .$JAF_KEY,
               Description = .$Description %>% stringi::stri_trans_general("Latin-ASCII"), # stri_trans_general needed to sanitize, otherwise Excel reports broken file
@@ -104,17 +105,18 @@ countrySheet <- function(geo_code)
               `Score level` = round(.$score_latest_value,1),
               `Score change` = round(.$score_change,1),
               Year = .$time)} %>% 
-  setorder(row_order) %>% 
-  .[,row_order := NULL] %>% 
+  {`if`(all_geos, setorder(.,Country,row_order), setorder(.,row_order))} %>% 
+  .[, row_order := NULL] %>% 
   .[, `POLICY AREA` := `POLICY AREA` %>% 
-      ifelse(duplicated(.),"",.)]
+      ifelse(!all_geos & duplicated(.),"",.)]
 
-countrySheet_add <- function(geo_code)
+countrySheet_add <- function(geo_code, all_geos=FALSE)
   JAF_SCORES %>% 
-  .[geo==geo_code] %>% 
+  .[geo %in% geo_code] %>% 
   merge(IndicsSelectedForKEC, by='JAF_KEY') %>% 
   merge(PolicyAreaLabels, by='PolicyArea') %>% 
   {data.table(row_order = .$`#`,
+              Country = if (all_geos) .$geo,
               `POLICY AREA` = .$`POLICY AREA`,
               Indicator = .$JAF_KEY,
               Description = .$Description %>% stringi::stri_trans_general("Latin-ASCII"), # stri_trans_general needed to sanitize, otherwise Excel reports broken file
@@ -130,10 +132,10 @@ countrySheet_add <- function(geo_code)
               `Score level` = round(.$score_latest_value,1),
               `Score change` = round(.$score_change,1),
               Year = .$time)} %>% 
-  setorder(row_order) %>% 
-  .[,row_order := NULL] %>% 
+  {`if`(all_geos, setorder(.,Country,row_order), setorder(.,row_order))} %>% 
+  .[, row_order := NULL] %>% 
   .[, `POLICY AREA` := `POLICY AREA` %>% 
-      ifelse(duplicated(.),"",.)]
+      ifelse(!all_geos & duplicated(.),"",.)]
 
 set_zoom <- function(x, sheet_views) # from https://stackoverflow.com/a/74239871
   gsub('(?<=zoomScale=")[0-9]+', x,
@@ -150,7 +152,7 @@ boldInlineXLString <- function(txt)
 
 message('\nCreating KEC files...')
 
-createFolder(paste0(OUTPUT_FOLDER,'/KEC'))
+# createFolder(paste0(OUTPUT_FOLDER,'/KEC'))
 
 KEC_wb <-
   openxlsx2::wb_workbook()
@@ -158,7 +160,9 @@ KEC_wb$add_worksheet('Info')
 KEC_wb$add_data(sheet='Info',
                 x=paste0(plainInlineXLString('Classification used in the '),
                          boldInlineXLString('Employment/Social challenges'),
-                         plainInlineXLString(' column&#10;in '), # &#10; = line break
+                         plainInlineXLString(' and&#10;'), # &#10; = line break
+                         boldInlineXLString('Good labour market/social outcomes'),
+                         plainInlineXLString(' columns in '),
                          boldInlineXLString('..._add'),
                          plainInlineXLString(' worksheets:')), 
                 inline_strings=TRUE)
@@ -171,7 +175,7 @@ KEC_wb$add_data(sheet='Info',
                   .[,.(`Quantitative assessment`,`Good or bad?`)])
 KEC_wb$set_col_widths(sheet='Info',
                       cols=1:2,
-                      widths='auto')
+                      widths=c(63,12))
 KEC_wb$add_fill(sheet='Info',
                 color=wb_color(hex='#FFFF00'),
                 dims=paste0('A2:B',2+nrow(QuantAssessmentLabels)))
@@ -210,9 +214,12 @@ for (geo_code in EU_Members_geo_codes) {
     KEC_wb$set_col_widths(sheet=sheet_name,
                           cols=c(1,3),
                           widths=70)
+    KEC_wb$set_col_widths(sheet=sheet_name,
+                          cols=ncol(dta),
+                          widths=5)
     if (dim2=='_add')
       KEC_wb$set_col_widths(sheet=sheet_name,
-                            cols=3:4,
+                            cols=c(4,5),
                             widths=50)
   }
 }
@@ -222,73 +229,63 @@ wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/Key Employment Challenges and Good Out
 message('\nDone `Key Employment Challenges and Good Outcomes.xlsx`')
 
 
-### TO DO – extra KEC file
-# KEC_wb <-
-#   openxlsx2::wb_workbook()
-# KEC_wb$add_worksheet('Info')
-# KEC_wb$add_data(sheet='Info',
-#                 x=paste0(plainInlineXLString('Classification used in the '),
-#                          boldInlineXLString('Employment/Social challenges'),
-#                          plainInlineXLString(' column&#10;in '), # &#10; = line break
-#                          boldInlineXLString('..._add'),
-#                          plainInlineXLString(' worksheets:')), 
-#                 inline_strings=TRUE)
-# KEC_wb$add_cell_style(sheet='Info', wrap_text=TRUE,)
-# KEC_wb$add_data(sheet='Info',
-#                 start_row=2,
-#                 x=QuantAssessmentLabels %>% 
-#                   .[,.(`Quantitative assessment`,QuantAssessmentGood)] %>% 
-#                   .[, `Good or bad?` := ifelse(QuantAssessmentGood,'+ Good','\u2212 Bad')] %>% 
-#                   .[,.(`Quantitative assessment`,`Good or bad?`)])
-# KEC_wb$set_col_widths(sheet='Info',
-#                       cols=1:2,
-#                       widths='auto')
-# KEC_wb$add_fill(sheet='Info',
-#                 color=wb_color(hex='#FFFF00'),
-#                 dims=paste0('A2:B',2+nrow(QuantAssessmentLabels)))
-# 
-# for (geo_code in EU_Members_geo_codes) {
-#   cat(geo_code,"")
-#   for (dim2 in c("",'_add')) {
-#     dta <-
-#       get(paste0('countrySheet',dim2))(geo_code) %>%
-#       .[, lapply(.,. %>% `if`(is.character(.),ifelse(is.na(.),"",.),.))]
-#     sheet_name <-
-#       paste0(geo_code,dim2)
-#     KEC_wb$add_worksheet(sheet_name)
-#     KEC_wb$add_data(sheet=sheet_name,
-#                     dims='B1',
-#                     x=EU_Members_geo_names[geo==geo_code]$geo_labels)
-#     KEC_wb$add_data(sheet=sheet_name,
-#                     start_row=4,
-#                     x=dta)
-#     KEC_wb$freeze_pane(sheet=sheet_name,
-#                        firstActiveRow=5)
-#     KEC_wb$add_fill(sheet=sheet_name,
-#                     dims=paste0('A4:',int2col(ncol(dta)),'4'),
-#                     color=wb_color(hex='#e7e6e6'))
-#     KEC_wb$add_font(sheet=sheet_name,
-#                     dims='B1',
-#                     bold="bold",
-#                     size=18,
-#                     color=wb_color(hex='#4472c4'))
-#     KEC_wb$add_font(sheet=sheet_name,
-#                     dims=paste0('A4:',int2col(ncol(dta)),'4'),
-#                     bold="bold")
-#     KEC_wb$set_col_widths(sheet=sheet_name,
-#                           cols=seq_along(colnames(dta)),
-#                           widths="auto")
-#     KEC_wb$set_col_widths(sheet=sheet_name,
-#                           cols=c(1,3),
-#                           widths=70)
-#     if (dim2=='_add')
-#       KEC_wb$set_col_widths(sheet=sheet_name,
-#                             cols=3:4,
-#                             widths=50)
-#   }
-# }
-# for (ws in KEC_wb$worksheets %>% tail(-1))
-#   ws$sheetViews <- set_zoom(75, ws$sheetViews)
-# wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/Key Employment Challenges and Good Outcomes.xlsx'))
-# message('\nDone `Key Employment Challenges and Good Outcomes.xlsx`')
+### Extra KEC file
+KEC_wb <-
+  openxlsx2::wb_workbook()
+KEC_wb$add_worksheet('Info')
+KEC_wb$add_data(sheet='Info',
+                x=paste0(plainInlineXLString('Classification used in the '),
+                         boldInlineXLString('Employment/Social challenges'),
+                         plainInlineXLString(' and&#10;'), # &#10; = line break
+                         boldInlineXLString('Good labour market/social outcomes'),
+                         plainInlineXLString(' columns:'),
+                inline_strings=TRUE))
+KEC_wb$add_cell_style(sheet='Info', wrap_text=TRUE,)
+KEC_wb$add_data(sheet='Info',
+                start_row=2,
+                x=QuantAssessmentLabels %>%
+                  .[,.(`Quantitative assessment`,QuantAssessmentGood)] %>%
+                  .[, `Good or bad?` := ifelse(QuantAssessmentGood,'+ Good','\u2212 Bad')] %>%
+                  .[,.(`Quantitative assessment`,`Good or bad?`)])
+KEC_wb$set_col_widths(sheet='Info',
+                      cols=1:2,
+                      widths=c(63,12))
+KEC_wb$add_fill(sheet='Info',
+                color=wb_color(hex='#FFFF00'),
+                dims=paste0('A2:B',2+nrow(QuantAssessmentLabels)))
+
+dta <-
+  countrySheet_add(EU_Members_geo_codes, all_geos=TRUE) %>%
+  .[, lapply(.,. %>% `if`(is.character(.),ifelse(is.na(.),"",.),.))]
+sheet_name <-
+  'All countries'
+KEC_wb$add_worksheet(sheet_name)
+KEC_wb$add_data(sheet=sheet_name,
+                start_row=1,
+                x=dta)
+KEC_wb$freeze_pane(sheet=sheet_name,
+                   firstActiveRow=2)
+KEC_wb$add_fill(sheet=sheet_name,
+                dims=paste0('A1:',int2col(ncol(dta)),'1'),
+                color=wb_color(hex='#e7e6e6'))
+KEC_wb$add_font(sheet=sheet_name,
+                dims=paste0('A1:',int2col(ncol(dta)),'1'),
+                bold="bold")
+KEC_wb$set_col_widths(sheet=sheet_name,
+                      cols=seq_along(colnames(dta)),
+                      widths="auto")
+KEC_wb$set_col_widths(sheet=sheet_name,
+                      cols=c(2,4),
+                      widths=70)
+KEC_wb$set_col_widths(sheet=sheet_name,
+                      cols=5:6,
+                      widths=50)
+KEC_wb$set_col_widths(sheet=sheet_name,
+                      cols=c(1,7,8,14),
+                      widths=10)
+KEC_wb$add_filter(sheet=sheet_name, rows=1, cols=1:8)
+for (ws in KEC_wb$worksheets %>% tail(-1))
+  ws$sheetViews <- set_zoom(75, ws$sheetViews)
+wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/Key Employment Challenges and Good Outcomes - single sheet.xlsx'))
+message('Done `Key Employment Challenges and Good Outcomes - single sheet.xlsx`')
 
