@@ -221,12 +221,12 @@ for (geo_code in EU_Members_geo_codes) {
                        firstActiveRow=5)
     KEC_wb$add_fill(sheet=sheet_name,
                     dims=paste0('A4:',int2col(ncol(dta)),'4'),
-                    color=wb_color(hex='e7e6e6'))
+                    color=wb_color(hex='#e7e6e6'))
     KEC_wb$add_font(sheet=sheet_name,
                     dims='B1',
                     bold="bold",
                     size=18,
-                    color=wb_color(hex='4472c4'))
+                    color=wb_color(hex='#4472c4'))
     KEC_wb$add_font(sheet=sheet_name,
                     dims=paste0('A4:',int2col(ncol(dta)),'4'),
                     bold="bold")

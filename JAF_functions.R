@@ -9,6 +9,7 @@ library(countrycode)
 library(rvest)
 library(kit)
 library(xml2)
+library(openxlsx2)
 
 
 # Constants and aliases ---------------------------------------------------
@@ -776,8 +777,8 @@ emission_intensity <- function(with_filters=NULL)
                 b = fromEurostatDataset("nama_10_a64_e", 
                                         with_filters(na_item="EMP_DC", unit="THS_PER", nace_r2="TOTAL")))) %>% 
   .[, flags_ := paste0(flags_a,flags_b)] %>% 
-  .[, base_val := value_[time==2022], by=geo] %>% 
-  .[, base_flg := flags_[time==2022], by=geo] %>% 
+  .[, base_val := value_[time==2010], by=geo] %>% 
+  .[, base_flg := flags_[time==2010], by=geo] %>% 
   .[, value_ := 100*value_/base_val] %>% 
   .[, flags_ := paste0(flags_,base_flg) %>% 
       gsub(':',"",.,fixed=TRUE)] %>% 

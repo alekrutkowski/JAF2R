@@ -152,7 +152,7 @@ boldInlineXLString <- function(txt)
 
 message('\nCreating KEC files...')
 
-# createFolder(paste0(OUTPUT_FOLDER,'/KEC'))
+createFolder(paste0(OUTPUT_FOLDER,'/KEC'))
 
 KEC_wb <-
   openxlsx2::wb_workbook()
