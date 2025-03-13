@@ -168,6 +168,18 @@ value = fromEurostatDataset("lfsa_urgan",
     with_filters(sex = "M", unit = "PC", citizen = "TOTAL", age = "Y30-54"))
 )
 
+inside(JAF_INDICATORS, indicator_named = "PA1.C3.30-54.T") = 
+specification(
+name = "Unemployment rate in age group 30-54 - total ",
+unit_of_level = "% (of active men 30-54)",
+unit_of_change = "pp",
+indicator_groups = "OUTPUT CONTEXT COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Labour Force Survey",
+high_is_good = FALSE,
+value = fromEurostatDataset("lfsa_urgan", 
+    with_filters(sex = "T", unit = "PC", citizen = "TOTAL", age = "Y30-54"))
+)
+
 # inside(JAF_INDICATORS, indicator_named = "PA1.C3.F") = 
 # specification(
 # name = "Disability employment gap by level of activity limitation and sex - women",
