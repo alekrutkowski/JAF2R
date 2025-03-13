@@ -430,47 +430,47 @@ where = variables(
 ))
 )
 
-inside(JAF_INDICATORS, indicator_named = "PA11a.S9.") = 
-specification(
-name = "At-risk-of poverty rate of children living in household at work (0.2<WI<=0.55)",
-unit_of_level = "% (of popn 0-17)",
-indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-calculate_score_change = TRUE,
-value = fromFormula((a*b+c*d)/(b+d),
-where = variables(
- a = fromEurostatDataset('ilc_li06',
-  with_filters(age="Y_LT18", hhtyp="HH_DCH", indic_il="LI_R_MD60", sex="T", workint="WI02-045")),
- b = fromEurostatDataset('ilc_lvps03',
-  with_filters(age="Y_LT18", hhtyp="HH_DCH", sex="T", workint="WI02-045")),
- c = fromEurostatDataset('ilc_li06',
-  with_filters(age="Y_LT18", hhtyp="HH_DCH", indic_il="LI_R_MD60", sex="T", workint="WI045-055")),
- d = fromEurostatDataset('ilc_lvps03',
-  with_filters(age="Y_LT18", hhtyp="HH_DCH", sex="T", workint="WI045-055"))
-))
-)
-
-inside(JAF_INDICATORS, indicator_named = "PA11a.S10.") = 
-specification(
-name = "At-risk-of poverty rate of children living in household at work (0.55<WI<=1)",
-unit_of_level = "% (of popn 0-17)",
-indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
-source = "Eurostat, EU Statistics on Income and Living Conditions",
-high_is_good = FALSE,
-calculate_score_change = TRUE,
-value = fromFormula((a*b+c*d)/(b+d),
-where = variables(
- a = fromEurostatDataset('ilc_li06',
-  with_filters(age="Y_LT18", hhtyp="HH_DCH", indic_il="LI_R_MD60", sex="T", workint="WI055-085")),
- b = fromEurostatDataset('ilc_lvps03',
-  with_filters(age="Y_LT18", hhtyp="HH_DCH", sex="T", workint="WI055-085")),
- c = fromEurostatDataset('ilc_li06',
-  with_filters(age="Y_LT18", hhtyp="HH_DCH", indic_il="LI_R_MD60", sex="T", workint="WI085-1")),
- d = fromEurostatDataset('ilc_lvps03',
-  with_filters(age="Y_LT18", hhtyp="HH_DCH", sex="T", workint="WI085-1"))
-))
-)
+# inside(JAF_INDICATORS, indicator_named = "PA11a.S9.") = 
+# specification(
+# name = "At-risk-of poverty rate of children living in household at work (0.2<WI<=0.55)",
+# unit_of_level = "% (of popn 0-17)",
+# indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
+# source = "Eurostat, EU Statistics on Income and Living Conditions",
+# high_is_good = FALSE,
+# calculate_score_change = TRUE,
+# value = fromFormula((a*b+c*d)/(b+d),
+# where = variables(
+#  a = fromEurostatDataset('ilc_li06',
+#   with_filters(age="Y_LT18", hhtyp="HH_DCH", indic_il="LI_R_MD60", sex="T", workint="WI02-045")),
+#  b = fromEurostatDataset('ilc_lvps03',
+#   with_filters(age="Y_LT18", hhtyp="HH_DCH", sex="T", workint="WI02-045")),
+#  c = fromEurostatDataset('ilc_li06',
+#   with_filters(age="Y_LT18", hhtyp="HH_DCH", indic_il="LI_R_MD60", sex="T", workint="WI045-055")),
+#  d = fromEurostatDataset('ilc_lvps03',
+#   with_filters(age="Y_LT18", hhtyp="HH_DCH", sex="T", workint="WI045-055"))
+# ))
+# )
+# 
+# inside(JAF_INDICATORS, indicator_named = "PA11a.S10.") = 
+# specification(
+# name = "At-risk-of poverty rate of children living in household at work (0.55<WI<=1)",
+# unit_of_level = "% (of popn 0-17)",
+# indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
+# source = "Eurostat, EU Statistics on Income and Living Conditions",
+# high_is_good = FALSE,
+# calculate_score_change = TRUE,
+# value = fromFormula((a*b+c*d)/(b+d),
+# where = variables(
+#  a = fromEurostatDataset('ilc_li06',
+#   with_filters(age="Y_LT18", hhtyp="HH_DCH", indic_il="LI_R_MD60", sex="T", workint="WI055-085")),
+#  b = fromEurostatDataset('ilc_lvps03',
+#   with_filters(age="Y_LT18", hhtyp="HH_DCH", sex="T", workint="WI055-085")),
+#  c = fromEurostatDataset('ilc_li06',
+#   with_filters(age="Y_LT18", hhtyp="HH_DCH", indic_il="LI_R_MD60", sex="T", workint="WI085-1")),
+#  d = fromEurostatDataset('ilc_lvps03',
+#   with_filters(age="Y_LT18", hhtyp="HH_DCH", sex="T", workint="WI085-1"))
+# ))
+# )
 
 inside(JAF_INDICATORS, indicator_named = "PA11a.S11.") = 
 specification(
