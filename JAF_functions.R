@@ -507,7 +507,7 @@ fromBenefitsAndWages <- function(table_code, with_filters) {
   url_filters <-
     with_filters$indicator %>% 
     gsub('.','/',.,fixed=TRUE) %>% 
-    sub('^S/',"1EC/",.) %>% 
+    # sub('^S/',"1EC/",.) %>% 
     `if`(table_code=='nrr_ub',
          sub('^(.+)/(.+)/(.+)$',"\\1/\\3/\\2",.),
          .) %>% 
