@@ -1,7 +1,53 @@
-### Compiled automatically by rutkoal
-### from `catalogue - jaf_h_2021 2023-12-20.csv`
-### on 2024-04-26 16:18:16.495188
-### 81 defined indicators.
+### Added by Paul on 12 March 2025 ###
+
+inside(JAF_INDICATORS, indicator_named = "PA14.O1.") = 
+specification(
+name = "Inability to keep home adequately warm - total",
+unit_of_level = "% (of total popn)",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromEurostatDataset("ilc_mdes01",
+   with_filters(unit="PC", incgrp="TOTAL", hhtyp="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA14.S1.") = 
+specification(
+name = "Inability to keep home adequately warm among population at risk of poverty",
+unit_of_level = "% (of AROP popn)",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromEurostatDataset("ilc_mdes01",
+   with_filters(unit="PC", incgrp="B_MD60", hhtyp="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA14.S2.") = 
+specification(
+name = "Arrears on utility bills - total",
+unit_of_level = "% (of total popn)",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromEurostatDataset("ilc_mdes07",
+   with_filters(unit="PC", incgrp="TOTAL", hhtyp="TOTAL"))
+)
+
+inside(JAF_INDICATORS, indicator_named = "PA14.S3.") = 
+specification(
+name = "Arrears on utility bills among population at risk of poverty ",
+unit_of_level = "% (of AROP popn)",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromEurostatDataset("ilc_mdes07",
+   with_filters(unit="PC", incgrp="B_MD60", hhtyp="TOTAL"))
+)
+################ end ###################
 
 inside(JAF_INDICATORS, indicator_named = "PA11.O1.") = 
 specification(
