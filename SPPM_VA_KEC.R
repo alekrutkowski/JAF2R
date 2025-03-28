@@ -244,5 +244,5 @@ for (geo_code in EU_Members_geo_codes) {
 }
 for (ws in KEC_wb$worksheets %>% tail(-1))
   ws$sheetViews <- set_zoom(75, ws$sheetViews)
-wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/Key Employment Challenges and Good Outcomes.xlsx'))
+wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/Key Social Challenges and Good Social Outcomes.xlsx'))
 message('\nDone.')

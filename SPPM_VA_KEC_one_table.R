@@ -44,7 +44,13 @@ KEC_wb$add_cell_style(sheet='One table',
 KEC_wb$set_col_widths(sheet='One table',
                       cols=c(1,2,3),
                       widths=c(70,22,70))
+KEC_wb$freeze_pane(sheet='One table',
+                   first_active_row=2,
+                   first_active_col=4)
+KEC_wb$set_col_widths(sheet='One table',
+                      cols=seq_len(ncol(dta)) %>% tail(-3),
+                      widths=6)
 for (ws in KEC_wb$worksheets)
   ws$sheetViews <- set_zoom(75, ws$sheetViews)
-wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/Key Employment Challenges and Good Outcomes - single table.xlsx'))
+wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/Key Social Challenges and Good Social Outcomes - single table.xlsx'))
 message('\nDone.')
