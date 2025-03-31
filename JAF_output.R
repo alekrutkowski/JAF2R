@@ -506,8 +506,8 @@ if (!exists('DEVMODE')) { # slow
   QCT <- qualityChecksTable(JAF_GRAND_TABLE)
   wb_workbook() %>% 
     wb_add_worksheet("JAF quality checks", zoom=75) %>%
-    wb_add_data(x=QCT) %>% 
-    wb_add_font(dims=paste0('A1:',int2col(ncol(QCT)),'1'), bold="bold") %>% 
+    wb_add_data(x=QCT, na.strings="") %>% 
+    wb_add_font(dims=paste0('A1:',int2col(ncol(QCT)),'1'), bold=TRUE) %>% 
     wb_add_cell_style(dims=paste0('A1:',int2col(ncol(QCT)),'1'), wrap_text=TRUE) %>% 
     wb_set_col_widths(cols=1:ncol(QCT), widths=12) %>%
     wb_set_row_heights(rows=1, heights=107) %>% 
@@ -518,6 +518,7 @@ if (!exists('DEVMODE')) { # slow
 
 message('\nPreparing the data.Rds file for the Shiny/Shinylive app...')
 if (!dir.exists('../JAF2R_shinylive')) createFolder('../JAF2R_shinylive')
+if (!dir.exists('../JAF2R_shinylive/data')) createFolder('../JAF2R_shinylive/data')
 JAF_EXPORTS <-
   list(Compilation_Date_Time = OUTPUT_FOLDER %>% 
          sub('JAF output ',"",.,fixed=TRUE),

@@ -808,8 +808,9 @@ getParticipation_in_education_and_training <- function() {
     sort
   # List of tuples with (sheet_name_prefix, usecols, new_column_names)
   sheets_and_columns <- list(
-    list('TIME', c(1,12:15), years %>% 
+    list('TIME', c(1,9:15), c(2007,2011,2016,2022) %>% 
            expand.grid(c('value_ ','flags_ '),.) %>% do.call(paste0,.) %>% 
+           setdiff('flags_ 2007') %>% # absent column
            c('Country',.)),
     list("SEX", c(1, 6, 7), c("Country", "MEN", "WOMEN")),
     list("AGE", c(1, 8, 9, 10, 11), c("Country", "Y25-34", "Y35-44", "Y45-54", "Y55-64")),

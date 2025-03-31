@@ -224,12 +224,12 @@ for (geo_code in EU_Members_geo_codes) {
                     color=wb_color(hex='#e7e6e6'))
     KEC_wb$add_font(sheet=sheet_name,
                     dims='B1',
-                    bold="bold",
+                    bold=TRUE,
                     size=18,
                     color=wb_color(hex='#4472c4'))
     KEC_wb$add_font(sheet=sheet_name,
                     dims=paste0('A4:',int2col(ncol(dta)),'4'),
-                    bold="bold")
+                    bold=TRUE)
     KEC_wb$set_col_widths(sheet=sheet_name,
                           cols=seq_along(colnames(dta)),
                           widths="auto")
