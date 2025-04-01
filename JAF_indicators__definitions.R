@@ -1,3 +1,111 @@
+### Added by Paul on 31 March 2025 ###
+
+inside(JAF_INDICATORS, indicator_named = "PA14b.O1.") =
+specification(
+name = "Inability to keep home adequately warm - total",
+unit_of_level = "% (of total popn)",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromEurostatDataset("ilc_mdes01",
+   with_filters(unit="PC", incgrp="TOTAL", hhtyp="TOTAL"))
+) 
+ 
+inside(JAF_INDICATORS, indicator_named = "PA14b.S1.") =
+specification(
+name = "Inability to keep home adequately warm among population at risk of poverty",
+unit_of_level = "% (of AROP popn)",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromEurostatDataset("ilc_mdes01",
+   with_filters(unit="PC", incgrp="B_MD60", hhtyp="TOTAL"))
+) 
+ 
+inside(JAF_INDICATORS, indicator_named = "PA14b.S2.") =
+specification(
+name = "Inability to keep home adequately warm among population not at risk of poverty",
+unit_of_level = "% (of non-AROP popn)",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromEurostatDataset("ilc_mdes01",
+   with_filters(unit="PC", incgrp="A_MD60", hhtyp="TOTAL"))
+) 
+ 
+inside(JAF_INDICATORS, indicator_named = "PA14b.S3.") =
+specification(
+name = "Gap in inability to keep home adequately warm between populations at risk of poverty and not at risk of poverty",
+unit_of_level = "Percentage points",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromFormula(a-b,
+where = variables(
+  a = fromEurostatDataset("ilc_mdes01",
+      with_filters(unit="PC", incgrp="B_MD60", hhtyp="TOTAL")),
+  b = fromEurostatDataset("ilc_mdes01",
+      with_filters(unit="PC", incgrp="A_MD60", hhtyp="TOTAL"))))
+)
+ 
+inside(JAF_INDICATORS, indicator_named = "PA14b.S4.") =
+specification(
+name = "Arrears on utility bills - total",
+unit_of_level = "% (of total popn)",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromEurostatDataset("ilc_mdes07",
+   with_filters(unit="PC", incgrp="TOTAL", hhtyp="TOTAL"))
+) 
+ 
+inside(JAF_INDICATORS, indicator_named = "PA14b.S5.") =
+specification(
+name = "Arrears on utility bills among population at risk of poverty",
+unit_of_level = "% (of AROP popn)",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromEurostatDataset("ilc_mdes07",
+   with_filters(unit="PC", incgrp="B_MD60", hhtyp="TOTAL"))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA14b.S6.") =
+specification(
+name = "Arrears on utility bills among population not at risk of poverty",
+unit_of_level = "% (of non-AROP popn)",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromEurostatDataset("ilc_mdes07",
+   with_filters(unit="PC", incgrp="A_MD60", hhtyp="TOTAL"))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA14b.S7.") =
+specification(
+name = "Gap in arrears on utility bills among populations at risk of poverty and not at risk of poverty",
+unit_of_level = "Percentage points",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "Eurostat, EU Statistics on Income and Living Conditions",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromFormula(a-b,
+where = variables(
+a = fromEurostatDataset("ilc_mdes07",
+    with_filters(unit="PC", incgrp="B_MD60", hhtyp="TOTAL")),
+b = fromEurostatDataset("ilc_mdes07",
+    with_filters(unit="PC", incgrp="A_MD60", hhtyp="TOTAL"))))
+)
+
+################ end ###################
+
 
 inside(JAF_INDICATORS, indicator_named = "PA11d1.S4.") = 
 specification(name = "Income inequality reducing effect of taxes and social transfers",
