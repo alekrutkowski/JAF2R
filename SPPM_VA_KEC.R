@@ -6,90 +6,100 @@ library(openxlsx2)
 # Functions and constants -------------------------------------------------
 
 IndicsSelectedForKEC <- '
-| POLICY AREA                                                                                                                                | JAF_KEY                 |
-|--------------------------------------------------------------------------------------------------------------------------------------------|-------------------------|
-| 1. Poverty, social exclusion and inequality / 1.1. Poverty and social exclusion (age brackets: total, children and working age population) | PA11.O1.                |
-|                                                                                                                                            | PA11a.O1.               |
-|                                                                                                                                            | PA11b.O1.               |
-|                                                                                                                                            | PA11.S1.                |
-|                                                                                                                                            | PA11a.S1.               |
-|                                                                                                                                            | PA11b.S1.T              |
-|                                                                                                                                            | PA11.S2.                |
-|                                                                                                                                            | PA11a.S2.               |
-|                                                                                                                                            | PA11b.S2.               |
-|                                                                                                                                            | PA11.S3.T               |
-|                                                                                                                                            | PA11a.S3.               |
-|                                                                                                                                            | PA11b.S3.               |
-|                                                                                                                                            | PA11.S6.                |
-|                                                                                                                                            | PA11.S6.18-64           |
-|                                                                                                                                            | PA11.S8.                |
-|                                                                                                                                            | PA11.S9.                |
-|                                                                                                                                            | PA11.S9.0-17            |
-|                                                                                                                                            | PA11.S9.18-64           |
-| 1.2. Inequality                                                                                                                            | PA11.S10.               |
-|                                                                                                                                            | PA11.S14.               |
-|                                                                                                                                            | PA11.S15.               |
-| 1.3.  Material and social deprivation (all age brackets)                                                                                   | PA11.S13.T              |
-|                                                                                                                                            | PA11a.S11.              |
-|                                                                                                                                            | PA11b.S12.T             |
-|                                                                                                                                            | PA11c.S9.T              |
-| 1.4 Housing situation (all age brackets)                                                                                                   | PA11.S11.               |
-|                                                                                                                                            | PA11a.S7.               |
-|                                                                                                                                            | PA11b.S10.              |
-|                                                                                                                                            | PA11c.S7.               |
-|                                                                                                                                            | PA11.S12.               |
-|                                                                                                                                            | PA11a.S8.               |
-|                                                                                                                                            | PA11b.S11.              |
-|                                                                                                                                            | PA11c.S8.               |
-| 2. Effectiveness of social protection                                                                                                      | PA11.S4.                |
-|                                                                                                                                            | PA11.S5.                |
-| 2.1. Effectiveness of social protection for children                                                                                       | PA11a.S4.               |
-|                                                                                                                                            | PA11a.S5.               |
-|                                                                                                                                            | PA11a.S6.               |
-|                                                                                                                                            | PA11.S6.LT18.WI0-02     |
-|                                                                                                                                            | PA11a.S9.               |
-|                                                                                                                                            | PA11a.S10.              |
-| 2.2. Effectiveness of social benefits for the working age population                                                                       | PA11b.S6.               |
-|                                                                                                                                            | PA11b.S7.               |
-| 2.3. Inclusive labour markets                                                                                                              | PA11b.S4.               |
-|                                                                                                                                            | PA11b.S5.T              |
-|                                                                                                                                            | PA11.S6.18-64.WI0-02    |
-|                                                                                                                                            | PA11b.S9.               |
-| 3. Pensions                                                                                                                                | PA11c.O1.               |
-|                                                                                                                                            | PA11c.O1.M              |
-|                                                                                                                                            | PA11c.O1.F              |
-|                                                                                                                                            | PA11c.S1.T              |
-|                                                                                                                                            | PA11c.S1.M              |
-|                                                                                                                                            | PA11c.S1.F              |
-|                                                                                                                                            | PA11c.S2.T              |
-|                                                                                                                                            | PA11c.S2.M              |
-|                                                                                                                                            | PA11c.S2.F              |
-|                                                                                                                                            | PA11c.S4.               |
-|                                                                                                                                            | PA11c.S5.               |
-|                                                                                                                                            | PA11c.S6.               |
-|                                                                                                                                            | PA11.S9.GE65            |
-| 5. Health / 5.1. Health status                                                                                                             | PA13.S1.                |
-|                                                                                                                                            | PA13.S2.                |
-|                                                                                                                                            | PA13.S3.                |
-|                                                                                                                                            | PA13.S4.                |
-|                                                                                                                                            | PA13.S5.                |
-|                                                                                                                                            | PA13.S6.                |
-|                                                                                                                                            | PA13.S7.                |
-|                                                                                                                                            | PA13.S8.                |
-|                                                                                                                                            | PA13.S9.                |
-|                                                                                                                                            | PA13.S10.               |
-|                                                                                                                                            | PA13.S11.               |
-| 5.2. Effectiveness of curative or preventive health care                                                                                   | PA13.S12.               |
-|                                                                                                                                            | PA13.S13.               |
-|                                                                                                                                            | PA13.S14.               |
-| 5.3. Access to health care                                                                                                                 | PA13.S15.               |
-|                                                                                                                                            | PA13.S16.               |
-|                                                                                                                                            | PA13.S17.               |
-|                                                                                                                                            | PA13.S18.               |
-|                                                                                                                                            | PA13.S19.               |
-|                                                                                                                                            | PA11.C11.Q1-Q5.TOOEXP   |
-|                                                                                                                                            | PA11.C11.Q1-Q5.TOOFAR   |
-|                                                                                                                                            | PA11.C11.Q1-Q5.NOTIME   |
+| POLICY AREA                                                                                                                                 | JAF_KEY                |
+|---------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
+| 1. Poverty, social exclusion and inequality / 1.1. Poverty and social exclusion (age brackets: total, children and working age population)  | PA11.O1.               |
+|                                                                                                                                             | PA11a.O1.              |
+|                                                                                                                                             | PA11b.O1.              |
+|                                                                                                                                             | PA11.S1.               |
+|                                                                                                                                             | PA11a.S1.              |
+|                                                                                                                                             | PA11b.S1.T             |
+|                                                                                                                                             | PA11.S2.               |
+|                                                                                                                                             | PA11a.S2.              |
+|                                                                                                                                             | PA11b.S2.              |
+|                                                                                                                                             | PA11.S3.T              |
+|                                                                                                                                             | PA11a.S3.              |
+|                                                                                                                                             | PA11b.S3.              |
+|                                                                                                                                             | PA11.S6.               |
+|                                                                                                                                             | PA11.S6.18-64          |
+|                                                                                                                                             | PA11.S8.               |
+|                                                                                                                                             | PA11.S9.               |
+|                                                                                                                                             | PA11.S9.0-17           |
+|                                                                                                                                             | PA11.S9.18-64          |
+| 1.2 Fair green transition / Energy poverty                                                                                                  | PA14b.O1.              |
+|                                                                                                                                             | PA14b.S1.              |
+|                                                                                                                                             | PA14b.S2.              |
+|                                                                                                                                             | PA14b.S3.              |
+|                                                                                                                                             | PA14b.S4.              |
+|                                                                                                                                             | PA14b.S5.              |
+|                                                                                                                                             | PA14b.S6.              |
+|                                                                                                                                             | PA14b.S7.              |
+| 1.3. Inequality                                                                                                                             | PA11.S10.              |
+|                                                                                                                                             | PA11.S14.              |
+|                                                                                                                                             | PA11.S15.              |
+| 1.4.  Material and social deprivation (all age brackets)"                                                                                   | PA11.S13.T             |
+|                                                                                                                                             | PA11a.S11.             |
+|                                                                                                                                             | PA11b.S12.T            |
+|                                                                                                                                             | PA11c.S9.T             |
+| 1.5 Housing situation (all age brackets)"                                                                                                   | PA11.S11.              |
+|                                                                                                                                             | PA11a.S7.              |
+|                                                                                                                                             | PA11b.S10.             |
+|                                                                                                                                             | PA11c.S7.              |
+|                                                                                                                                             | PA11.S12.              |
+|                                                                                                                                             | PA11a.S8.              |
+|                                                                                                                                             | PA11b.S11.             |
+|                                                                                                                                             | PA11c.S8.              |
+| 1.6 Fair green transition / Energy poverty                                                                                                  | PA14b.O1.              |
+|                                                                                                                                             | PA14b.S1.              |
+|                                                                                                                                             | PA14b.S2.              |
+|                                                                                                                                             | PA14b.S3.              |
+| 2. Effectiveness of social protection                                                                                                       | PA11.S4.               |
+|                                                                                                                                             | PA11.S5.               |
+| 2.1. Effectiveness of social protection for children                                                                                        | PA11a.S4.              |
+|                                                                                                                                             | PA11a.S5.              |
+|                                                                                                                                             | PA11a.S6.              |
+|                                                                                                                                             | PA11.S6.LT18.WI0-02    |
+| 2.2. Effectiveness of social benefits for the working age population                                                                        | PA11b.S6.              |
+|                                                                                                                                             | PA11b.S7.              |
+| 2.3. Inclusive labour markets                                                                                                               | PA11b.S4.              |
+|                                                                                                                                             | PA11b.S5.T             |
+|                                                                                                                                             | PA11.S6.18-64.WI0-02   |
+|                                                                                                                                             | PA11b.S9.              |
+| 3. Pensions                                                                                                                                 | PA11c.O1.              |
+|                                                                                                                                             | PA11c.O1.M             |
+|                                                                                                                                             | PA11c.O1.F             |
+|                                                                                                                                             | PA11c.S1.T             |
+|                                                                                                                                             | PA11c.S1.M             |
+|                                                                                                                                             | PA11c.S1.F             |
+|                                                                                                                                             | PA11c.S2.T             |
+|                                                                                                                                             | PA11c.S2.M             |
+|                                                                                                                                             | PA11c.S2.F             |
+|                                                                                                                                             | PA11c.S4.              |
+|                                                                                                                                             | PA11c.S5.              |
+|                                                                                                                                             | PA11c.S6.              |
+|                                                                                                                                             | PA11.S9.GE65           |
+| 5. Health / 5.1. Health status                                                                                                              | PA13.S1.               |
+|                                                                                                                                             | PA13.S2.               |
+|                                                                                                                                             | PA13.S3.               |
+|                                                                                                                                             | PA13.S4.               |
+|                                                                                                                                             | PA13.S5.               |
+|                                                                                                                                             | PA13.S6.               |
+|                                                                                                                                             | PA13.S7.               |
+|                                                                                                                                             | PA13.S8.               |
+|                                                                                                                                             | PA13.S9.               |
+|                                                                                                                                             | PA13.S10.              |
+|                                                                                                                                             | PA13.S11.              |
+| 5.2. Effectiveness of curative or preventive health care                                                                                    | PA13.S12.              |
+|                                                                                                                                             | PA13.S13.              |
+|                                                                                                                                             | PA13.S14.              |
+| 5.3. Access to health care                                                                                                                  | PA13.S15.              |
+|                                                                                                                                             | PA13.S16.              |
+|                                                                                                                                             | PA13.S17.              |
+|                                                                                                                                             | PA13.S18.              |
+|                                                                                                                                             | PA13.S19.              |
+|                                                                                                                                             | PA11.C11.Q1-Q5.TOOEXP  |
+|                                                                                                                                             | PA11.C11.Q1-Q5.TOOFAR  |
+|                                                                                                                                             | PA11.C11.Q1-Q5.NOTIME  |
 ' %>% 
   readMarkDownTable() %>% 
   .[,row_order := .I]
