@@ -133,7 +133,7 @@ wb_workbook() %>%
   wb_add_data(x="Derived helper columns for easier filtering \u2013 don't edit them",
               start_col=ncol(JAF_catalogue)+1, start_row=1) %>% 
   wb_add_font(dims=paste0('A1:',int2col(ncol(JAF_catalogue)+1),'1'),
-              bold="bold",
+              bold=TRUE,
               size=20) %>% 
   wb_add_filter(rows=2,
                 cols=(ncol(JAF_catalogue)+1):

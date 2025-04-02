@@ -6682,9 +6682,9 @@ high_is_good = FALSE,
 value = fromFormula(a - b,
   where = variables(
   a = fromEurostatDataset("lfsi_emp_a", 
-    with_filters(age = "Y55-64", isced11 = "TOTAL", sex = "M", unit = "PC_POP")),
+    with_filters(age = "Y55-64", indic_em = "EMP_LFS", sex = "M", unit = "PC_POP")),
   b = fromEurostatDataset("lfsi_emp_a", 
-    with_filters(age = "Y55-64", isced11 = "TOTAL", sex = "F", unit = "PC_POP"))))
+    with_filters(age = "Y55-64", indic_em = "EMP_LFS", sex = "F", unit = "PC_POP"))))
 )
 
 inside(JAF_INDICATORS, indicator_named = "PA7.1.S2.F") = 

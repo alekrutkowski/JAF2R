@@ -847,7 +847,7 @@ getParticipation_in_education_and_training <- function() {
                 .[, c('var.','time') := tstrsplit(variable,split=' ')] %>% 
                 .[, variable := NULL] %>% 
                 dcast(Country + time ~ var., value.var='value',
-                      fun.aggregate=identity) %>% 
+                      fun.aggregate=identity, fill=NA_character_) %>% 
                 .[, time := as.integer(time)] %>% 
                 .[, group := 'TOTAL'])}
       # Append the data.table to the list
