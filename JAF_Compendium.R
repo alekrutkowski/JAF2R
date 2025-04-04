@@ -184,7 +184,7 @@ openxlsx2::wb_workbook() %>%
   wb_add_data(dims='C1',
               x='Index Compendium') %>%
   wb_add_font(dims='C1',
-              bold="bold",
+              bold=TRUE,
               size=18) %>%
   wb_add_data(start_row=2,
               x=JAF_Compendium_Index %>%
@@ -197,7 +197,7 @@ openxlsx2::wb_workbook() %>%
               start_row=2) %>%
   wb_freeze_pane(firstActiveRow=3) %>%
   wb_add_font(dims=paste0('A2:',int2col(ncol(JAF_Compendium_Index)),'2'),
-              bold="bold",
+              bold=TRUE,
               size=12) %>%
   wb_set_col_widths(cols=seq_along(JAF_Compendium_Index),
                     widths="auto") %>%
@@ -279,7 +279,7 @@ for (CompendiumNum. in unique(JAF_Compendium_Index_raw$CompendiumNum)) {
              x=c('A3','B3','B5','B6','C42'),
              f=\(wb,x) wb_add_font(wb, JAF_KEY.,
                                    dims=x,
-                                   bold="bold",
+                                   bold=TRUE,
                                    size=13)) %>%
       wb_set_col_widths(JAF_KEY.,
                         cols=2,

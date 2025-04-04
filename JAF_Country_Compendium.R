@@ -70,10 +70,10 @@ for (geo_code in c(EU_geo_code,EA_geo_code,EU_Members_geo_codes)) {
     wb_freeze_pane(firstActiveRow=3) %>%
     wb_add_filter(rows=2, cols=1:4) %>%
     wb_add_font(dims='C1',
-                bold="bold",
+                bold=TRUE,
                 size=18) %>%
     wb_add_font(dims=paste0('A2:',int2col(ncol(dta)),'2'),
-                bold="bold") %>%
+                bold=TRUE) %>%
     wb_add_fill(every_nth_row = 2,
                 dims=paste0("A3:",
                             int2col(ncol(dta)),3+nrow(dta)),

@@ -39,6 +39,8 @@ PolicyAreaLabels <- '
 | 11f3       | Focus on poverty and exclusion of disadvantaged groups - low-skilled people                               |
 | 11f4       | Focus on poverty and exclusion of disadvantaged groups - (quasi-)jobless households                       |
 | 11f5       | Focus on poverty and exclusion of disadvantaged groups - youth                                            |
+| 14b        | Social fairness and distributional aspects of the green transition                                        |
+| 15b        | Social fairness and distributional aspects of the digital transition                                      |
 ' %>% 
   readMarkDownTable()
 
@@ -76,6 +78,8 @@ PolicyAreaLabels_General <- '
 | 11f3        | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
 | 11f4        | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
 | 11f5        | Promoting equal opportunities for all, fostering social inclusion and fighting poverty |
+| 14b         | Social fairness and distributional aspects of the green transition                     |
+| 15b         | Social fairness and distributional aspects of the digital transition                   |
 ' %>% 
   readMarkDownTable()
 
@@ -202,12 +206,12 @@ for (geo_code in EU_Members_geo_codes) {
                     color=wb_color(hex='#e7e6e6'))
     KEC_wb$add_font(sheet=sheet_name,
                     dims='B1',
-                    bold="bold",
+                    bold=TRUE,
                     size=18,
                     color=wb_color(hex='#4472c4'))
     KEC_wb$add_font(sheet=sheet_name,
                     dims=paste0('A4:',int2col(ncol(dta)),'4'),
-                    bold="bold")
+                    bold=TRUE)
     KEC_wb$set_col_widths(sheet=sheet_name,
                           cols=seq_along(colnames(dta)),
                           widths="auto")
@@ -270,7 +274,7 @@ KEC_wb$add_fill(sheet=sheet_name,
                 color=wb_color(hex='#e7e6e6'))
 KEC_wb$add_font(sheet=sheet_name,
                 dims=paste0('A1:',int2col(ncol(dta)),'1'),
-                bold="bold")
+                bold=TRUE)
 KEC_wb$set_col_widths(sheet=sheet_name,
                       cols=seq_along(colnames(dta)),
                       widths="auto")

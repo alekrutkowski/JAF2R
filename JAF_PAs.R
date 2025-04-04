@@ -178,13 +178,13 @@ for (pa_code in names(Selected_PAs_Codes)) {
       wb_freeze_pane(firstActiveRow=10,firstActiveCol=3) %>%
       wb_add_filter(rows=9, cols=2) %>%
       wb_add_font(dims='A1:B2',
-                  bold="bold",
+                  bold=TRUE,
                   size=18) %>%
       wb_add_font(dims=paste0('B5:',int2col(ncol(head.)),'7'),
-                  bold="bold",
+                  bold=TRUE,
                   size=12) %>%
       wb_add_font(dims=paste0('A',9+nrow(vals.)-1,':',int2col(ncol(vals.)),9+nrow(vals.)),
-                  bold="bold") %>%
+                  bold=TRUE) %>%
       wb_add_fill(every_nth_row = 2,
                   dims=paste0("A10:",int2col(ncol(vals.)+1),9+nrow(vals.)),
                   color= wb_color(hex="e6f1ff")) %>%

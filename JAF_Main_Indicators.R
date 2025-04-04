@@ -136,13 +136,13 @@ for (indic_type in c('latest_value','change')) {
     wb_freeze_pane(firstActiveRow=8,firstActiveCol=2) %>%
     wb_add_filter(rows=7, cols=1) %>%
     wb_add_font(dims='A1:A2',
-                bold="bold",
+                bold=TRUE,
                 size=18) %>%
     wb_add_font(dims=paste0('A3:',int2col(ncol(head.)),'5'),
-                bold="bold",
+                bold=TRUE,
                 size=12) %>%
     wb_add_font(dims=paste0('A',7+nrow(vals.)-1,':',int2col(ncol(vals.)),7+nrow(vals.)),
-                bold="bold") %>%
+                bold=TRUE) %>%
     wb_add_fill(every_nth_row = 2,
                 dims=paste0("A8:",int2col(ncol(vals.)),7+nrow(vals.)),
                 color= wb_color(hex="e6f1ff")) %>%

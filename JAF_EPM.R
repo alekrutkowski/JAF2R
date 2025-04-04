@@ -160,7 +160,7 @@ for (geo_code in EU_Members_geo_codes) {
     wb_freeze_pane(firstActiveRow=5) %>%
     # wb_add_filter(rows=2, cols=1:4) %>%
     wb_add_font(dims='A1:AB5',
-                bold="bold") %>%
+                bold=TRUE) %>%
     wb_add_font(dims='B2', size=22) %>%
     wb_add_font(dims='C4', size=22) %>%
     wb_add_font(dims='P4', size=22) %>%
