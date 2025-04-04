@@ -16,7 +16,7 @@ inside(JAF_INDICATORS, indicator_named = "PA14b.S1.") =
 specification(
 name = "Inability to keep home adequately warm among population at risk of poverty",
 unit_of_level = "% (of AROP popn)",
-indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 calculate_score_change = TRUE,
@@ -28,7 +28,7 @@ inside(JAF_INDICATORS, indicator_named = "PA14b.S2.") =
 specification(
 name = "Inability to keep home adequately warm among population not at risk of poverty",
 unit_of_level = "% (of non-AROP popn)",
-indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 calculate_score_change = TRUE,
@@ -40,7 +40,7 @@ inside(JAF_INDICATORS, indicator_named = "PA14b.S3.") =
 specification(
 name = "Gap in inability to keep home adequately warm between populations at risk of poverty and not at risk of poverty",
 unit_of_level = "Percentage points",
-indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 calculate_score_change = TRUE,
@@ -56,7 +56,7 @@ inside(JAF_INDICATORS, indicator_named = "PA14b.S4.") =
 specification(
 name = "Arrears on utility bills - total",
 unit_of_level = "% (of total popn)",
-indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 calculate_score_change = TRUE,
@@ -68,7 +68,7 @@ inside(JAF_INDICATORS, indicator_named = "PA14b.S5.") =
 specification(
 name = "Arrears on utility bills among population at risk of poverty",
 unit_of_level = "% (of AROP popn)",
-indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 calculate_score_change = TRUE,
@@ -80,7 +80,7 @@ inside(JAF_INDICATORS, indicator_named = "PA14b.S6.") =
 specification(
 name = "Arrears on utility bills among population not at risk of poverty",
 unit_of_level = "% (of non-AROP popn)",
-indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 calculate_score_change = TRUE,
@@ -92,7 +92,7 @@ inside(JAF_INDICATORS, indicator_named = "PA14b.S7.") =
 specification(
 name = "Gap in arrears on utility bills among populations at risk of poverty and not at risk of poverty",
 unit_of_level = "Percentage points",
-indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
 calculate_score_change = TRUE,
