@@ -584,9 +584,9 @@ fromLFSspecialFile <- function(jaf_lfs_code, with_filters) {
     paste0('___CONSOLIDATED.csv')
   memoised_fread(name_of_raw_file_from_estat) %>%
     copy() %>% 
-    setnames(colnames(.),
-             colnames(.) %>% tolower()) %>% 
-    .[, c('quarter','flag','flag_break') := NULL] %>% 
+    setnames(tolower) %>% 
+    setnames('flag','flags_') %>% 
+    .[, c('quarter','flag_break') := NULL] %>% 
     .[, country := ifelse(country=='EUR20','EA20',country)] %>% 
     setnames(c('country','year','value'),
              c('geo','time','value_')) %>% 
