@@ -18,7 +18,9 @@ if (interactive() && exists("JAF_INDICATORS"))
 
 # Order matters:
 preCheckInidcators('JAF_indicators__definitions.R')
-# runScript('Digital_Indicators_JAF.R') # script from Vlad PODOBEA (F3)
+runScript('Digital_Indicators_JAF.R') # script from Vlad PODOBEA (F3)
+detach("package:readxl", unload = TRUE) # imported by Digital_Indicators_JAF.R, collides with openxlsx2
+detach("package:openxlsx", unload = TRUE) # imported by Digital_Indicators_JAF.R, collides with openxlsx2
 runScript('JAF_indicators__definitions.R')
 runScript('JAF_output.R')
 runScript('JAF_KEC.R')

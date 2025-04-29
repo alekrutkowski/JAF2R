@@ -703,8 +703,7 @@ fromAMECO <- function(ameco_variable_code, time_period=0L)
 fromDigitalIndicator <- function(indicator, with_filters=NULL)
   get(indicator) %>% 
   as.data.table() %>% 
-  setnames('COUNTRY','geo') %>% 
-  setnames('weighted_prop','value_') %>% 
+  setnames('value','value_') %>% 
   .[, .(geo,value_,time)]
   
 
