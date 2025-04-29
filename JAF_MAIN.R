@@ -18,6 +18,7 @@ if (interactive() && exists("JAF_INDICATORS"))
 
 # Order matters:
 preCheckInidcators('JAF_indicators__definitions.R')
+# runScript('Digital_Indicators_JAF.R') # script from Vlad PODOBEA (F3)
 runScript('JAF_indicators__definitions.R')
 runScript('JAF_output.R')
 runScript('JAF_KEC.R')

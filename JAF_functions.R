@@ -700,6 +700,14 @@ fromAMECO <- function(ameco_variable_code, time_period=0L)
   copy() %>% 
   .[,time := time - time_period]
 
+fromDigitalIndicator <- function(indicator, with_filters=NULL)
+  get(indicator) %>% 
+  as.data.table() %>% 
+  setnames('COUNTRY','geo') %>% 
+  setnames('weighted_prop','value_') %>% 
+  .[, .(geo,value_,time)]
+  
+
 fromSpecialCalculation <- function(indicator, with_filters=NULL)
   tryCatch(get(indicator),
            error = function(e) {

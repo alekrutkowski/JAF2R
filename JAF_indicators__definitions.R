@@ -1,3 +1,246 @@
+### Based on Vlad's input on 15 April 2025 ###
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.O1.") =
+specification(
+name = "Persons in a household without internet access for personal use at home (total population)",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_TotalPopulation_filtered",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S1.") =
+specification(
+name = "Persons in a household without internet access for personal use at home for population at risk of poverty or social exclusion",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_AROPE_filtered_1",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S2.") =
+specification(
+name = "Persons in a household without internet access for personal use at home for population not at risk of poverty or social exclusion",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_notAROPE_filtered_2",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S3.") =
+specification(
+name = "Persons in a household without internet access for personal use at home for population at risk of poverty",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_AROP_filtered_1",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S4.") =
+specification(
+name = "Persons in a household without internet access for personal use at home for population not at risk of poverty",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_notAROP_filtered_2",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S5.") =
+specification(
+name = "Persons aged 0-17 in a household without internet access for personal use at home",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_AgeGroups_Ages1617",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S6.") =
+specification(
+name = "Persons aged 18-64 in a household without internet access for personal use at home",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_AgeGroups_Ages1864",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S7.") =
+specification(
+name = "Persons aged 65+ in a household without internet access for personal use at home",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_AgeGroups_Ages65Over",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S8.") =
+specification(
+name = "Persons in a household without internet access for personal use at home - men",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_GENDER_filtered_Men",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S9.") =
+specification(
+name = "Persons in a household without internet access for personal use at home - women",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_GENDER_filtered_Female",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S10.") =
+specification(
+name = "Persons in a household without internet access for personal use at home living in an urban setting",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_URBANISATION_Urban",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S11.") =
+specification(
+name = "Persons in a household without internet access for personal use at home living in a rural setting",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_URBANISATION_Rural",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S12.") =
+specification(
+name = "Persons with low educational attainment level in a household without internet access for personal use at home",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_Education_Low",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S13.") =
+specification(
+name = "Persons with medium educational attainment level in a household without internet access for personal use at home",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_Education_Medium",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S14.") =
+specification(
+name = "Persons with high educational attainment level in a household without internet access for personal use at home",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutInternet_Education_High",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S15.") =
+specification(
+name = "Persons in a household without a computer (total population)",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_WithoutComputer_TotalPopulation_filtered",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S16.") =
+specification(
+name = "Persons in a household without a computer for population at risk of poverty",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutComputer_AROP_filtered_1",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S17.") =
+specification(
+name = "Persons in a household without a computer for population not at risk of poverty",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutComputer_notAROP_filtered_2",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S18.") =
+specification(
+name = "Persons in a household without a computer living in an urban setting",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutComputer_URBANISATION_Urban",
+   with_filters(NA))
+) 
+
+inside(JAF_INDICATORS, indicator_named = "PA15b.S19.") =
+specification(
+name = "Persons in a household without a computer living in a rural setting",
+unit_of_level = "%",
+indicator_groups = "MAIN OUTPUT OVERALL COMPENDIUM 1 COUNTRY",
+source = "EU SILC",
+high_is_good = FALSE,
+calculate_score_change = TRUE,
+value = fromDigitalIndicator("Persons_withoutComputer_URBANISATION_Rural",
+   with_filters(NA))
+) 
+
+
 ### Added by Paul on 31 March 2025 ###
 
 inside(JAF_INDICATORS, indicator_named = "PA14b.O1.") =
@@ -5807,7 +6050,7 @@ value = fromEurostatDataset("earn_nt_lowwtrp",
 
 inside(JAF_INDICATORS, indicator_named = "PA4.2.S3.T") = 
 specification(
-name = "Transitions by pay level - total",
+name = "Labour transitions by pay level",
 unit_of_level = "%",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 4 COUNTRY",
@@ -7035,7 +7278,7 @@ value = fromEurostatDataset("edat_lfse_03",
 
 inside(JAF_INDICATORS, indicator_named = "PA8.1.S2.") = 
 specification(
-name = "Youth education attainment level (aged 20-24) - total",
+name = "Share of population aged 20-24 having completed at least upper secondary education",
 unit_of_level = "% (of popn 20-24)",
 unit_of_change = "pp",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 7 COUNTRY",

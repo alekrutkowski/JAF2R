@@ -128,6 +128,7 @@ countrySheet_add <- function(geo_code, all_geos=FALSE)
                 ifelse(.$QuantAssessmentGood,"",.$`Quantitative assessment`),
               `Good labour market/social outcomes` = 
                 ifelse(.$QuantAssessmentGood,.$`Quantitative assessment`,""),
+              Levels = .$score_category_latest_value,
               Changes = .$score_category_change,
               Flags = .$flags_,
               ` ` = "", # blank separator column
