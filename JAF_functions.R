@@ -701,7 +701,9 @@ fromAMECO <- function(ameco_variable_code, time_period=0L)
   .[,time := time - time_period]
 
 fromDigitalIndicator <- function(indicator, with_filters=NULL)
-  get(indicator) %>% 
+  indicator %>% 
+  paste0('_FINAL') %>% 
+  get() %>% 
   as.data.table() %>% 
   setnames('value','value_') %>% 
   .[, .(geo,value_,time)]

@@ -18,9 +18,14 @@ if (interactive() && exists("JAF_INDICATORS"))
 
 # Order matters:
 preCheckInidcators('JAF_indicators__definitions.R')
-runScript('Digital_Indicators_JAF.R') # script from Vlad PODOBEA (F3)
-detach("package:readxl", unload = TRUE) # imported by Digital_Indicators_JAF.R, collides with openxlsx2
-detach("package:openxlsx", unload = TRUE) # imported by Digital_Indicators_JAF.R, collides with openxlsx2
+# runScript('Digital_Indicators_JAF.R') # script from Vlad PODOBEA (F3)
+# runScript('Digital_Indicators_JAF_2022.R') # script from Vlad PODOBEA (F3)
+# runScript('Digital_Indicators_JAF_2021.R') # script from Vlad PODOBEA (F3)
+# runScript('Digital_Indicators_JAF_2020.R') # script from Vlad PODOBEA (F3)
+# runScript('Digital_Indicators_JAF_MergeAllYears.R') # script from Vlad PODOBEA (F3)
+# detach("package:readxl", unload = TRUE) # imported by Digital_Indicators_JAF.R, collides with openxlsx2
+# detach("package:openxlsx", unload = TRUE) # imported by Digital_Indicators_JAF.R, collides with openxlsx2
+load('RENV_DigitalIndicators_Final.RData') # precalculated indicators by Vlad PODOBEA (F3), substituting the lines above
 runScript('JAF_indicators__definitions.R')
 runScript('JAF_output.R')
 runScript('JAF_KEC.R')
