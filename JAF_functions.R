@@ -590,6 +590,7 @@ fromLFSspecialFile <- function(jaf_lfs_code, with_filters) {
     .[, country := ifelse(country=='EUR20','EA20',country)] %>% 
     setnames(c('country','year','value'),
              c('geo','time','value_')) %>% 
+    .[geo %in% c(EU_Members_geo_codes,EU_geo_code,EA_geo_code)] %>% 
     .[, time := as.integer(time)] %>% 
     .[, value_ := as.numeric(value_)] %>% 
     Reduce(\(dt,x) dt[dt[[tolower(x)]] %in% with_filters[[x]]],

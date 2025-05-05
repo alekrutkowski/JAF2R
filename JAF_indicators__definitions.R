@@ -6327,7 +6327,7 @@ value = fromFormula(a + b,
 
 inside(JAF_INDICATORS, indicator_named = "PA5.S5.") = 
 specification(
-name = "Employment impact of parenthood ",
+name = "Employment impact of parenthood",
 unit_of_level = "percentage points (difference in ERs)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 5 COUNTRY",
@@ -7024,7 +7024,7 @@ value = fromFormula(a + b,
 
 inside(JAF_INDICATORS, indicator_named = "PA7.2.C3.") = 
 specification(
-name = "Gender segregation in occupations ",
+name = "Gender segregation in occupations",
 unit_of_level = "% (of employment)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 6 COUNTRY",
@@ -7036,7 +7036,7 @@ value = fromLFSspecialFile("lfse_iscogap",
 
 inside(JAF_INDICATORS, indicator_named = "PA7.2.C4.") = 
 specification(
-name = "Gender segregation in sectors ",
+name = "Gender segregation in sectors",
 unit_of_level = "% (of employment)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 6 COUNTRY",
@@ -7892,7 +7892,7 @@ value = fromEurostatDataset("educ_uoe_grad04",
 inside(JAF_INDICATORS, indicator_named = "PA9.2.O1.") = 
 specification(
 name = "Completion of tertiary or equivalent education (aged 30-34) - total",
-unit_of_level = "% (of popn 30-36)",
+unit_of_level = "% (of popn 30-34)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT OVERALL COMPENDIUM 7 COUNTRY",
 source = "Eurostat, EU labour Force Survey",

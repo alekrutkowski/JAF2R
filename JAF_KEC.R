@@ -83,6 +83,46 @@ PolicyAreaLabels_General <- '
 ' %>% 
   readMarkDownTable()
 
+sq <- function(...) sQuote(paste0(...),FALSE) # single quote
+
+dq <- function(...) dQuote(paste0(...),FALSE) # double quote
+
+sanitizeForExcel <- function(dt)
+  # Otherwise Excel reports a broken file
+  dt[, lapply(.SD,
+              \(col) if (is.character(col))
+                stringi::stri_trans_general(col,"Latin-ASCII") else col)]
+
+JAF_Compendium_Index_raw <-
+  JAF_NAMES_DESCRIPTIONS %>%
+  .[(for_Compendium), .(Compendium_Number,JAF_KEY)] %>%
+  setnames('Compendium_Number','CompendiumNum') %>% 
+  order_by_JAF_KEY()
+
+JAF_Compendium_Index <-
+  JAF_Compendium_Index_raw %>% 
+  merge(JAF_NAMES_DESCRIPTIONS, by='JAF_KEY') %>% 
+  
+  .[, `Policy Area` := sub("^([^\\.]+)\\..*$", "\\1", JAF_KEY)] %>% 
+  .[, Indicator := name] %>% 
+  .[, name := NULL] %>% 
+  .[, Compendium := 
+      paste0("=HYPERLINK(",
+             dq("[..\\JAF Compendium\\Compendium-",CompendiumNum,".xlsx]",sq(JAF_KEY),"!A1"),
+             ",",
+             dq("Compendium - ",CompendiumNum),
+             ")")] %>% 
+  sanitizeForExcel() %>% 
+  order_by_JAF_KEY() %>% 
+  .[, .(JAF_KEY,`Policy Area`,Indicator,Compendium)]
+
+getCompendiumLinkColumn <- function(dt)
+  copy(dt) %>% 
+  .[, row_order := .I] %>% 
+  merge(JAF_Compendium_Index, by.x='Indicator', by.y='JAF_KEY') %>% 
+  setorder(row_order) %>% 
+  .$Compendium
+
 IndicsSelectedForKEC <- 
   JAF_NAMES_DESCRIPTIONS %>%
   .[!(JAF_KEY %>% `JAF_KEY->C_O_S_part` %>% grepl('C',.))] %>% 
@@ -226,6 +266,12 @@ for (geo_code in EU_Members_geo_codes) {
       KEC_wb$set_col_widths(sheet=sheet_name,
                             cols=c(4,5),
                             widths=50)
+    KEC_wb$add_data(sheet=sheet_name,
+                    start_row=4, start_col=ncol(dta)+1, col_names=FALSE,
+                    x='Compendium')
+    KEC_wb$add_formula(sheet=sheet_name,
+                       start_row=5, start_col=ncol(dta)+1,
+                       x=getCompendiumLinkColumn(dta))
   }
 }
 for (ws in KEC_wb$worksheets %>% tail(-1))
@@ -289,6 +335,12 @@ KEC_wb$set_col_widths(sheet=sheet_name,
                       cols=c(1,7,8,14),
                       widths=10)
 KEC_wb$add_filter(sheet=sheet_name, rows=1, cols=1:8)
+KEC_wb$add_data(sheet=sheet_name,
+                start_row=1, start_col=ncol(dta)+1, col_names=FALSE,
+                x='Compendium')
+KEC_wb$add_formula(sheet=sheet_name,
+                   start_row=2, start_col=ncol(dta)+1,
+                   x=getCompendiumLinkColumn(dta))
 for (ws in KEC_wb$worksheets %>% tail(-1))
   ws$sheetViews <- set_zoom(75, ws$sheetViews)
 wb_save(KEC_wb,paste0(OUTPUT_FOLDER,'/KEC/Key Employment Challenges and Good Outcomes - single sheet.xlsx'))
