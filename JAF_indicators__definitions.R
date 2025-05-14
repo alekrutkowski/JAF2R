@@ -6188,7 +6188,7 @@ value = fromLFSspecialFile("lfse_inactpt_lackcare",
 inside(JAF_INDICATORS, indicator_named = "PA5.S1.F") = 
 specification(
 name = "Inactivity and part-time work due to personal and family responsibilities - women",
-unit_of_level = "% (of women 15-64)",
+unit_of_level = "% (of women 20-64)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT SUBINDICATOR COMPENDIUM 5 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
@@ -6288,7 +6288,7 @@ value = fromFormula(a + b,
 inside(JAF_INDICATORS, indicator_named = "PA5.S4.LT30") = 
 specification(
 name = "Child care – Children cared for (by formal arrangements other than by the family) less than 30h a usual week as a proportion of all children in the same age group (age 0 to 3) ",
-unit_of_level = "% (of children of 3 years to mandatory school age)",
+unit_of_level = "%",
 unit_of_change = "pp",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 5 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
@@ -6300,7 +6300,7 @@ value = fromEurostatDataset("ilc_caindformal",
 inside(JAF_INDICATORS, indicator_named = "PA5.S4.GT30") = 
 specification(
 name = "Child care – Children cared for (by formal arrangements other than by the family) 30h or more a usual week as a proportion of all children in the same age group (age 0 to 3) ",
-unit_of_level = "% (of children of 3 years to mandatory school age)",
+unit_of_level = "%",
 unit_of_change = "pp",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 5 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
@@ -6312,7 +6312,7 @@ value = fromEurostatDataset("ilc_caindformal",
 inside(JAF_INDICATORS, indicator_named = "PA5.S4.T") = 
 specification(
 name = "Child care – Children cared for (by formal arrangements other than by the family) (age 0 to 3) ",
-unit_of_level = "% (of children of 3 years to mandatory school age)",
+unit_of_level = "%",
 unit_of_change = "pp",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 5 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
@@ -7740,7 +7740,7 @@ value = fromEurostatDataset("edat_lfs_9911",
 inside(JAF_INDICATORS, indicator_named = "PA9.2.C1.HIGH.F") = 
 specification(
 name = "Completion of tertiary or equivalent education (aged 30-34) - women",
-unit_of_level = "% (of women 30-36)",
+unit_of_level = "% (of women 30-34)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 7 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",
@@ -7752,7 +7752,7 @@ value = fromEurostatDataset("edat_lfse_04",
 inside(JAF_INDICATORS, indicator_named = "PA9.2.C1.HIGH.M") = 
 specification(
 name = "Completion of tertiary or equivalent education (aged 30-34) - men",
-unit_of_level = "% (of men 30-36)",
+unit_of_level = "% (of men 30-34)",
 unit_of_change = "pp",
 indicator_groups = "OUTPUT CONTEXT COMPENDIUM 7 COUNTRY",
 source = "Eurostat, EU Labour Force Survey",

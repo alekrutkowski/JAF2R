@@ -11,3 +11,12 @@ JAF_mini_catalogue_*.csv
 JAF_INDICATORS * *.Rds
 tmp.RData
 /tmp
+*.csv
+*.tsv
+*.zip
+*.json
+* - Copy.R
+KSC file structure 28 3 2025.xlsx
+Missing JAF indicators added Nov 2024.docx
+PA11a.C2.1 and PA11a.C2.9.xlsx
+*.old

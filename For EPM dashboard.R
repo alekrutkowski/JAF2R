@@ -16,18 +16,26 @@ DataForEPM <-
                        a = fromEurostatDataset("lfsi_emp_a", 
                                                with_filters(age="Y20-64", indic_em="EMP_LFS", sex="M", unit="PC_POP")),
                        b = fromEurostatDataset("lfsi_emp_a", 
-                                               with_filters(age="Y20-64", indic_em="EMP_LFS", sex="F", unit="PC_POP")))))
+                                               with_filters(age="Y20-64", indic_em="EMP_LFS", sex="F", unit="PC_POP"))))
+       ,
+       lfse_er_child=
+         fread('IESS_11_PA7_2_S1_Y.csv___CONSOLIDATED.csv') %>% 
+         setnames(c('COUNTRY','YEAR','value'),
+                  c('geo',    'year','value_n'))
+  )
 
 transformToOldFormat <- function(dt, filename)
   dt %>% 
   setnames(c('value_','time','flags_'),
            c('value_n','year','flag'),
            skip_absent=TRUE) %>% 
-  .[, file := filename] %>% 
+  `if`(filename!='lfse_er_child',
+       .[, file := filename],
+       .)%>% 
   `if`(filename=='lfse_inactpt_lackcare',
        .[, sex := 'T'] %>% .[, age := 'Y15-64'],
        .)
-  
+
 for (n in names(DataForEPM))
   DataForEPM[[n]] %>% 
   transformToOldFormat(n) %>% 
