@@ -46,9 +46,10 @@ For SPPM VA:
 
 ### Data files
 
-The following LSF data files are received from Eurostat annually at the end of April.
+The following LSF data files are received from Eurostat and EMPL.F3 annually around the end of April.
 
 ```
+From ESTAT - Frank.BAUER@ec.europa.eu:
 - IESS_10_PA5_C3_mod_Y.csv
 - IESS_11_PA7_2_S1_Y.csv
 - IESS_15_PA7_1_C4_2064_FTE_AA.csv
@@ -56,6 +57,12 @@ The following LSF data files are received from Eurostat annually at the end of A
 - IESS_17_PA7_1_C6_N1_N2_AA.csv
 - IESS_PA2_C3_AA.csv
 - IESS_PA2_S5_v2_Y.csv
+
+From ESTAT - ESTAT-LFS-user-support@ec.europa.eu and Livio.DELLABATE@ec.europa.eu: 
+- YYYYMMDD_Rxxxxx_1_YYYYMMDD_xxxxxx_EMPLF3_AA_2.csv e.g. 20241105_R20714_1_20241105_103613_EMPLF3_AA_2.csv
+
+From F3 - Vlad.PODOBEA@ec.europa.eu:
+- RENV_DigitalIndicators_Final.RData
 ```
 
 For JAF, these template files are also needed, but don't have to be updated:
@@ -66,7 +73,9 @@ For JAF, these template files are also needed, but don't have to be updated:
 - Blank_16x9.pptx
 ```
 
-### Additional tools for converting the indicator definitions R script <--> Excel file
+### Additional tools
+
+##### For converting the indicator definitions R script <--> Excel file
 
 The definitions of the indicators are stored in the respective R scripts:
 `JAF_indicators__definitions.R` and `SPPM_VA_indicators__definitions.R`. 
@@ -84,6 +93,21 @@ When run (sourced), each of these two scripts will ask interactively the user
 for the path to the folder where the respective input file (R script or Excel file)
 is located.
 
+##### For re-creating the full IESS time series
+
+The newly obtained IESS_... data files contain only the latest years.
+To re-create the full time series for the data files IESS_...,
+run the script `Consolidate_IESS_time_series.R`.
+
+# System requirements
+
+For the compilation of PDFs, LaTeX distribution needs to be installed, e.g. MiKTeX
+(TexStudio app in the Commission). It may be necessary to set the Windows environment variable:
+Windows 10 start menu > "Edit environment variables for your account" > 
+In the "Environment Variable" window, in the first list under "User variables for xxxxxxx" (xxxxxxx = yur user name)
+there should be a variable called "Path" -- if not available click "New..." otherwise click "Edit...".
+That environment variable should contain the value `C:\Program Files\MiKTeX\miktex\bin\x64`.
+
 # Running the scripts
 
 It is recommended to use RStudio IDE to run the files.
@@ -95,6 +119,7 @@ used in the web browser for web proxy authentication and replace the path in
 the 6th code line:
 
 ```r
+# In the Commission:
 Sys.setenv(http_proxy =
   "http://XXXX:YYYY@proxy-t2-bx.welcome.ec.europa.eu:8012")
 Sys.setenv(https_proxy =
@@ -111,6 +136,7 @@ used in the web browser for web proxy authentication and replace the path in
 the 6th code line:
 
 ```r
+# In the Commission:
 Sys.setenv(http_proxy =
   "http://XXXX:YYYY@proxy-t2-bx.welcome.ec.europa.eu:8012")
 Sys.setenv(https_proxy =
@@ -187,6 +213,7 @@ The following sources and functions are currently defined:
 - fromLFSspecialFile
 - fromDESI
 - fromAMECO
+- fromDigitalIndicator
 - fromSpecialCalculation
 ```
 
