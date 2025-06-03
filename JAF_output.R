@@ -503,10 +503,11 @@ createFolder(OUTPUT_FOLDER)
 
 if (!exists('DEVMODE')) { # slow
   message('\nGenerating `Quality Checks.xlsx`...')
-  QCT <- qualityChecksTable(JAF_GRAND_TABLE)
+  QCT <- qualityChecksTable(JAF_GRAND_TABLE) %>% 
+    as.data.frame() # otherwise crash in * below: Error in `[.data.frame`(cc, cc$row_r %in% cc_rows, ) : Value of SET_STRING_ELT() must be a 'CHARSXP' not a 'raw'
   wb_workbook() %>% 
     wb_add_worksheet("JAF quality checks", zoom=75) %>%
-    wb_add_data(x=QCT, na.strings="") %>% 
+    wb_add_data(x=QCT, na.strings="") %>% # *
     wb_add_font(dims=paste0('A1:',int2col(ncol(QCT)),'1'), bold=TRUE) %>% 
     wb_add_cell_style(dims=paste0('A1:',int2col(ncol(QCT)),'1'), wrap_text=TRUE) %>% 
     wb_set_col_widths(cols=1:ncol(QCT), widths=12) %>%
