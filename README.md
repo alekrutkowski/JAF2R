@@ -99,6 +99,19 @@ The newly obtained IESS_... data files contain only the latest years.
 To re-create the full time series for the data files IESS_...,
 run the script `Consolidate_IESS_time_series.R`.
 
+##### For compiling the special files for the EPM
+
+The following files:
+
+```
+- lfse_er_child.csv
+- empl_gender_gap_20_64.csv
+- lfse_inactpt_lackcare.csv
+- vacancy_rate.csv
+```
+
+can be produced with `For EPM dashboard.R`.
+
 # System requirements
 
 For the compilation of PDFs, LaTeX distribution needs to be installed, e.g. MiKTeX

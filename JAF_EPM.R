@@ -61,7 +61,7 @@ NationalTargets <- '
 | PA8.2.C3.  | PT         | 60    |
 | PA8.2.C3.  | RO         | 17.4  |
 | PA8.2.C3.  | SI         | 60    |
-| PA8.2.C3.  | SK         | 60    |
+| PA8.2.C3.  | SK         | 50    |
 | PA8.2.C3.  | FI         | 50    |
 | PA8.2.C3.  | SE         | 60    |
 | PA8.2.C3.  | EU27_2020  | 60    |
@@ -91,6 +91,7 @@ countryTableForEPMpartII <- function(geo_code)
   .[geo==as.character(geo_code)] %>% 
   .[, geo := NULL] %>% 
   .[!is.na(value_)] %>% 
+  .[, value := round(value_,1)] %>% 
   .[as.integer(time) >= current_year-6L &
       as.integer(time) < current_year] %>% 
   .[JAF_KEY %in% JAF_KEYs__for_EPM_PartII] %>% 
