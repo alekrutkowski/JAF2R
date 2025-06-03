@@ -121,6 +121,24 @@ In the "Environment Variable" window, in the first list under "User variables fo
 there should be a variable called "Path" -- if not available click "New..." otherwise click "Edit...".
 That environment variable should contain the value `C:\Program Files\MiKTeX\miktex\bin\x64`.
 
+The following packages need to be installed:
+
+```r
+needed_pkgs <-
+  c("arm","collapse","countrycode","data.table","descriptio",
+    "dplyr","eurodata","expss","ggeffects","ggmap","ggplot2",
+    "ggpubr","ggthemes","haven","jsonlite","kit","knitr",
+    "labelled","magrittr","memoise","mschart","OECD","officer",
+    "openxlsx","openxlsx2","pacman","readxl","rmarkdown","ROCR",
+    "rstudioapi","rvest","sf","sp","stringi","stringr","survey",
+    "texreg","tibble","tidyverse","utils","writexl","xml2")
+installed_pkgs <-
+  row.names(installed.packages())
+for (n in needed_pkgs)
+  if (!n %in% installed_pkgs)
+      install.packages(n)
+```
+
 # Running the scripts
 
 It is recommended to use RStudio IDE to run the files.
@@ -129,7 +147,7 @@ It is recommended to use RStudio IDE to run the files.
 
 In the code below replace XXXX with your user name and YYYY with your password
 used in the web browser for web proxy authentication and replace the path in
-the 6th code line:
+the 7th code line:
 
 ```r
 # In the Commission:
@@ -146,7 +164,7 @@ source("JAF_MAIN.R") # This script will run all the needed sub-scripts
 
 In the code below replace XXXX with your user name and YYYY with your password
 used in the web browser for web proxy authentication and replace the path in
-the 6th code line:
+the 7th code line:
 
 ```r
 # In the Commission:
