@@ -25,6 +25,7 @@ the output folder.
 - JAF_functions.R
 - JAF_indicators__definitions.R
 - JAF_output.R
+- JAF_runs_compared.R
 - JAF_KEC.R
 - JAF_Compendium.R
 - JAF_Country_Compendium.R
