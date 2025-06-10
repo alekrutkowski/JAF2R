@@ -117,7 +117,7 @@ can be produced with `For EPM dashboard.R`.
 For the compilation of PDFs, LaTeX distribution needs to be installed, e.g. MiKTeX
 (TexStudio app in the Commission). It may be necessary to set the Windows environment variable:
 Windows 10 start menu > "Edit environment variables for your account" > 
-In the "Environment Variable" window, in the first list under "User variables for xxxxxxx" (xxxxxxx = yur user name)
+In the "Environment Variable" window, in the first list under "User variables for xxxxxxx" (xxxxxxx = your user name)
 there should be a variable called "Path" -- if not available click "New..." otherwise click "Edit...".
 That environment variable should contain the value `C:\Program Files\MiKTeX\miktex\bin\x64`.
 

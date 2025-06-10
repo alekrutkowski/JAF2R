@@ -28,6 +28,7 @@ preCheckInidcators('JAF_indicators__definitions.R')
 load('RENV_DigitalIndicators_Final.RData') # precalculated indicators by Vlad PODOBEA (F3), substituting the lines above
 runScript('JAF_indicators__definitions.R')
 runScript('JAF_output.R')
+runScript('JAF_runs_compared.R')
 runScript('JAF_KEC.R')
 runScript('JAF_Compendium.R')
 runScript('JAF_Country_Compendium.R')
