@@ -503,18 +503,20 @@ createFolder(OUTPUT_FOLDER)
 
 if (!exists('DEVMODE')) { # slow
   message('\nGenerating `Quality Checks.xlsx`...')
-  QCT <- qualityChecksTable(JAF_GRAND_TABLE) %>% 
-    as.data.frame() # otherwise crash in * below: Error in `[.data.frame`(cc, cc$row_r %in% cc_rows, ) : Value of SET_STRING_ELT() must be a 'CHARSXP' not a 'raw'
-  wb_workbook() %>% 
-    wb_add_worksheet("JAF quality checks", zoom=75) %>%
-    wb_add_data(x=QCT, na.strings="") %>% # *
-    wb_add_font(dims=paste0('A1:',int2col(ncol(QCT)),'1'), bold=TRUE) %>% 
-    wb_add_cell_style(dims=paste0('A1:',int2col(ncol(QCT)),'1'), wrap_text=TRUE) %>% 
-    wb_set_col_widths(cols=1:ncol(QCT), widths=12) %>%
-    wb_set_row_heights(rows=1, heights=107) %>% 
-    wb_freeze_pane(first_row=TRUE) %>% 
-    wb_add_filter(rows=1, cols=1:ncol(QCT)) %>% 
-    wb_save(paste0(OUTPUT_FOLDER,'/Quality Checks.xlsx'))
+  QCT <- retry({
+    qualityChecksTable(JAF_GRAND_TABLE) %>% 
+      as.data.frame() # otherwise crash in * below: Error in `[.data.frame`(cc, cc$row_r %in% cc_rows, ) : Value of SET_STRING_ELT() must be a 'CHARSXP' not a 'raw'
+    wb_workbook() %>% 
+      wb_add_worksheet("JAF quality checks", zoom=75) %>%
+      wb_add_data(x=QCT, na.strings="") %>% # *
+      wb_add_font(dims=paste0('A1:',int2col(ncol(QCT)),'1'), bold=TRUE) %>% 
+      wb_add_cell_style(dims=paste0('A1:',int2col(ncol(QCT)),'1'), wrap_text=TRUE) %>% 
+      wb_set_col_widths(cols=1:ncol(QCT), widths=12) %>%
+      wb_set_row_heights(rows=1, heights=107) %>% 
+      wb_freeze_pane(first_row=TRUE) %>% 
+      wb_add_filter(rows=1, cols=1:ncol(QCT)) %>% 
+      wb_save(paste0(OUTPUT_FOLDER,'/Quality Checks.xlsx'))
+  }, interval=0)
 } 
 
 message('\nPreparing the data.Rds file for the Shiny/Shinylive app...')

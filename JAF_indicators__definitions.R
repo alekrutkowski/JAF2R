@@ -689,7 +689,7 @@ value = fromEurostatDataset("lfsa_argaed",
 
 inside(JAF_INDICATORS, indicator_named = "PA1.C2.low.F") = 
 specification(
-name = "Employment rate of low-skilled population aged 20-64 - total",
+name = "Employment rate of low-skilled population aged 20-64 - women",
 unit_of_level = "% (of low-skilled popn 20-64)",
 unit_of_change = "pp",
 indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
@@ -701,7 +701,7 @@ value = fromEurostatDataset("lfsi_educ_a",
 
 inside(JAF_INDICATORS, indicator_named = "PA1.C2.low.M") = 
 specification(
-name = "Employment rate of low-skilled population aged 20-64 - total",
+name = "Employment rate of low-skilled population aged 20-64 - men",
 unit_of_level = "% (of low-skilled popn 20-64)",
 unit_of_change = "pp",
 indicator_groups = "MAIN OUTPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
