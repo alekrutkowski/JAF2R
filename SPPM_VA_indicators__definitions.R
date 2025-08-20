@@ -331,14 +331,12 @@ unit_of_change = "ratio change",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-value = fromFormula(a/(b+c),
+value = fromFormula(a/b,
 where = variables(
  a = fromEurostatDataset('ilc_di01',
   with_filters(currency="EUR", indic_il="SHARE", quantile="QU5")),
  b = fromEurostatDataset('ilc_di01',
-  with_filters(currency="EUR", indic_il="SHARE", quantile="Q1")),
- c = fromEurostatDataset('ilc_di01',
-  with_filters(currency="EUR", indic_il="SHARE", quantile="Q2"))
+  with_filters(currency="EUR", indic_il="SHARE", quantile="QU3"))
 ))
 )
 
@@ -350,13 +348,11 @@ unit_of_change = "ratio change",
 indicator_groups = "INPUT SUBINDICATOR COMPENDIUM 1 COUNTRY",
 source = "Eurostat, EU Statistics on Income and Living Conditions",
 high_is_good = FALSE,
-value = fromFormula((a+b)/c,
+value = fromFormula(a/b,
 where = variables(
  a = fromEurostatDataset('ilc_di01',
-  with_filters(currency="EUR", indic_il="SHARE", quantile="Q1")),
+  with_filters(currency="EUR", indic_il="SHARE", quantile="QU3")),
  b = fromEurostatDataset('ilc_di01',
-  with_filters(currency="EUR", indic_il="SHARE", quantile="Q2")),
- c = fromEurostatDataset('ilc_di01',
   with_filters(currency="EUR", indic_il="SHARE", quantile="QU1"))
 ))
 )
