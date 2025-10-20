@@ -503,7 +503,7 @@ createFolder(OUTPUT_FOLDER)
 
 if (!exists('DEVMODE')) { # slow
   message('\nGenerating `Quality Checks.xlsx`...')
-  QCT <- retry({
+  QCT <- # retry({
     qualityChecksTable(JAF_GRAND_TABLE) %>% 
       as.data.frame() # otherwise crash in * below: Error in `[.data.frame`(cc, cc$row_r %in% cc_rows, ) : Value of SET_STRING_ELT() must be a 'CHARSXP' not a 'raw'
     wb_workbook() %>% 
@@ -516,7 +516,7 @@ if (!exists('DEVMODE')) { # slow
       wb_freeze_pane(first_row=TRUE) %>% 
       wb_add_filter(rows=1, cols=1:ncol(QCT)) %>% 
       wb_save(paste0(OUTPUT_FOLDER,'/Quality Checks.xlsx'))
-  }, interval=0)
+  # }, interval=0)
 } 
 
 message('\nPreparing the data.Rds file for the Shiny/Shinylive app...')

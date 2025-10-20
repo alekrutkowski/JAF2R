@@ -6456,9 +6456,9 @@ high_is_good = FALSE,
 value = fromFormula(100 * a/(b + c),
   where = variables(
   a = fromEurostatDataset("lfsa_igaww", 
-    with_filters(age = "Y15-29", sex = "T", unit = "THS_PER", wantwork = "YES")),
+    with_filters(age = "Y15-29", sex = "T", unit = "THS_PER", wstatus = "NSEEK_WANT")), #  formerly wantwork = "YES"
   b = fromEurostatDataset("lfsa_igaww", 
-    with_filters(age = "Y15-29", sex = "T", unit = "THS_PER", wantwork = "TOTAL")),
+    with_filters(age = "Y15-29", sex = "T", unit = "THS_PER", wstatus = "TOTAL")), #  formery wantwork = "TOTAL"
   c = fromEurostatDataset("lfsa_pganws", 
     with_filters(age = "Y15-29", citizen = "TOTAL", sex = "T", unit = "THS_PER", wstatus = "ACT"))))
 )
@@ -6474,9 +6474,9 @@ high_is_good = FALSE,
 value = fromFormula(100 * a/(b + c),
   where = variables(
   a = fromEurostatDataset("lfsa_igaww", 
-    with_filters(age = "Y15-64", sex = "T", unit = "THS_PER", wantwork = "YES")),
+    with_filters(age = "Y15-64", sex = "T", unit = "THS_PER", wstatus = "NSEEK_WANT")), #  formerly wantwork = "YES"
   b = fromEurostatDataset("lfsa_igaww", 
-    with_filters(age = "Y15-64", sex = "T", unit = "THS_PER", wantwork = "TOTAL")),
+    with_filters(age = "Y15-64", sex = "T", unit = "THS_PER", wstatus = "TOTAL")), #  formery wantwork = "TOTAL"
   c = fromEurostatDataset("lfsa_pganws", 
     with_filters(age = "Y15-64", citizen = "TOTAL", sex = "T", unit = "THS_PER", wstatus = "ACT"))))
 )
@@ -6492,9 +6492,9 @@ high_is_good = FALSE,
 value = fromFormula(100 * a/(b + c),
   where = variables(
   a = fromEurostatDataset("lfsa_igaww", 
-    with_filters(age = "Y30-54", sex = "T", unit = "THS_PER", wantwork = "YES")),
+    with_filters(age = "Y30-54", sex = "T", unit = "THS_PER", wstatus = "NSEEK_WANT")), #  formerly wantwork = "YES"
   b = fromEurostatDataset("lfsa_igaww", 
-    with_filters(age = "Y30-54", sex = "T", unit = "THS_PER", wantwork = "TOTAL")),
+    with_filters(age = "Y30-54", sex = "T", unit = "THS_PER", wstatus = "TOTAL")), #  formery wantwork = "TOTAL"
   c = fromEurostatDataset("lfsa_pganws", 
     with_filters(age = "Y30-54", citizen = "TOTAL", sex = "T", unit = "THS_PER", wstatus = "ACT"))))
 )
@@ -6510,9 +6510,9 @@ high_is_good = FALSE,
 value = fromFormula(100 * a/(b + c),
   where = variables(
   a = fromEurostatDataset("lfsa_igaww", 
-    with_filters(age = "Y55-64", sex = "T", unit = "THS_PER", wantwork = "YES")),
+    with_filters(age = "Y55-64", sex = "T", unit = "THS_PER", wstatus = "NSEEK_WANT")), #  formerly wantwork = "YES"
   b = fromEurostatDataset("lfsa_igaww", 
-    with_filters(age = "Y55-64", sex = "T", unit = "THS_PER", wantwork = "TOTAL")),
+    with_filters(age = "Y55-64", sex = "T", unit = "THS_PER", wstatus = "TOTAL")), #  formery wantwork = "TOTAL"
   c = fromEurostatDataset("lfsa_pganws", 
     with_filters(age = "Y55-64", citizen = "TOTAL", sex = "T", unit = "THS_PER", wstatus = "ACT"))))
 )
